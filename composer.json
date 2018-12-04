@@ -1,0 +1,30 @@
+{
+    "name": "poowf/otter",
+    "description": "A relatively automatic CRUD backend administration panel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zane J. Chua",
+            "email": "zane.jocelyn@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Poowf\\Otter\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Poowf\\Otter\\OtterServiceProvider"
+            ],
+            "aliases": {
+                "Otter": "Poowf\\Otter\\Facade"
+            }
+        }
+    }
+}
