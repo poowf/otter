@@ -15,7 +15,7 @@ let hexToRgba = function(hex, opacity) {
 /**
  *
  */
-$(document).ready(function() {
+require(['jquery'], function($) {
   /** Constant div card */
   const DIV_CARD = 'div.card';
 
