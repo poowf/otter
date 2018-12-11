@@ -3,8 +3,9 @@
 namespace DummyNamespace;
 
 use Illuminate\Http\Request;
+use Poowf\Otter\Http\Resources\OtterResource;
 
-class DummyClass
+class DummyClass extends OtterResource
 {
     /**
      * The model the resource corresponds to.

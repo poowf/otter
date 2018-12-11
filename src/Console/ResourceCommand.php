@@ -11,7 +11,7 @@ class ResourceCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'otter:resource {name : The name of the class}';
+    protected $signature = 'otter:resource {name : The name of the class} {--model= : The name of the model}';
 
     /**
      * The console command description.
@@ -58,8 +58,9 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $model = $this->rootNamespace() . '\\' . $this->argument('name');
-        return str_replace('DummyFullClass', $model, parent::buildClass($name));
+        $model = $this->option('model');
+        $fullModelName = ($model) ? str_replace('/', '\\', $model) : $this->rootNamespace() . '\\' . $this->argument('name');
+        return str_replace('DummyFullClass', $fullModelName, parent::buildClass($name));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Poowf\Otter;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class OtterServiceProvider extends ServiceProvider
@@ -14,9 +15,10 @@ class OtterServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerRoutes();
         $this->registerPublishing();
         $this->registerResources();
+        $this->registerRoutes();
+        $this->registerResourceRoutes();
     }
 
     /**
@@ -33,6 +35,37 @@ class OtterServiceProvider extends ServiceProvider
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+    }
+
+    protected function registerResourceRoutes()
+    {
+        Route::group([
+            'prefix' => 'api/otter',
+            'namespace' => 'Poowf\Otter\Http\Controllers\API',
+            'middleware' => 'api',
+        ], function () {
+            $directory = app_path('Otter/');
+            $files = File::files($directory);
+
+            foreach($files as $file)
+            {
+                $path = $file->getPathname();
+                $class = str_replace('.php', '', $path);
+                $baseResourceName = basename($class);
+
+//                Instantiating a new Resource
+//                $resourceNamespace = 'App\\Otter\\';
+//                $resource = $resourceNamespace . $baseResourceName;
+//                $instance = new $resource;
+
+                $pluralName = str_plural(strtolower($baseResourceName));
+
+                Route::apiResource($pluralName, 'OtterController', [ 'as' => 'api.otter' ]);
+            }
+
+        });
+//        $scanned_directory = array_values(array_diff(scandir($directory), array('..', '.')));
+
     }
 
     /**
