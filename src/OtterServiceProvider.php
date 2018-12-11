@@ -15,6 +15,7 @@ class OtterServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes();
+        $this->registerPublishing();
         $this->registerResources();
     }
 
@@ -54,15 +55,18 @@ class OtterServiceProvider extends ServiceProvider
         );
     }
 
-
     /**
-     * Setup the resource publishing groups for Otter.
+     * Register the package's publishable resources.
      *
      * @return void
      */
-    protected function offerPublishing()
+    protected function registerPublishing()
     {
         if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../public' => public_path('vendor/otter'),
+            ], 'otter-assets');
+            
             $this->publishes([
                 __DIR__.'/../stubs/OtterServiceProvider.stub' => app_path('Providers/OtterServiceProvider.php'),
             ], 'otter-provider');
@@ -71,6 +75,20 @@ class OtterServiceProvider extends ServiceProvider
                 __DIR__.'/../config/otter.php' => config_path('otter.php'),
             ], 'otter-config');
         }
+    }
+
+    /**
+     * Setup the commands for Otter.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        $this->commands([
+            Console\InstallCommand::class,
+            Console\PublishCommand::class,
+            Console\ResourceCommand::class,
+        ]);
     }
 
     /**
@@ -85,10 +103,6 @@ class OtterServiceProvider extends ServiceProvider
         });
 
         $this->mergeConfig();
-        $this->offerPublishing();
-
-        $this->commands([
-            Console\ResourceCommand::class,
-        ]);
+        $this->registerCommands();
     }
 }
