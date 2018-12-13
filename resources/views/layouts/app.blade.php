@@ -38,12 +38,24 @@
         @yield("head")
     </head>
     <body class="">
-        {{--@include("otter::partials/header")--}}
+        <div id="app">
+            <example-component></example-component>
+        </div>
+        <div class="page">
+            <div class="page-main">
 
-        @yield("content")
+                @include("otter::partials/header")
 
-        {{--@include("otter::partials/footer")--}}
+                @yield("content")
 
-        @yield("scripts")
+                @include("otter::partials/footer")
+
+                <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>
+                <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
+                <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
+
+                @yield("scripts")
+            </div>
+        </div>
     </body>
 </html>

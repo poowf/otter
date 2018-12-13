@@ -9,8 +9,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function dashboard()
     {
-        return view('otter::pages.index');
+        return view('otter::pages.dashboard');
     }
 }

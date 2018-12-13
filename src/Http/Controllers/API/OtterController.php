@@ -9,10 +9,13 @@ class OtterController extends Controller
 {
     public function __construct(Request $request) {
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
-        $this->resourceName = explode('.', $request->route()->getName())[2];
-        $this->resourceNamespace = 'App\\Otter\\';
-        $this->baseResourceName = ucfirst(str_singular($this->resourceName));
-        $this->resource = $this->resourceNamespace . $this->baseResourceName;
+        if(!app()->runningInConsole())
+        {
+            $this->resourceName = explode('.', $request->route()->getName())[2];
+            $this->resourceNamespace = 'App\\Otter\\';
+            $this->baseResourceName = ucfirst(str_singular($this->resourceName));
+            $this->resource = $this->resourceNamespace . $this->baseResourceName;
+        }
     }
 
     /**
