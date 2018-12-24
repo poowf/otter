@@ -3,4 +3,4 @@
 use Illuminate\Support\Facades\Route;
 
 // Catch-all Route...
-Route::get('/{view?}', 'HomeController@dashboard')->where('view', '(.*)')->name('otter.dashboard');
+Route::get('/', 'HomeController@dashboard')->name('otter.dashboard');

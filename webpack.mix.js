@@ -38,6 +38,7 @@ mix
         ]
     })
 
+    .js('resources/assets/js/bootstrap.js', 'assets/js')
     .js('resources/assets/js/app.js', 'assets/js')
     .sass('resources/assets/sass/app.scss', 'public/assets/css')
     .extract(['jquery'])

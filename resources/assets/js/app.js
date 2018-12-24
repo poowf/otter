@@ -19,6 +19,8 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('examples-component', require('./components/ExampleComponent.vue'));
+Vue.component('table-component', require('./components/TableComponent.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
