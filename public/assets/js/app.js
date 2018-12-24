@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ExampleComponent.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/FormComponent.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21,10 +21,217 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    name: "FormComponent",
+    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'action'],
+    data: function data() {
+        return {
+            handleText: 'Create',
+            handleButtonText: 'Create',
+            resourceData: {}
+        };
+    },
+
+    watch: {
+        resourceName: function resourceName() {
+            console.log("changed");
+            // if (this.resourceName) {
+            //     this.fetchResource();
+            // }
+        }
+    },
+    created: function created() {
+        if (this.action === 'edit') {
+            this.handleText = "Edit";
+            this.handleButtonText = "Update";
+            this.fetchResource();
+        } else if (this.action === 'create') {
+            this.handleText = "Create";
+            this.handleButtonText = "Create";
+        }
+    },
     mounted: function mounted() {
         console.log('Component mounted.');
+    },
+
+    filters: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+    },
+    methods: {
+        fetchResource: function fetchResource() {
+            var _this = this;
+
+            axios.get('/api/otter/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+                _this.resourceData = response.data.data;
+                console.log(_this.resourceData);
+            }).catch(function (e) {
+                _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
+            }).finally(function () {});
+        },
+        handleAction: function handleAction(action) {
+            if (action === 'edit') {
+                this.handleUpdate();
+            } else if (action === 'create') {
+                this.handleStore();
+            }
+        },
+        handleStore: function handleStore(e) {
+            var _this2 = this;
+
+            axios.post('/api/otter/' + this.resourceName, this.resourceData).then(function (response) {
+                console.log(response);
+                console.log("success");
+                // window.location = response.data.redirect;
+                window.location = '/otter/' + _this2.resourceName;
+            }).catch(function (e) {
+                _this2.error = 'Could not save. Please check your values or try again later.';
+            }).finally(function () {
+                _this2.loading = false;
+            });
+        },
+        handleUpdate: function handleUpdate(e) {
+            var _this3 = this;
+
+            axios.patch('/api/otter/' + this.resourceName + '/' + this.resourceId, this.resourceData).then(function (response) {
+                console.log(response);
+                console.log("success");
+                _this3.fetchResource();
+            }).catch(function (e) {
+                _this3.error = 'Could not update. Please check your values or try again later.';
+            }).finally(function () {
+                _this3.loading = false;
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ShowComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "ShowComponent",
+    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'],
+    data: function data() {
+        return {
+            resourceData: {}
+        };
+    },
+
+    watch: {
+        resourceName: function resourceName() {
+            console.log("changed");
+            // if (this.resourceName) {
+            //     this.fetchResource();
+            // }
+        }
+    },
+    created: function created() {
+        this.fetchResource();
+    },
+    mounted: function mounted() {
+        console.log('Component mounted.');
+    },
+
+    filters: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+    },
+    methods: {
+        fetchResource: function fetchResource() {
+            var _this = this;
+
+            axios.get('/api/otter/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+                _this.resourceData = response.data.data;
+                console.log(_this.resourceData);
+            }).catch(function (e) {
+                _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
+            }).finally(function () {});
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SidebarComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "SidebarComponent",
+    props: ['allResourceNames'],
+    mounted: function mounted() {
+        console.log('Component mounted.');
+    },
+
+    filters: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
     }
 });
 
@@ -63,10 +270,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "TableComponent",
-    props: ['resourceName', 'resourceFields'],
+    props: ['prettyResourceName', 'resourceName', 'resourceFields'],
     data: function data() {
         return {
             resourceData: []
@@ -83,12 +308,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     created: function created() {
         this.fetchResourceIndex();
-        console.log(this.resourceFields);
     },
     mounted: function mounted() {
         console.log('Component mounted.');
     },
 
+    filters: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+    },
     methods: {
         fetchResourceIndex: function fetchResourceIndex() {
             var _this = this;
@@ -99,6 +330,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
             }).finally(function () {});
+        },
+        handleDelete: function handleDelete(resourceId) {
+            var _this2 = this;
+
+            axios.delete('/api/otter/' + this.resourceName + '/' + resourceId).then(function (response) {
+                console.log(response);
+                console.log("success");
+                _this2.fetchResourceIndex();
+            }).catch(function (e) {
+                _this2.error = 'Could not update. Please check your values or try again later.';
+            }).finally(function () {
+                _this2.loading = false;
+            });
         }
     }
 });
@@ -671,6 +915,183 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d893ab8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SidebarComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.allResourceNames, function(resourceName, index) {
+      return _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link dropdown-toggle pl-4",
+            attrs: {
+              href: "#" + resourceName + "-menu",
+              "data-toggle": "collapse",
+              "aria-expanded": "false"
+            }
+          },
+          [_vm._v(_vm._s(_vm._f("capitalize")(resourceName)))]
+        ),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            staticClass:
+              "nav nav-tabs border-0 justify-content-center collapse",
+            attrs: { id: resourceName + "-menu" }
+          },
+          [
+            _c("li", { staticClass: "nav-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link pl-6",
+                  attrs: { href: "/otter/" + resourceName }
+                },
+                [_vm._v("View")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link pl-6",
+                  attrs: { href: "/otter/" + resourceName + "/create" }
+                },
+                [_vm._v("Create")]
+              )
+            ])
+          ]
+        )
+      ])
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1d893ab8", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-237965d9\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ShowComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _c("h3", { staticClass: "card-title" }, [
+          _vm._v(_vm._s(_vm.prettyResourceName))
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-options" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "dropdown card-options-dropdown" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dropdown-item",
+                  attrs: {
+                    href:
+                      "/otter/" +
+                      _vm.resourceName +
+                      "/" +
+                      _vm.resourceId +
+                      "/edit/"
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fe fe-edit mr-3" }),
+                  _vm._v("Edit Profile\n                        ")
+                ]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
+            return _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "h6" }, [_vm._v(_vm._s(fieldKey))]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
+            ])
+          }),
+          0
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-option",
+        attrs: {
+          type: "button",
+          "data-toggle": "tooltip",
+          title: "",
+          "data-original-title": "Edit"
+        }
+      },
+      [_c("i", { staticClass: "fe fe-edit" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-option dropdown-toggle",
+        attrs: { type: "button", "data-toggle": "dropdown" }
+      },
+      [_c("i", { staticClass: "fe fe-more-vertical" })]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-237965d9", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-294c2f46\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/TableComponent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -684,7 +1105,22 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [
-              _vm._v(_vm._s(_vm.resourceName))
+              _vm._v(_vm._s(_vm.prettyResourceName))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "action-container" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "icon",
+                  attrs: {
+                    "data-toggle": "tooltip",
+                    "data-original-title": "Create",
+                    href: "/otter/" + _vm.resourceName + "/create"
+                  }
+                },
+                [_c("i", { staticClass: "fe fe-plus" })]
+              )
             ])
           ]),
           _vm._v(" "),
@@ -696,10 +1132,14 @@ var render = function() {
                 _c("thead", [
                   _c(
                     "tr",
-                    _vm._l(_vm.resourceFields, function(tableName, tableKey) {
-                      return _c("th", [_vm._v(_vm._s(tableKey))])
-                    }),
-                    0
+                    [
+                      _vm._l(_vm.resourceFields, function(tableType, tableKey) {
+                        return _c("th", [_vm._v(_vm._s(tableKey))])
+                      }),
+                      _vm._v(" "),
+                      _c("th")
+                    ],
+                    2
                   )
                 ]),
                 _vm._v(" "),
@@ -708,12 +1148,91 @@ var render = function() {
                   _vm._l(_vm.resourceData, function(resource, index) {
                     return _c(
                       "tr",
-                      _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
-                        return _c("td", [
-                          _vm._v(_vm._s(resource["" + fieldKey]))
+                      [
+                        _vm._l(_vm.resourceFields, function(
+                          fieldType,
+                          fieldKey
+                        ) {
+                          return _c("td", [
+                            _vm._v(_vm._s(resource["" + fieldKey]))
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-right" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-secondary btn-sm",
+                              attrs: {
+                                href:
+                                  "/otter/" +
+                                  _vm.resourceName +
+                                  "/" +
+                                  resource.id +
+                                  "/"
+                              }
+                            },
+                            [_vm._v("View")]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "dropdown" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "btn btn-secondary btn-sm dropdown-toggle",
+                                attrs: {
+                                  type: "button",
+                                  "data-toggle": "dropdown"
+                                }
+                              },
+                              [_vm._v("Action")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "dropdown-menu" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: {
+                                    href:
+                                      "/otter/" +
+                                      _vm.resourceName +
+                                      "/" +
+                                      resource.id +
+                                      "/edit/"
+                                  }
+                                },
+                                [
+                                  _c("i", { staticClass: "fe fe-edit mr-3" }),
+                                  _vm._v(
+                                    "Edit\n                                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn dropdown-item",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.handleDelete(resource.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", { staticClass: "fe fe-delete mr-3" }),
+                                  _vm._v(
+                                    "Delete\n                                            "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
                         ])
-                      }),
-                      0
+                      ],
+                      2
                     )
                   }),
                   0
@@ -738,45 +1257,154 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7168fb6a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ExampleComponent.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-70be8f72\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/FormComponent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
+  return _c("div", [
+    _c("form", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-body" }, [
+        _c("h3", { staticClass: "card-title" }, [
+          _vm._v(_vm._s(_vm.handleText) + " " + _vm._s(_vm.prettyResourceName))
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c(
+            "div",
+            { staticClass: "col-md-12" },
+            _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
+              return _c("div", { staticClass: "form-group" }, [
+                _c("label", { staticClass: "form-label" }, [
+                  _vm._v(_vm._s(fieldKey))
+                ]),
+                _vm._v(" "),
+                fieldType === "checkbox"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.resourceData["" + fieldKey],
+                          expression: "resourceData[`${fieldKey}`]"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        checked: Array.isArray(_vm.resourceData["" + fieldKey])
+                          ? _vm._i(_vm.resourceData["" + fieldKey], null) > -1
+                          : _vm.resourceData["" + fieldKey]
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = _vm.resourceData["" + fieldKey],
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(
+                                  _vm.resourceData,
+                                  "" + fieldKey,
+                                  $$a.concat([$$v])
+                                )
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.resourceData,
+                                  "" + fieldKey,
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.resourceData, "" + fieldKey, $$c)
+                          }
+                        }
+                      }
+                    })
+                  : fieldType === "radio"
+                  ? _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.resourceData["" + fieldKey],
+                          expression: "resourceData[`${fieldKey}`]"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "radio" },
+                      domProps: {
+                        checked: _vm._q(_vm.resourceData["" + fieldKey], null)
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.$set(_vm.resourceData, "" + fieldKey, null)
+                        }
+                      }
+                    })
+                  : _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.resourceData["" + fieldKey],
+                          expression: "resourceData[`${fieldKey}`]"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: fieldType },
+                      domProps: { value: _vm.resourceData["" + fieldKey] },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.resourceData,
+                            "" + fieldKey,
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+              ])
+            }),
+            0
+          )
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer text-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary btn-block",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                _vm.handleAction(_vm.action)
+              }
+            }
+          },
+          [_vm._v(_vm._s(_vm.handleButtonText))]
+        )
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7168fb6a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-70be8f72", module.exports)
   }
 }
 
@@ -11931,9 +12559,10 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
-Vue.component('example-component', __webpack_require__("./resources/assets/js/components/ExampleComponent.vue"));
-Vue.component('examples-component', __webpack_require__("./resources/assets/js/components/ExampleComponent.vue"));
 Vue.component('table-component', __webpack_require__("./resources/assets/js/components/TableComponent.vue"));
+Vue.component('form-component', __webpack_require__("./resources/assets/js/components/FormComponent.vue"));
+Vue.component('show-component', __webpack_require__("./resources/assets/js/components/ShowComponent.vue"));
+Vue.component('sidebar-component', __webpack_require__("./resources/assets/js/components/SidebarComponent.vue"));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -11947,15 +12576,15 @@ var app = new Vue({
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/ExampleComponent.vue":
+/***/ "./resources/assets/js/components/FormComponent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ExampleComponent.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/FormComponent.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7168fb6a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ExampleComponent.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-70be8f72\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/FormComponent.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -11972,7 +12601,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/ExampleComponent.vue"
+Component.options.__file = "resources/assets/js/components/FormComponent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -11981,9 +12610,105 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7168fb6a", Component.options)
+    hotAPI.createRecord("data-v-70be8f72", Component.options)
   } else {
-    hotAPI.reload("data-v-7168fb6a", Component.options)
+    hotAPI.reload("data-v-70be8f72", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/ShowComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ShowComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-237965d9\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ShowComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ShowComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-237965d9", Component.options)
+  } else {
+    hotAPI.reload("data-v-237965d9", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SidebarComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SidebarComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d893ab8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SidebarComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SidebarComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d893ab8", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d893ab8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

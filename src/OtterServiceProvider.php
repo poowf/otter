@@ -3,7 +3,6 @@
 namespace Poowf\Otter;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class OtterServiceProvider extends ServiceProvider
@@ -39,27 +38,15 @@ class OtterServiceProvider extends ServiceProvider
 
     protected function registerResourceRoutes()
     {
-        $directory = app_path('Otter/');
-        $files = File::files($directory);
+        $names = Otter::getResourceNames();
 
         Route::group([
             'prefix' => 'api/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers\API',
             'middleware' => 'api',
-        ], function () use($files, $directory) {
-            foreach($files as $file)
+        ], function () use($names) {
+            foreach($names as $pluralName)
             {
-                $path = $file->getPathname();
-                $class = str_replace('.php', '', $path);
-                $baseResourceName = basename($class);
-
-//                Instantiating a new Resource
-//                $resourceNamespace = 'App\\Otter\\';
-//                $resource = $resourceNamespace . $baseResourceName;
-//                $instance = new $resource;
-
-                $pluralName = str_plural(strtolower($baseResourceName));
-
                 Route::apiResource($pluralName, 'OtterController', [ 'as' => 'api.otter' ]);
             }
         });
@@ -67,25 +54,13 @@ class OtterServiceProvider extends ServiceProvider
         Route::group([
             'prefix' => '/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers',
-            'middleware' => 'web',
-        ], function () use($files, $directory) {
-            foreach($files as $file)
+            'middleware' => config('otter.middleware', 'web'),
+        ], function () use($names) {
+            foreach($names as $pluralName)
             {
-                $path = $file->getPathname();
-                $class = str_replace('.php', '', $path);
-                $baseResourceName = basename($class);
-
-//                Instantiating a new Resource
-//                $resourceNamespace = 'App\\Otter\\';
-//                $resource = $resourceNamespace . $baseResourceName;
-//                $instance = new $resource;
-
-                $pluralName = str_plural(strtolower($baseResourceName));
-
-                Route::apiResource($pluralName, 'OtterViewController', [ 'as' => 'web.otter' ]);
+                Route::resource($pluralName, 'OtterViewController', [ 'as' => 'web.otter' ]);
             }
         });
-//        $scanned_directory = array_values(array_diff(scandir($directory), array('..', '.')));
     }
 
     /**

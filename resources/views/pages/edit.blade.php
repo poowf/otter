@@ -6,15 +6,20 @@
 @stop
 
 @section("content")
-    <div class="my-3 my-md-5">
         <div class="container">
             <div class="page-header">
                 <h1 class="page-title">
-                    Dashboard
+                    {{ $prettyResourceName }}
                 </h1>
             </div>
+            <form-component
+                    resource-name="{{ $resourceName }}"
+                    pretty-resource-name="{{ $prettyResourceName }}"
+                    resource-id="{{ $resourceId }}"
+                    action="edit"
+                    :resource-fields="{{ $resourceFields }}"
+            ></form-component>
         </div>
-    </div>
 @stop
 
 @section("scripts")

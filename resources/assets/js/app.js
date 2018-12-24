@@ -18,9 +18,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('examples-component', require('./components/ExampleComponent.vue'));
 Vue.component('table-component', require('./components/TableComponent.vue'));
+Vue.component('form-component', require('./components/FormComponent.vue'));
+Vue.component('show-component', require('./components/ShowComponent.vue'));
+Vue.component('sidebar-component', require('./components/SidebarComponent.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

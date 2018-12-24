@@ -35,17 +35,88 @@
         <script src="{{ asset('vendor/otter/assets/plugins/maps-google/plugin.js') }}"></script>
         <!-- Input Mask Plugin -->
         <script src="{{ asset('vendor/otter/assets/plugins/input-mask/plugin.js') }}"></script>
+        <style>
+            .sidebar {
+                background: #fff;
+                border-right: 1px solid rgba(0, 40, 100, 0.12);
+            }
+            .sidebar.fixed {
+                display: none;
+            }
+
+            .sidebar .nav-tabs .nav-item {
+                width: 100%;
+                display: block;
+            }
+
+            .sidebar .nav-tabs .nav-link {
+                border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+            }
+
+            a[data-toggle="collapse"] {
+                position: relative;
+            }
+
+            .sidebar .dropdown-toggle::after {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: 20px;
+                transform: translateY(-50%);
+            }
+
+            .sidebar .dropdown-toggle::after {
+                display: inline-block;
+                width: 0;
+                height: 0;
+                margin-left: .255em;
+                vertical-align: .255em;
+                content: "";
+                border-top: .3em solid;
+                border-right: .3em solid transparent;
+                border-bottom: 0;
+                border-left: .3em solid transparent;
+            }
+
+            .action-container {
+                position: absolute;
+                right: 20px;
+            }
+
+            @media (min-width: 992px) {
+                .fixed {
+                    flex: 0 0 200px;
+                    min-height: 100vh;
+                }
+                .col .fluid {
+                    min-height: 100vh;
+                }
+                .sidebar.fixed {
+                    display: block;
+                }
+            }
+
+            .flex-grow {
+                flex:1;
+            }
+        </style>
         @yield("head")
     </head>
     <body class="">
-        <div class="page">
-            <div id="app" class="page-main">
+        <div class="page container-fluid">
+            <div id="app" class="page-main row h-100">
+                @include("otter::partials/sidebar")
 
-                @include("otter::partials/header")
+                <!-- center content -->
+                <div class="col fluid d-flex flex-column px-0">
+                    @include("otter::partials/header")
+                    <!-- main content -->
+                    <div class="flex-grow">
+                        @yield("content")
+                    </div>
 
-                @yield("content")
-
-                @include("otter::partials/footer")
+                    @include("otter::partials/footer")
+                </div>
             </div>
 
             <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>

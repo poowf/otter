@@ -3,11 +3,12 @@
 namespace Poowf\Otter\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Poowf\Otter\Http\Controllers\Controller;
+use Poowf\Otter\Otter;
 
 class OtterViewController extends Controller
 {
     public function __construct(Request $request) {
+        parent::__construct();
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
         if(!app()->runningInConsole())
         {
@@ -15,7 +16,20 @@ class OtterViewController extends Controller
             $this->resourceNamespace = 'App\\Otter\\';
             $this->baseResourceName = ucfirst(str_singular($this->resourceName));
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
+            $this->allResourceNames = Otter::getResourceNames();
         }
+    }
+
+    /**
+     * Display the dashboard page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dashboard()
+    {
+        $allResourceNames = $this->allResourceNames;
+
+        return view('otter::pages.dashboard', compact('allResourceNames'));
     }
 
     /**
@@ -25,89 +39,96 @@ class OtterViewController extends Controller
      */
     public function index()
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-        $modelInstance = new $modelName;
+        $allResourceNames = $this->allResourceNames;
         $resourceName = $this->resourceName;
-
-//        Instantiating a new Resource
-//        $resourceInstance = new $this->resource;
+        $prettyResourceName = $this->baseResourceName;
         $resourceFields = json_encode($this->resource::fields());
 
-        return view('otter::pages.index', compact('resourceName', 'resourceFields'));
+        return view('otter::pages.index', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $allResourceNames = $this->allResourceNames;
+        $resourceName = $this->resourceName;
+        $prettyResourceName = $this->baseResourceName;
+        $resourceFields = json_encode($this->resource::fields());
+
+        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-        $modelInstance = new $modelName;
-        $modelInstance->fill($request->all());
-        $modelInstance->save();
-
-        return response()->json([
-            'status' => 'success',
-            new $this->resource($modelInstance),
-        ]);
+        //Intentionally Not Implemented
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  \Illuminate\Database\Eloquent\Model $resourceInstance
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($resourceInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
+        $allResourceNames = $this->allResourceNames;
+        $resourceName = $this->resourceName;
+        $prettyResourceName = $this->baseResourceName;
+        $resourceFields = json_encode($this->resource::fields());
+        $resourceId = $resourceInstance->id;
 
-        return new $this->resource($modelInstance);
+        return view('otter::pages.show', compact('allResourceNames', 'resourceId', 'prettyResourceName', 'resourceName', 'resourceFields'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model $resourceInstance
+     * @return \Illuminate\Http\Response
+     *
+     */
+    public function edit($resourceInstance)
+    {
+        $allResourceNames = $this->allResourceNames;
+        $resourceName = $this->resourceName;
+        $prettyResourceName = $this->baseResourceName;
+        $resourceFields = json_encode($this->resource::fields());
+        $resourceId = $resourceInstance->id;
+
+        return view('otter::pages.edit', compact('allResourceNames', 'resourceId', 'prettyResourceName', 'resourceName', 'resourceFields'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Database\Eloquent\Model $resourceInstance
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $resourceInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
-        $modelInstance->fill($request->all());
-        $modelInstance->save();
-
-        return response()->json([
-            'status' => 'success',
-            new $this->resource($modelInstance),
-        ]);
+        //Intentionally Not Implemented
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  \Illuminate\Database\Eloquent\Model $resourceInstance
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy($resourceInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
-        $modelInstance->delete();
-
-        return response()->json([
-            'status' => 'success'
-        ]);
+        //Intentionally Not Implemented
     }
 }

@@ -8,6 +8,7 @@ use Poowf\Otter\Http\Controllers\Controller;
 class OtterController extends Controller
 {
     public function __construct(Request $request) {
+        parent::__construct();
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
         if(!app()->runningInConsole())
         {
@@ -43,7 +44,7 @@ class OtterController extends Controller
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
         $modelInstance = new $modelName;
-        $modelInstance->fill($request->all());
+        $modelInstance->forceFill($request->all());
         $modelInstance->save();
 
         return response()->json([
@@ -58,11 +59,12 @@ class OtterController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($modelInstance)
     {
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
+//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
+
 
         return new $this->resource($modelInstance);
     }
@@ -74,11 +76,11 @@ class OtterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $modelInstance)
     {
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
+//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
         $modelInstance->fill($request->all());
         $modelInstance->save();
 
@@ -94,11 +96,11 @@ class OtterController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($modelInstance)
     {
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
-        $modelInstance = $modelName::findOrFail($id);
+//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
         $modelInstance->delete();
 
         return response()->json([

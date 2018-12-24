@@ -10,11 +10,12 @@
         <div class="container">
             <div class="page-header">
                 <h1 class="page-title">
-                    Dashboard
+                    {{ $prettyResourceName }}
                 </h1>
             </div>
             <table-component
                     resource-name="{{ $resourceName }}"
+                    pretty-resource-name="{{ $prettyResourceName }}"
                     :resource-fields="{{ $resourceFields }}"
             ></table-component>
         </div>
