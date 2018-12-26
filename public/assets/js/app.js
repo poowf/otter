@@ -318,6 +318,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!value) return '';
             value = value.toString();
             return value.charAt(0).toUpperCase() + value.slice(1);
+        },
+        removeUnderscore: function removeUnderscore(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.replace(/_/g, ' ');
+        },
+        sanitize: function sanitize(value) {
+            if (!value) return '';
+            value = value.toString();
+            value = value.match(/[A-Za-z][a-z]*/g) || [];
+
+            return value.join(' ');
         }
     },
     methods: {
@@ -1134,7 +1146,9 @@ var render = function() {
                     "tr",
                     [
                       _vm._l(_vm.resourceFields, function(tableType, tableKey) {
-                        return _c("th", [_vm._v(_vm._s(tableKey))])
+                        return _c("th", [
+                          _vm._v(_vm._s(_vm._f("sanitize")(tableKey)))
+                        ])
                       }),
                       _vm._v(" "),
                       _c("th")

@@ -66,7 +66,27 @@ class Otter
 
         return $names;
     }
-    
+
+    /**
+     * Retrieve the users's gravatar photo
+     *
+     * @return string
+     */
+    public static function getGravatarLink($email)
+    {
+        $hash = md5(strtolower(trim($email)));
+
+        return "//www.gravatar.com/avatar/$hash";
+    }
+
+    /**
+     * Retrieve the model instance
+     * This method checks if the object is an instance of the model and if it is not, 
+     * it will take the object as the primary key of the model and retrieve it
+     *
+     * @param  \Closure  $callback
+     * @return static
+     */
     public static function getModelInstance($object, $modelName)
     {
        return ($object instanceof $modelName) ? $object  : $modelName::findOrFail($object);

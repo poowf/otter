@@ -3,7 +3,7 @@
         <div class="header py-4">
             <div class="container">
                 <div class="d-flex">
-                    <a class="header-brand" href="/otter">
+                    <a class="header-sidebar-brand" href="/otter">
                         <img src="{{ asset('vendor/otter/demo/brand/tabler.svg') }}" class="header-brand-img" alt="tabler logo">
                     </a>
                 </div>

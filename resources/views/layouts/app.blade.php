@@ -94,6 +94,9 @@
                 .sidebar.fixed {
                     display: block;
                 }
+                .header .header-brand {
+                    display: none;
+                }
             }
 
             .flex-grow {

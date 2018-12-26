@@ -10,7 +10,7 @@
         <div class="container">
             <div class="page-header">
                 <h1 class="page-title">
-                    {{ $prettyResourceName }}
+                    {{ ucfirst($resourceName) }}
                 </h1>
             </div>
             <table-component

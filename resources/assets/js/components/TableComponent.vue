@@ -13,7 +13,7 @@
                         <table class="table card-table table-vcenter text-nowrap">
                             <thead>
                                 <tr>
-                                    <th v-for="tableType, tableKey in resourceFields">{{ tableKey }}</th>
+                                    <th v-for="tableType, tableKey in resourceFields">{{ tableKey | sanitize }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -76,7 +76,19 @@
                 if (!value) return ''
                 value = value.toString()
                 return value.charAt(0).toUpperCase() + value.slice(1)
-            }
+            },
+            removeUnderscore: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                return value.replace(/_/g, ' ');
+            },
+            sanitize: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                value = value.match(/[A-Za-z][a-z]*/g) || [];
+
+                return value.join(' ');
+            },
         },
         methods: {
             fetchResourceIndex() {
