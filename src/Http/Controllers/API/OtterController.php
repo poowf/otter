@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Poowf\Otter\Otter;
 use Poowf\Otter\Http\Controllers\Controller;
 
 class OtterController extends Controller
@@ -16,6 +17,8 @@ class OtterController extends Controller
             $this->resourceNamespace = 'App\\Otter\\';
             $this->baseResourceName = ucfirst(str_singular($this->resourceName));
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
+            /** @var TYPE_NAME $model */
+            $this->modelName = $this->resource::$model;
         }
     }
 
@@ -28,8 +31,10 @@ class OtterController extends Controller
     {
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
+        //Instantiate new model instance
         $modelInstance = new $modelName;
 
+        //Return an Otter resource of the model
         return $this->resource::collection($modelInstance::all());
     }
 
@@ -43,10 +48,14 @@ class OtterController extends Controller
     {
         /** @var TYPE_NAME $model */
         $modelName = $this->resource::$model;
+        //Instantiate new model instance
         $modelInstance = new $modelName;
+        //Force filling of variables into model instance
         $modelInstance->forceFill($request->all());
+        //Save model instance
         $modelInstance->save();
 
+        //Return response
         return response()->json([
             'status' => 'success',
             new $this->resource($modelInstance),
@@ -61,10 +70,8 @@ class OtterController extends Controller
      */
     public function show($modelInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
-
+        //Retrieve the model instance
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
 
         return new $this->resource($modelInstance);
     }
@@ -78,9 +85,8 @@ class OtterController extends Controller
      */
     public function update(Request $request, $modelInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
+        //Retrieve the model instance
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
         $modelInstance->fill($request->all());
         $modelInstance->save();
 
@@ -98,9 +104,8 @@ class OtterController extends Controller
      */
     public function destroy($modelInstance)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
-//        $modelInstance = $modelName::findOrFail($modelInstance)->first();
+        //Retrieve the model instance
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
         $modelInstance->delete();
 
         return response()->json([

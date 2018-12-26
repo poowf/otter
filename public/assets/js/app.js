@@ -1168,7 +1168,7 @@ var render = function() {
                                   "/otter/" +
                                   _vm.resourceName +
                                   "/" +
-                                  resource.id +
+                                  resource.route_key +
                                   "/"
                               }
                             },
@@ -1199,7 +1199,7 @@ var render = function() {
                                       "/otter/" +
                                       _vm.resourceName +
                                       "/" +
-                                      resource.id +
+                                      resource.route_key +
                                       "/edit/"
                                   }
                                 },
@@ -1217,7 +1217,7 @@ var render = function() {
                                   staticClass: "btn dropdown-item",
                                   on: {
                                     click: function($event) {
-                                      _vm.handleDelete(resource.id)
+                                      _vm.handleDelete(resource.route_key)
                                     }
                                   }
                                 },

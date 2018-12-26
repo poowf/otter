@@ -29,4 +29,16 @@ class DummyClass extends OtterResource
             'example-field' => 'type',
         ];
     }
+
+    /**
+     * Fields to be hidden in the resource collection
+     *
+     * @return array
+     */
+    public function hidden()
+    {
+        return [
+            'password'
+        ];
+    }
 }

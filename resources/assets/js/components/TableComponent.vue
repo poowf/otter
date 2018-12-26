@@ -21,14 +21,14 @@
                                 <tr v-for="resource, index in resourceData">
                                     <td v-for="fieldType, fieldKey in resourceFields">{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
-                                        <a class="btn btn-secondary btn-sm" v-bind:href="`/otter/${resourceName}/${resource.id}/`">View</a>
+                                        <a class="btn btn-secondary btn-sm" v-bind:href="`/otter/${resourceName}/${resource.route_key}/`">View</a>
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Action</button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" v-bind:href="`/otter/${resourceName}/${resource.id}/edit/`">
+                                                <a class="dropdown-item" v-bind:href="`/otter/${resourceName}/${resource.route_key}/edit/`">
                                                     <i class="fe fe-edit mr-3"></i>Edit
                                                 </a>
-                                                <button class="btn dropdown-item" @click="handleDelete(resource.id)">
+                                                <button class="btn dropdown-item" @click="handleDelete(resource.route_key)">
                                                     <i class="fe fe-delete mr-3"></i>Delete
                                                 </button>
                                             </div>

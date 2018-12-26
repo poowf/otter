@@ -11,7 +11,7 @@ class ResourceCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'otter:resource {name : The name of the class} {--model= : The name of the model}';
+    protected $signature = 'otter:resource {name : The name of the class} {--model= : The class name of the model}';
 
     /**
      * The console command description.
@@ -34,7 +34,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/../../stubs/resource.stub';
+        return __DIR__.'/../../stubs/OtterResource.stub';
     }
 
     /**
@@ -59,8 +59,10 @@ class ResourceCommand extends GeneratorCommand
     protected function buildClass($name)
     {
         $model = $this->option('model');
-        $fullModelName = ($model) ? str_replace('/', '\\', $model) : $this->rootNamespace() . '\\' . $this->argument('name');
-        return str_replace('DummyFullClass', $fullModelName, parent::buildClass($name));
+        //Check if class name of the model is supplied and use that, otherwise use the root name space and append the name of the model for the classname
+        $fullModelClassName = ($model) ? str_replace('/', '\\', $model) : $this->rootNamespace() . '\\' . $this->argument('name');
+        //Replace the text with the full model classname and execute the buildclass to generate the rest of the stub
+        return str_replace('DummyFullClass', $fullModelClassName, parent::buildClass($name));
     }
 
     /**

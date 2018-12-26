@@ -66,4 +66,9 @@ class Otter
 
         return $names;
     }
+    
+    public static function getModelInstance($object, $modelName)
+    {
+       return ($object instanceof $modelName) ? $object  : $modelName::findOrFail($object);
+    }
 }
