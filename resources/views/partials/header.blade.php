@@ -3,7 +3,7 @@
         <div class="container">
             <div class="d-flex">
                 <a class="header-brand" href="/otter">
-                    <img src="{{ asset('vendor/otter/demo/brand/tabler.svg') }}" class="header-brand-img" alt="tabler logo">
+                    <img src="{{ asset(mix('assets/images/tabler.svg', 'vendor/otter')) }}" class="header-brand-img" alt="tabler logo">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="dropdown">
@@ -44,8 +44,8 @@
                             <a href="/otter" class="nav-link active"><i class="fe fe-home"></i> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Interface</a>
-                            <div class="dropdown-menu dropdown-menu-arrow">
+                            <a href="mobile-menu" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Interface</a>
+                            <div id="mobile-menu" class="dropdown-menu dropdown-menu-arrow">
                                 <a href="./cards.html" class="dropdown-item ">Cards design</a>
                                 <a href="./charts.html" class="dropdown-item ">Charts</a>
                                 <a href="./pricing-cards.html" class="dropdown-item ">Pricing cards</a>

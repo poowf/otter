@@ -28,7 +28,7 @@
                                                 <a class="dropdown-item" v-bind:href="`/otter/${resourceName}/${resource.route_key}/edit/`">
                                                     <i class="fe fe-edit mr-3"></i>Edit
                                                 </a>
-                                                <button class="btn dropdown-item" @click="handleDelete(resource.route_key)">
+                                                <button class="btn dropdown-item" @click.stop="handleAction('Delete', resource.route_key)">
                                                     <i class="fe fe-delete mr-3"></i>Delete
                                                 </button>
                                             </div>
@@ -41,6 +41,15 @@
                 </div>
             </div>
         </div>
+        <modal-component :id="`modal-confirmation`" :title="modal.title" :action="modal.action" :visible="modal.visible" @close="resetModal()">
+            <div slot="body">
+                <p class="">{{ modal.action }} Resource?</p>
+            </div>
+            <div slot="footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @click="handleDelete()">{{ modal.action }}</button>
+            </div>
+        </modal-component>
     </div>
 </template>
 
@@ -50,52 +59,30 @@
         props: [
             'prettyResourceName',
             'resourceName',
-            'resourceFields',
+            'resourceFields'
         ],
         data() {
             return {
+                loading: false,
                 resourceData: [],
-            }
-        },
-        watch: {
-            resourceName() {
-                console.log("changed");
-                // if (this.resourceName) {
-                //     this.fetchResourceIndex();
-                // }
+                currentSelectedResource: null,
+                modal: {
+                    title: null,
+                    action: null,
+                    visible: false,
+                },
             }
         },
         created() {
             this.fetchResourceIndex();
         },
         mounted() {
-            console.log('Component mounted.')
-        },
-        filters: {
-            capitalize: function (value) {
-                if (!value) return ''
-                value = value.toString()
-                return value.charAt(0).toUpperCase() + value.slice(1)
-            },
-            removeUnderscore: function (value) {
-                if (!value) return ''
-                value = value.toString()
-                return value.replace(/_/g, ' ');
-            },
-            sanitize: function (value) {
-                if (!value) return ''
-                value = value.toString()
-                value = value.match(/[A-Za-z][a-z]*/g) || [];
-
-                return value.join(' ');
-            },
         },
         methods: {
             fetchResourceIndex() {
                 axios.get(`/api/otter/${this.resourceName}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
-                        console.log(this.resourceData);
                     })
                     .catch(e => {
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
@@ -103,10 +90,15 @@
                     .finally(() => {
                     });
             },
-            handleDelete(resourceId) {
-                axios.delete(`/api/otter/${this.resourceName}/${resourceId}`)
+            handleAction(action, resourceKey) {
+                this.modal.title = action + ' Confirmation';
+                this.modal.action = action;
+                this.modal.visible = true;
+                this.currentSelectedResource = resourceKey;
+            },
+            handleDelete() {
+                axios.delete(`/api/otter/${this.resourceName}/${this.currentSelectedResource}`)
                     .then(response => {
-                        console.log(response);
                         console.log("success");
                         this.fetchResourceIndex();
                     })
@@ -116,6 +108,10 @@
                     .finally(() => {
                         this.loading = false;
                     });
+            },
+            resetModal() {
+                this.modal.visible = false;
+                this.currentSelectedResource = null;
             },
         }
     }

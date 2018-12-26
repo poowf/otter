@@ -35,11 +35,24 @@ mix
                     })
                 ]
             })
-        ]
+        ],
+        externals: {
+            'sparkline': '__webpack_require__("./node_modules/tabler-ui/dist/assets/js/vendors/jquery.sparkline.min.js")',
+            'circle-progress': '__webpack_require__("./node_modules/tabler-ui/dist/assets/js/vendors/circle-progress.min.js")'
+        }
     })
 
     .js('resources/assets/js/bootstrap.js', 'assets/js')
     .js('resources/assets/js/app.js', 'assets/js')
+    .js('node_modules/tabler-ui/dist/assets/js/core.js', 'assets/js')
+    
     .sass('resources/assets/sass/app.scss', 'public/assets/css')
+    .copy('node_modules/tabler-ui/dist/assets/css/tabler.css', 'public/assets/css/tabler.css')
+    .copy('node_modules/tabler-ui/dist/demo/brand/tabler.svg', 'public/assets/images/tabler.svg')
+    .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.eot', 'public/assets/fonts/feather/feather-webfont.eot')
+    .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.svg', 'public/assets/fonts/feather/feather-webfont.svg')
+    .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.ttf', 'public/assets/fonts/feather/feather-webfont.ttf')
+    .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.woff', 'public/assets/fonts/feather/feather-webfont.woff')
+
     .extract(['jquery'])
     .version();

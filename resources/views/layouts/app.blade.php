@@ -18,23 +18,8 @@
         <title>Otter</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
-        <script src="{{ asset('vendor/otter/assets/js/require.min.js') }}"></script>
-        <script>
-            requirejs.config({
-                baseUrl: '/vendor/otter/',
-            });
-        </script>
-        <!-- Dashboard Core -->
-        <link href="{{ asset('vendor/otter/assets/css/dashboard.css') }}" rel="stylesheet" />
-        <script src="{{ asset('vendor/otter/assets/js/dashboard.js') }}"></script>
-        <!-- c3.js Charts Plugin -->
-        <link href="{{ asset('vendor/otter/assets/plugins/charts-c3/plugin.css') }}" rel="stylesheet" />
-        <script src="{{ asset('vendor/otter/assets/plugins/charts-c3/plugin.js') }}"></script>
-        <!-- Google Maps Plugin -->
-        <link href="{{ asset('vendor/otter/assets/plugins/maps-google/plugin.css') }}" rel="stylesheet" />
-        <script src="{{ asset('vendor/otter/assets/plugins/maps-google/plugin.js') }}"></script>
-        <!-- Input Mask Plugin -->
-        <script src="{{ asset('vendor/otter/assets/plugins/input-mask/plugin.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset(mix('assets/css/tabler.css', 'vendor/otter')) }}">
+
         <style>
             .sidebar {
                 background: #fff;
@@ -83,6 +68,14 @@
                 right: 20px;
             }
 
+            .card-options a.dropdown-item:active {
+                color: #fff;
+            }
+
+            .card-options a.dropdown-item:not(.btn) {
+                margin-left: 0;
+            }
+
             @media (min-width: 992px) {
                 .fixed {
                     flex: 0 0 200px;
@@ -126,6 +119,7 @@
             <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
             <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
             <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
+            <script src="{{ asset(mix('assets/js/core.js', 'vendor/otter')) }}"></script>
             @yield("scripts")
         </div>
     </body>

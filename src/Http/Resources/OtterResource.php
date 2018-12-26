@@ -14,10 +14,13 @@ class OtterResource extends JsonResource
      */
     public function toArray($request)
     {
-        $array = parent::toArray($request);
-        $array['route_key'] = $this->{parent::getRouteKeyName()};
+        $transformed = parent::toArray($request);
+        $transformed['route_key'] = $this->{parent::getRouteKeyName()};
+        $transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
+        $transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
+        $transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
 
-        return $array;
+        return $transformed;
     }
 
     /**

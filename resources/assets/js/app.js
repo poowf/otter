@@ -22,6 +22,19 @@ Vue.component('table-component', require('./components/TableComponent.vue'));
 Vue.component('form-component', require('./components/FormComponent.vue'));
 Vue.component('show-component', require('./components/ShowComponent.vue'));
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue'));
+Vue.component('modal-component', require('./components/ModalComponent.vue'));
+
+Vue.filter("capitalize", value => {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+})
+
+Vue.filter("sanitize", value => {
+    if (!value) return ''
+    value = value.toString().match(/[A-Za-z][a-z]*/g) || [];
+    return value.join(' ').replace(/\b\w/g, l => l.toUpperCase());
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,5 +43,5 @@ Vue.component('sidebar-component', require('./components/SidebarComponent.vue'))
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });

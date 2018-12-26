@@ -1,3 +1,8 @@
+webpackJsonp([2],{
+
+/***/ "./node_modules/tabler-ui/dist/assets/js/core.js":
+/***/ (function(module, exports, __webpack_require__) {
+
 /**
  *
  */
@@ -15,7 +20,7 @@ let hexToRgba = function(hex, opacity) {
 /**
  *
  */
-require(['jquery'], function($) {
+$(document).ready(function() {
   /** Constant div card */
   const DIV_CARD = 'div.card';
 
@@ -75,7 +80,7 @@ require(['jquery'], function($) {
       });
     };
 
-    require(['sparkline'], function() {
+    new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__("sparkline")]; ((function() {
       $('[data-sparkline]').each(function() {
         let $chart = $(this);
 
@@ -83,12 +88,12 @@ require(['jquery'], function($) {
           color: $chart.attr('data-sparkline-color')
         });
       });
-    });
+    }).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
   }
 
   /**  */
   if ($('.chart-circle').length) {
-    require(['circle-progress'], function() {
+    new Promise(function(resolve) { resolve(); }).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__("circle-progress")]; ((function() {
       $('.chart-circle').each(function() {
         let $this = $(this);
 
@@ -102,6 +107,32 @@ require(['jquery'], function($) {
           lineCap: 'round'
         });
       });
-    });
+    }).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}).catch(__webpack_require__.oe);
   }
 });
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./node_modules/tabler-ui/dist/assets/js/core.js");
+
+
+/***/ }),
+
+/***/ "circle-progress":
+/***/ (function(module, exports) {
+
+module.exports = __webpack_require__("./node_modules/tabler-ui/dist/assets/js/vendors/circle-progress.min.js");
+
+/***/ }),
+
+/***/ "sparkline":
+/***/ (function(module, exports) {
+
+module.exports = __webpack_require__("./node_modules/tabler-ui/dist/assets/js/vendors/jquery.sparkline.min.js");
+
+/***/ })
+
+},[2]);

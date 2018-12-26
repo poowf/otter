@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
-                            <label class="form-label">{{ fieldKey }}</label>
+                            <label class="form-label">{{ fieldKey | sanitize }}</label>
                             <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
                         </div>
                     </div>
@@ -27,21 +27,14 @@
             'resourceId',
             'resourceName',
             'resourceFields',
-            'action'
+            'action',
         ],
         data() {
             return {
                 handleText: 'Create',
                 handleButtonText: 'Create',
+                loading: false,
                 resourceData: {},
-            }
-        },
-        watch: {
-            resourceName() {
-                console.log("changed");
-                // if (this.resourceName) {
-                //     this.fetchResource();
-                // }
             }
         },
         created() {
@@ -58,21 +51,12 @@
             }
         },
         mounted() {
-            console.log('Component mounted.')
-        },
-        filters: {
-            capitalize: function (value) {
-                if (!value) return ''
-                value = value.toString()
-                return value.charAt(0).toUpperCase() + value.slice(1)
-            }
         },
         methods: {
             fetchResource() {
                 axios.get(`/api/otter/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
-                        console.log(this.resourceData);
                     })
                     .catch(e => {
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
@@ -93,7 +77,6 @@
             handleStore(e) {
                 axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
                     .then(response => {
-                        console.log(response);
                         console.log("success");
                         // window.location = response.data.redirect;
                         window.location = `/otter/${this.resourceName}`;
@@ -108,7 +91,6 @@
             handleUpdate(e) {
                 axios.patch(`/api/otter/${this.resourceName}/${this.resourceId}`, this.resourceData)
                     .then(response => {
-                        console.log(response);
                         console.log("success");
                         this.fetchResource();
                     })

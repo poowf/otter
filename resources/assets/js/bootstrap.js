@@ -10,7 +10,19 @@ window._ = require('lodash');
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
+
+    require('bootstrap');
 } catch (e) {}
+
+window['require'] = function(modules, callback) {
+    var modulesToRequire = modules.forEach(function(module) {
+        switch(module) {
+            case 'circle-progress': return require('../../../node_modules/tabler-ui/dist/assets/js/vendors/circle-progress.min.js');
+            case 'jquery': return require('jquery');
+        }
+    })
+    callback.apply(this, modulesToRequire);
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

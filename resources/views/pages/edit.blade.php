@@ -25,8 +25,5 @@
 @section("scripts")
     <script type="text/javascript">
         "use strict";
-        require(['jquery'], function($) {
-
-        });
     </script>
 @stop
