@@ -2,7 +2,6 @@
 
 namespace DummyNamespace;
 
-use Illuminate\Http\Request;
 use Poowf\Otter\Http\Resources\OtterResource;
 
 class DummyClass extends OtterResource
@@ -25,8 +24,6 @@ class DummyClass extends OtterResource
             'name' => 'text',
             'password' => 'password',
             'email' => 'email',
-            'first_name' => 'text',
-            'example-field' => 'type',
         ];
     }
 

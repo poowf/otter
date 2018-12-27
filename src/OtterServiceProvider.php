@@ -30,7 +30,7 @@ class OtterServiceProvider extends ServiceProvider
         Route::group([
             'prefix' => config('otter.uri', 'otter'),
             'namespace' => 'Poowf\Otter\Http\Controllers',
-            'middleware' => config('otter.middleware', 'web'),
+            'middleware' => config('otter.middleware.web', 'web'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
@@ -43,7 +43,7 @@ class OtterServiceProvider extends ServiceProvider
         Route::group([
             'prefix' => 'api/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers\API',
-            'middleware' => 'api',
+            'middleware' => config('otter.middleware.api', 'api'),
         ], function () use($names) {
             foreach($names as $pluralName)
             {
@@ -54,7 +54,7 @@ class OtterServiceProvider extends ServiceProvider
         Route::group([
             'prefix' => '/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers',
-            'middleware' => config('otter.middleware', 'web'),
+            'middleware' => config('otter.middleware.web', 'web'),
         ], function () use($names) {
             foreach($names as $pluralName)
             {

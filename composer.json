@@ -1,21 +1,31 @@
 {
     "name": "poowf/otter",
-    "description": "A relatively automatic CRUD backend administration panel",
+    "description": "A relatively automatic CRUD backend administration panel for Laravel",
+    "keywords": [
+        "laravel",
+        "administration",
+        "backend"
+    ],
     "license": "MIT",
     "authors": [
         {
             "name": "Zane J. Chua",
-            "email": "zane.jocelyn@gmail.com"
+            "email": "zane@poowf.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.0",
+        "illuminate/console": "5.5.x|5.6.x|5.7.x",
+        "illuminate/routing": "5.5.x|5.6.x|5.7.x"
     },
     "autoload": {
         "psr-4": {
             "Poowf\\Otter\\": "src"
         }
+    },
+    "support" : {
+        "source" : "https://github.com/poowf/otter",
+        "issues" : "https://github.com/poowf/otter/issues"
     },
     "extra": {
         "laravel": {
@@ -26,5 +36,10 @@
                 "Otter": "Poowf\\Otter\\Facade"
             }
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

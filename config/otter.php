@@ -13,7 +13,19 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware.web' => ['web'],
+    'middleware.api' => ['api'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Otter User Model Property
+    |--------------------------------------------------------------------------
+    |
+    | The following will be used when Otter is retrieving the name and email
+    | of a user through Auth::user(). Change these if you use some other names
+    | for the properties on your User model.
+    |
+    */
 
     'user' => [
         'name' => 'name',
