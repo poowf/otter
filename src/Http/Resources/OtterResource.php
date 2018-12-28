@@ -69,12 +69,22 @@ class OtterResource extends JsonResource
         {
             $otterResourceNamespace = 'App\\Otter\\';
             $otterResource = $otterResourceNamespace . $otterResourceName;
+            $relationshipType = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($this->{$relationKey}()));
 
             $relation = [];
-            $relation['relationshipType'] = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($this->{$relationKey}()));
-            $relation['otterResourceName'] = $otterResourceName;
-            $relation['resourceUrlName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
+            $relation['relationshipName'] = $relationKey;
+            $relation['relationshipType'] = $relationshipType;
+            $relation['resourceName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
             $relation['resourceFields'] = Otter::getAvailableFields($otterResource);
+            if($relationshipType === 'BelongsTo' || $relationshipType === 'HasOne')
+            {
+                $modelInstance = $this->{$relationKey};
+                $relation['resourceId'] = ($modelInstance) ? $modelInstance->{$modelInstance->getRouteKeyName()} : null;
+            }
+            else
+            {
+                $relation['resourceId'] = 'null';
+            }
             $relationalDataArray[$relationKey] = $relation;
         }
 

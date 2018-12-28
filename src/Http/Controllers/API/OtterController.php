@@ -13,12 +13,13 @@ class OtterController extends Controller
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
         if(!app()->runningInConsole())
         {
+            //TODO: Retreiving the resource name like this means it's highly reliant on the singular and plural words of the model
+            // Wondering if there is a way to decouple it.
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
             //TODO: This is ugly, try to look for an alternative way to transform the string.
             $this->baseResourceName = str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $this->resourceName))));
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
-            /** @var TYPE_NAME $model */
             $this->modelName = $this->resource::$model;
         }
     }
@@ -35,7 +36,7 @@ class OtterController extends Controller
         $modelInstance = new $modelName;
 
         //Return an Otter resource of the model
-        return $this->resource::collection($modelInstance::all());
+        return $this->resource::collection(($modelInstance)::all());
     }
 
     /**

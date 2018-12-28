@@ -23,6 +23,7 @@ Vue.component('form-component', require('./components/FormComponent.vue'));
 Vue.component('show-component', require('./components/ShowComponent.vue'));
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue'));
 Vue.component('modal-component', require('./components/ModalComponent.vue'));
+Vue.component('single-resource-component', require('./components/SingleResourceComponent.vue'));
 
 Vue.filter("capitalize", value => {
     if (!value) return ''

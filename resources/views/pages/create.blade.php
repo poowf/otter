@@ -14,7 +14,6 @@
         </div>
         <form-component
                 resource-name="{{ $resourceName }}"
-                pretty-resource-name="{{ $prettyResourceName }}"
                 action="create"
                 :resource-fields="{{ $resourceFields }}"
         ></form-component>

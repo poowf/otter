@@ -18,6 +18,7 @@ class OtterViewController extends Controller
             //TODO: This is ugly, try to look for an alternative way to transform the string.
             $this->baseResourceName = str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $this->resourceName))));
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
+            $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
             $this->allResourceNames = Otter::getResourceNames();
             /** @var TYPE_NAME $model */
             $this->modelName = (route_is('web.otter.dashboard')) ? null : $this->resource::$model;
@@ -46,10 +47,11 @@ class OtterViewController extends Controller
     {
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
+        $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
         $resourceFields = json_encode(Otter::getAvailableFields($this->resource));
 
-        return view('otter::pages.index', compact('allResourceNames', 'resourceName', 'resourceFields'));
+        return view('otter::pages.index', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -61,10 +63,11 @@ class OtterViewController extends Controller
     {
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
+        $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
         $resourceFields = json_encode($this->resource::fields());
 
-        return view('otter::pages.create', compact('allResourceNames', 'resourceName', 'resourceFields'));
+        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -90,12 +93,13 @@ class OtterViewController extends Controller
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
+        $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
         $resourceFields = json_encode(Otter::getAvailableFields($this->resource));
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
 
-        return view('otter::pages.show', compact('allResourceNames', 'resourceId', 'resourceName', 'resourceFields'));
+        return view('otter::pages.show', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -111,11 +115,12 @@ class OtterViewController extends Controller
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
+        $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
         $resourceFields = json_encode($this->resource::fields());
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
-        return view('otter::pages.edit', compact('allResourceNames', 'resourceId', 'resourceName', 'resourceFields'));
+        return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'));
     }
 
     /**

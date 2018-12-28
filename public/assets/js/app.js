@@ -176,16 +176,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "ShowComponent",
@@ -240,6 +230,71 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     name: "SidebarComponent",
     props: ['allResourceNames'],
     mounted: function mounted() {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SingleResourceComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "SingleResourceComponent",
+    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'],
+    data: function data() {
+        return {
+            loading: false,
+            resourceData: {}
+        };
+    },
+    created: function created() {
+        this.fetchResource();
+    },
+    mounted: function mounted() {},
+
+    methods: {
+        fetchResource: function fetchResource() {
+            var _this = this;
+
+            axios.get('/api/otter/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+                _this.resourceData = response.data.data;
+            }).catch(function (e) {
+                _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
+            }).finally(function () {
+                _this.loading = false;
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -1105,103 +1160,68 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c("h3", { staticClass: "card-title" }, [
-          _vm._v(_vm._s(_vm._f("beautify")(_vm.resourceName)))
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-options" }, [
-          _c("div", { staticClass: "dropdown card-options-dropdown" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "dropdown-item",
-                  attrs: {
-                    href:
-                      "/otter/" +
-                      _vm.resourceName +
-                      "/" +
-                      _vm.resourceId +
-                      "/edit/"
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fe fe-edit mr-3" }),
-                  _vm._v("Edit\n                        ")
-                ]
-              )
-            ])
-          ])
-        ])
-      ]),
+  return _c(
+    "div",
+    [
+      _c("single-resource-component", {
+        attrs: {
+          "resource-name": _vm.resourceName,
+          "resource-id": _vm.resourceId,
+          "resource-fields": _vm.resourceFields
+        }
+      }),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
-            return _c("div", { staticClass: "col-12" }, [
-              _c("div", { staticClass: "h6" }, [
-                _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
-              ]),
-              _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
-            ])
-          }),
-          0
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _vm.resourceData["relations"]
-      ? _c(
-          "div",
-          _vm._l(_vm.resourceData["relations"], function(
-            relation,
-            relationKey
-          ) {
-            return _c("div", [
-              relation.relationshipType === "HasMany"
-                ? _c(
-                    "div",
-                    [
-                      _c("table-component", {
-                        attrs: {
-                          "resource-name": relation.resourceUrlName,
-                          "resource-fields": relation.resourceFields
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e()
-            ])
-          }),
-          0
-        )
-      : _vm._e()
-  ])
+      _vm.resourceData["relations"]
+        ? _c(
+            "div",
+            _vm._l(_vm.resourceData["relations"], function(
+              relation,
+              relationKey
+            ) {
+              return _c("div", [
+                relation.relationshipType === "HasMany" ||
+                relation.relationshipType === "BelongsToMany"
+                  ? _c(
+                      "div",
+                      [
+                        _c("table-component", {
+                          attrs: {
+                            "resource-name": relation.resourceName,
+                            "resource-fields": relation.resourceFields
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                relation.relationshipType === "BelongsTo" ||
+                relation.relationshipType === "HasOne"
+                  ? _c(
+                      "div",
+                      [
+                        _c("single-resource-component", {
+                          attrs: {
+                            "pretty-resource-name": relation.relationshipName,
+                            "resource-name": relation.resourceName,
+                            "resource-id": relation.resourceId,
+                            "resource-fields": relation.resourceFields
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ])
+            }),
+            0
+          )
+        : _vm._e()
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-option dropdown-toggle",
-        attrs: { type: "button", "data-toggle": "dropdown" }
-      },
-      [_c("i", { staticClass: "fe fe-more-vertical" })]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -1435,6 +1455,97 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-294c2f46", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3713e880\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SingleResourceComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _c("h3", { staticClass: "card-title" }, [
+          _vm.prettyResourceName
+            ? _c("span", [
+                _vm._v(_vm._s(_vm._f("beautify")(_vm.prettyResourceName)))
+              ])
+            : _c("span", [_vm._v(_vm._s(_vm._f("beautify")(_vm.resourceName)))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-options" }, [
+          _c("div", { staticClass: "dropdown card-options-dropdown" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "dropdown-item",
+                  attrs: {
+                    href:
+                      "/otter/" +
+                      _vm.resourceName +
+                      "/" +
+                      _vm.resourceId +
+                      "/edit/"
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fe fe-edit mr-3" }),
+                  _vm._v("Edit\n                        ")
+                ]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
+            return _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "h6" }, [
+                _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
+              ]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
+            ])
+          }),
+          0
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-option dropdown-toggle",
+        attrs: { type: "button", "data-toggle": "dropdown" }
+      },
+      [_c("i", { staticClass: "fe fe-more-vertical" })]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3713e880", module.exports)
   }
 }
 
@@ -13100,6 +13211,7 @@ Vue.component('form-component', __webpack_require__("./resources/assets/js/compo
 Vue.component('show-component', __webpack_require__("./resources/assets/js/components/ShowComponent.vue"));
 Vue.component('sidebar-component', __webpack_require__("./resources/assets/js/components/SidebarComponent.vue"));
 Vue.component('modal-component', __webpack_require__("./resources/assets/js/components/ModalComponent.vue"));
+Vue.component('single-resource-component', __webpack_require__("./resources/assets/js/components/SingleResourceComponent.vue"));
 
 Vue.filter("capitalize", function (value) {
   if (!value) return '';
@@ -13312,6 +13424,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1d893ab8", Component.options)
   } else {
     hotAPI.reload("data-v-1d893ab8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SingleResourceComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SingleResourceComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3713e880\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SingleResourceComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SingleResourceComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3713e880", Component.options)
+  } else {
+    hotAPI.reload("data-v-3713e880", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
