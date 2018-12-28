@@ -9,6 +9,17 @@
                             <label class="form-label">{{ fieldKey | beautify }}</label>
                             <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
                         </div>
+                        <div v-for="relationalMetaData, relationalKey in relationalFields" class="form-group">
+                            <label class="form-label">{{ relationalKey | beautify }}</label>
+                            <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'HasMany' || relationalMetaData.relationshipType === 'BelongsToMany'" v-model="relationalSelection[`${relationalKey}`]">
+                                <option disabled selected>Select {{ relationalKey | beautify }}</option>
+                                <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id" >{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
+                            </select>
+                            <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'HasOne' || relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalSelection[`${relationalKey}`]">
+                                <option disabled selected>Select {{ relationalKey | beautify }}</option>
+                                <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id" >{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -26,6 +37,7 @@
             'resourceId',
             'resourceName',
             'resourceFields',
+            'relationalFields',
             'action',
         ],
         data() {
@@ -34,6 +46,8 @@
                 handleButtonText: 'Create',
                 loading: false,
                 resourceData: {},
+                relationalData: {},
+                relationalSelection: {},
             }
         },
         created() {
@@ -48,14 +62,45 @@
                 this.handleText = "Create";
                 this.handleButtonText = "Create";
             }
+            this.fetchRelationalItems();
+            if(this.relationalFields)
+            {
+                this.prepareRelationalSelection();
+            }
         },
         mounted() {
         },
         methods: {
+            prepareRelationalSelection() {
+                let field = null;
+                let relationalFields = this.relationalFields;
+                for(field in relationalFields)
+                {
+                    if(relationalFields[field].relationshipType === 'HasMany' || relationalFields[field].relationshipType === 'BelongsToMany')
+                    {
+                        this.relationalSelection[field] = [];
+                    }
+                    else if(relationalFields[field].relationshipType === 'HasOne' || relationalFields[field].relationshipType === 'BelongsTo')
+                    {
+                        this.relationalSelection[field] = null;
+                    }
+                }
+            },
             fetchResource() {
                 axios.get(`/api/otter/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
+                    })
+                    .catch(e => {
+                        this.error = `Could not retrieve ${this.resourceName}. Server error.`;
+                    })
+                    .finally(() => {
+                    });
+            },
+            fetchRelationalItems() {
+                axios.get(`/api/otter/${this.resourceName}/relational`)
+                    .then(response=>{
+                        this.relationalData = response.data.data;
                     })
                     .catch(e => {
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
@@ -74,18 +119,22 @@
                 }
             },
             handleStore(e) {
-                axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
-                    .then(response => {
-                        console.log("success");
-                        // window.location = response.data.redirect;
-                        window.location = `/otter/${this.resourceName}`;
-                    })
-                    .catch(e => {
-                        this.error = 'Could not save. Please check your values or try again later.';
-                    })
-                    .finally(() => {
-                        this.loading = false;
-                    });
+                this.resourceData.relations = this.relationalSelection;
+                this.resourceData.relationalFields = this.relationalFields;
+                console.log(this.resourceData);
+
+                // axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
+                //     .then(response => {
+                //         console.log("success");
+                //         // window.location = response.data.redirect;
+                //         window.location = `/otter/${this.resourceName}`;
+                //     })
+                //     .catch(e => {
+                //         this.error = 'Could not save. Please check your values or try again later.';
+                //     })
+                //     .finally(() => {
+                //         this.loading = false;
+                //     });
             },
             handleUpdate(e) {
                 axios.patch(`/api/otter/${this.resourceName}/${this.resourceId}`, this.resourceData)

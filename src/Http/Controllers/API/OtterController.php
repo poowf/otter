@@ -50,15 +50,48 @@ class OtterController extends Controller
         $modelName = $this->modelName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
+
+        if($request->input('relations'))
+        {
+            $relations = $request->input('relations');
+            $relationalFields = $request->input('relationalFields');
+
+            $request->request->remove('relations');
+            $request->request->remove('relationalFields');
+
+            foreach($relationalFields as $relationalField)
+            {
+                $relationshipModel = $relationalField['relationshipModel'];
+                $relationshipName = $relationalField['relationshipName'];
+                $relationshipType = $relationalField['relationshipType'];
+
+                if($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo')
+                {
+                    $modelInstance->{$relationshipName}()->associate($relations[$relationshipName]);
+                }
+                elseif($relationshipType === 'HasMany')
+                {
+//                    foreach($relations[$relationshipName] as $relationItem)
+//                    {
+//                        $modelInstance->{$relationshipName}()->findOrFail()->associate($relationItem);
+//                    }
+                }
+                elseif($relationshipType === 'BelongsToMany')
+                {
+                    $modelInstance->{$relationshipName}()->attach($relations[$relationshipName]);
+                }
+            }
+        }
+
         //Force filling of variables into model instance
         $modelInstance->forceFill($request->all());
         //Save model instance
         $modelInstance->save();
-
+        
         //Return response
         return response()->json([
             'status' => 'success',
-            new $this->resource($modelInstance),
+            'data' => new $this->resource($modelInstance),
         ]);
     }
 
@@ -92,7 +125,7 @@ class OtterController extends Controller
 
         return response()->json([
             'status' => 'success',
-            new $this->resource($modelInstance),
+            'data' => new $this->resource($modelInstance),
         ]);
     }
 
@@ -110,6 +143,24 @@ class OtterController extends Controller
 
         return response()->json([
             'status' => 'success'
+        ]);
+    }
+
+    /**
+     * Get all relational data in storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function relational()
+    {
+        $resource = $this->resource;
+        //Retrieve the model instance
+        $relationalData = Otter::getRelationalData($resource);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $relationalData
         ]);
     }
 }

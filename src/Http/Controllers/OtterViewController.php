@@ -66,8 +66,9 @@ class OtterViewController extends Controller
         $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
         $resourceFields = json_encode($this->resource::fields());
+        $relationalFields = json_encode(Otter::getRelationalFields($this->resource));
 
-        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
+        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields', 'relationalFields'));
     }
 
     /**

@@ -26,16 +26,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
-    props: ['resourceId', 'resourceName', 'resourceFields', 'action'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'relationalFields', 'action'],
     data: function data() {
         return {
             handleText: 'Create',
             handleButtonText: 'Create',
             loading: false,
-            resourceData: {}
+            resourceData: {},
+            relationalData: {},
+            relationalSelection: {}
         };
     },
     created: function created() {
@@ -47,10 +60,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.handleText = "Create";
             this.handleButtonText = "Create";
         }
+        this.fetchRelationalItems();
+        if (this.relationalFields) {
+            this.prepareRelationalSelection();
+        }
     },
     mounted: function mounted() {},
 
     methods: {
+        prepareRelationalSelection: function prepareRelationalSelection() {
+            var field = null;
+            var relationalFields = this.relationalFields;
+            for (field in relationalFields) {
+                if (relationalFields[field].relationshipType === 'HasMany' || relationalFields[field].relationshipType === 'BelongsToMany') {
+                    this.relationalSelection[field] = [];
+                } else if (relationalFields[field].relationshipType === 'HasOne' || relationalFields[field].relationshipType === 'BelongsTo') {
+                    this.relationalSelection[field] = null;
+                }
+            }
+        },
         fetchResource: function fetchResource() {
             var _this = this;
 
@@ -58,6 +86,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.resourceData = response.data.data;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
+            }).finally(function () {});
+        },
+        fetchRelationalItems: function fetchRelationalItems() {
+            var _this2 = this;
+
+            axios.get('/api/otter/' + this.resourceName + '/relational').then(function (response) {
+                _this2.relationalData = response.data.data;
+            }).catch(function (e) {
+                _this2.error = 'Could not retrieve ' + _this2.resourceName + '. Server error.';
             }).finally(function () {});
         },
         handleAction: function handleAction(action) {
@@ -68,17 +105,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         handleStore: function handleStore(e) {
-            var _this2 = this;
+            this.resourceData.relations = this.relationalSelection;
+            this.resourceData.relationalFields = this.relationalFields;
+            console.log(this.resourceData);
 
-            axios.post('/api/otter/' + this.resourceName, this.resourceData).then(function (response) {
-                console.log("success");
-                // window.location = response.data.redirect;
-                window.location = '/otter/' + _this2.resourceName;
-            }).catch(function (e) {
-                _this2.error = 'Could not save. Please check your values or try again later.';
-            }).finally(function () {
-                _this2.loading = false;
-            });
+            // axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
+            //     .then(response => {
+            //         console.log("success");
+            //         // window.location = response.data.redirect;
+            //         window.location = `/otter/${this.resourceName}`;
+            //     })
+            //     .catch(e => {
+            //         this.error = 'Could not save. Please check your values or try again later.';
+            //     })
+            //     .finally(() => {
+            //         this.loading = false;
+            //     });
         },
         handleUpdate: function handleUpdate(e) {
             var _this3 = this;
@@ -1632,107 +1674,273 @@ var render = function() {
           _c(
             "div",
             { staticClass: "col-md-12" },
-            _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
-              return _c("div", { staticClass: "form-group" }, [
-                _c("label", { staticClass: "form-label" }, [
-                  _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
-                ]),
-                _vm._v(" "),
-                fieldType === "checkbox"
-                  ? _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.resourceData["" + fieldKey],
-                          expression: "resourceData[`${fieldKey}`]"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "checkbox" },
-                      domProps: {
-                        checked: Array.isArray(_vm.resourceData["" + fieldKey])
-                          ? _vm._i(_vm.resourceData["" + fieldKey], null) > -1
-                          : _vm.resourceData["" + fieldKey]
-                      },
-                      on: {
-                        change: function($event) {
-                          var $$a = _vm.resourceData["" + fieldKey],
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(
-                                  _vm.resourceData,
-                                  "" + fieldKey,
-                                  $$a.concat([$$v])
-                                )
-                            } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  _vm.resourceData,
-                                  "" + fieldKey,
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
-                            }
-                          } else {
-                            _vm.$set(_vm.resourceData, "" + fieldKey, $$c)
+            [
+              _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
+                return _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "form-label" }, [
+                    _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
+                  ]),
+                  _vm._v(" "),
+                  fieldType === "checkbox"
+                    ? _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.resourceData["" + fieldKey],
+                            expression: "resourceData[`${fieldKey}`]"
                           }
-                        }
-                      }
-                    })
-                  : fieldType === "radio"
-                  ? _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.resourceData["" + fieldKey],
-                          expression: "resourceData[`${fieldKey}`]"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "radio" },
-                      domProps: {
-                        checked: _vm._q(_vm.resourceData["" + fieldKey], null)
-                      },
-                      on: {
-                        change: function($event) {
-                          _vm.$set(_vm.resourceData, "" + fieldKey, null)
-                        }
-                      }
-                    })
-                  : _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.resourceData["" + fieldKey],
-                          expression: "resourceData[`${fieldKey}`]"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: fieldType },
-                      domProps: { value: _vm.resourceData["" + fieldKey] },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.resourceData,
-                            "" + fieldKey,
-                            $event.target.value
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "checkbox" },
+                        domProps: {
+                          checked: Array.isArray(
+                            _vm.resourceData["" + fieldKey]
                           )
+                            ? _vm._i(_vm.resourceData["" + fieldKey], null) > -1
+                            : _vm.resourceData["" + fieldKey]
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.resourceData["" + fieldKey],
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.resourceData,
+                                    "" + fieldKey,
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.resourceData,
+                                    "" + fieldKey,
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.resourceData, "" + fieldKey, $$c)
+                            }
+                          }
                         }
-                      }
-                    })
-              ])
-            }),
-            0
+                      })
+                    : fieldType === "radio"
+                    ? _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.resourceData["" + fieldKey],
+                            expression: "resourceData[`${fieldKey}`]"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "radio" },
+                        domProps: {
+                          checked: _vm._q(_vm.resourceData["" + fieldKey], null)
+                        },
+                        on: {
+                          change: function($event) {
+                            _vm.$set(_vm.resourceData, "" + fieldKey, null)
+                          }
+                        }
+                      })
+                    : _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.resourceData["" + fieldKey],
+                            expression: "resourceData[`${fieldKey}`]"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: fieldType },
+                        domProps: { value: _vm.resourceData["" + fieldKey] },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.resourceData,
+                              "" + fieldKey,
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                ])
+              }),
+              _vm._v(" "),
+              _vm._l(_vm.relationalFields, function(
+                relationalMetaData,
+                relationalKey
+              ) {
+                return _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "form-label" }, [
+                    _vm._v(_vm._s(_vm._f("beautify")(relationalKey)))
+                  ]),
+                  _vm._v(" "),
+                  (_vm.relationalData &&
+                    relationalMetaData.relationshipType === "HasMany") ||
+                  relationalMetaData.relationshipType === "BelongsToMany"
+                    ? _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value:
+                                _vm.relationalSelection["" + relationalKey],
+                              expression:
+                                "relationalSelection[`${relationalKey}`]"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { multiple: "true" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.relationalSelection,
+                                "" + relationalKey,
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { disabled: "", selected: "" } },
+                            [
+                              _vm._v(
+                                "Select " +
+                                  _vm._s(_vm._f("beautify")(relationalKey))
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(
+                            _vm.relationalData["" + relationalKey],
+                            function(option) {
+                              return _vm.relationalData
+                                ? _c(
+                                    "option",
+                                    { domProps: { value: option.id } },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          option[
+                                            "" +
+                                              relationalMetaData.resourceTitle
+                                          ]
+                                        )
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            }
+                          )
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  (_vm.relationalData &&
+                    relationalMetaData.relationshipType === "HasOne") ||
+                  relationalMetaData.relationshipType === "BelongsTo"
+                    ? _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value:
+                                _vm.relationalSelection["" + relationalKey],
+                              expression:
+                                "relationalSelection[`${relationalKey}`]"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.relationalSelection,
+                                "" + relationalKey,
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { disabled: "", selected: "" } },
+                            [
+                              _vm._v(
+                                "Select " +
+                                  _vm._s(_vm._f("beautify")(relationalKey))
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(
+                            _vm.relationalData["" + relationalKey],
+                            function(option) {
+                              return _vm.relationalData
+                                ? _c(
+                                    "option",
+                                    { domProps: { value: option.id } },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          option[
+                                            "" +
+                                              relationalMetaData.resourceTitle
+                                          ]
+                                        )
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            }
+                          )
+                        ],
+                        2
+                      )
+                    : _vm._e()
+                ])
+              })
+            ],
+            2
           )
         ])
       ]),

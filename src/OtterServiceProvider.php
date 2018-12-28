@@ -47,6 +47,7 @@ class OtterServiceProvider extends ServiceProvider
         ], function () use($names) {
             foreach($names as $pluralName)
             {
+                Route::get("{$pluralName}/relational", 'OtterController@relational')->name("api.otter.{$pluralName}.relational");
                 Route::apiResource($pluralName, 'OtterController', [ 'as' => 'api.otter' ]);
             }
         });

@@ -16,6 +16,7 @@
                 resource-name="{{ $resourceName }}"
                 action="create"
                 :resource-fields="{{ $resourceFields }}"
+                :relational-fields="{{ $relationalFields }}"
         ></form-component>
     </div>
 @stop

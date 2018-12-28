@@ -64,18 +64,19 @@ class OtterResource extends JsonResource
     private function getRelationalData()
     {
         $relationalDataArray = [];
-        
+
         foreach($this::relations() as $relationKey => $otterResourceName)
         {
             $otterResourceNamespace = 'App\\Otter\\';
-            $otterResource = $otterResourceNamespace . $otterResourceName;
+            $otterRelationalResource = $otterResourceNamespace . $otterResourceName;
             $relationshipType = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($this->{$relationKey}()));
 
             $relation = [];
             $relation['relationshipName'] = $relationKey;
             $relation['relationshipType'] = $relationshipType;
+            $relation['relationshipModel'] = $otterRelationalResource::$model;
             $relation['resourceName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
-            $relation['resourceFields'] = Otter::getAvailableFields($otterResource);
+            $relation['resourceFields'] = Otter::getAvailableFields($otterRelationalResource);
             if($relationshipType === 'BelongsTo' || $relationshipType === 'HasOne')
             {
                 $modelInstance = $this->{$relationKey};

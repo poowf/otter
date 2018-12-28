@@ -6,6 +6,7 @@ use Closure;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Poowf\Otter\Http\Resources\OtterResource;
 
 class Otter
 {
@@ -96,12 +97,59 @@ class Otter
     /**
      * Retrieve all the fields that are not hidden in the resource collection
      *
-     * @param  array $fields
-     * @param  array $hidden
+     * @param  OtterResource $otterResource
      * @return array
      */
     public static function getAvailableFields($otterResource)
     {
         return array_diff_key($otterResource::fields(), array_flip($otterResource::hidden()));
     }
+
+    /**
+     * Retrieve all the fields that are relational
+     *
+     * @param  OtterResource $otterResource
+     * @return array
+     */
+    public static function getRelationalFields($otterResource)
+    {
+        $relationalDataArray = [];
+
+        $modelInstance = new $otterResource::$model;
+
+        foreach($otterResource::relations() as $relationKey => $otterResourceName)
+        {
+            $otterResourceNamespace = 'App\\Otter\\';
+            $otterRelationalResource = $otterResourceNamespace . $otterResourceName;
+            $relationshipType = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($modelInstance->{$relationKey}()));
+
+            $relation = [];
+            $relation['relationshipName'] = $relationKey;
+            $relation['relationshipType'] = $relationshipType;
+            $relation['relationshipModel'] = $otterRelationalResource::$model;
+            $relation['resourceName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
+            $relation['resourceTitle'] = $otterRelationalResource::$title;
+
+            $relationalDataArray[$relationKey] = $relation;
+        }
+
+        return $relationalDataArray;
+    }
+
+    public static function getRelationalData($otterResource)
+    {
+        $relationalDataArray = [];
+
+        $modelInstance = new $otterResource::$model;
+
+        foreach($otterResource::relations() as $relationKey => $otterResourceName)
+        {
+            $otterResourceNamespace = 'App\\Otter\\';
+            $otterRelationalResource = $otterResourceNamespace . $otterResourceName;
+            $relationalDataArray[$relationKey] = $otterRelationalResource::collection((new $otterRelationalResource::$model)::all());
+        }
+
+        return $relationalDataArray;
+    }
+
 }
