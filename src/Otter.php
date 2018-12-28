@@ -59,7 +59,8 @@ class Otter
             $path = $file->getPathname();
             $class = str_replace('.php', '', $path);
             $baseResourceName = basename($class);
-            $pluralName = str_plural(strtolower($baseResourceName));
+
+            $pluralName = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $baseResourceName)));
 
             $names->push($pluralName);
         }

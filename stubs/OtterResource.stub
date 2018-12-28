@@ -21,9 +21,6 @@ class DummyClass extends OtterResource
     public function fields()
     {
         return [
-            'name' => 'text',
-            'password' => 'password',
-            'email' => 'email',
         ];
     }
 
@@ -35,7 +32,6 @@ class DummyClass extends OtterResource
     public function hidden()
     {
         return [
-            'password'
         ];
     }
 }

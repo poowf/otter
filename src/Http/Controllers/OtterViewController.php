@@ -15,7 +15,8 @@ class OtterViewController extends Controller
         {
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
-            $this->baseResourceName = ucfirst(str_singular($this->resourceName));
+            //TODO: This is ugly, try to look for an alternative way to transform the string.
+            $this->baseResourceName = str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $this->resourceName))));
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->allResourceNames = Otter::getResourceNames();
             /** @var TYPE_NAME $model */
@@ -94,7 +95,6 @@ class OtterViewController extends Controller
         $resourceName = $this->resourceName;
         $prettyResourceName = $this->baseResourceName;
         $resourceFields = json_encode($this->getAvailableFields($this->resource::fields(), $this->resource::hidden()));
-
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
 

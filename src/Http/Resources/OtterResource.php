@@ -16,10 +16,11 @@ class OtterResource extends JsonResource
     {
         $transformed = parent::toArray($request);
         $transformed['route_key'] = $this->{parent::getRouteKeyName()};
+        $transformed['relations'] = !empty($this->getRelationalData()) ? $this->getRelationalData() : null;
         $transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
         $transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
         $transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
-
+        
         return $transformed;
     }
 
@@ -34,6 +35,17 @@ class OtterResource extends JsonResource
     }
 
     /**
+     * Get the relations used by the resource
+     *
+     * @return array
+     */
+    public function relations()
+    {
+        return [
+        ];
+    }
+
+    /**
      * Get the fields to be hidden in the index
      *
      * @return array
@@ -41,5 +53,25 @@ class OtterResource extends JsonResource
     public function hidden()
     {
         return [];
+    }
+
+    /**
+     * Get the relational data and the relational type
+     *
+     * @return array
+     */
+    private function getRelationalData()
+    {
+        $relationalDataArray = [];
+        
+        foreach($this::relations() as $relationKey => $otterResourceName)
+        {
+            $relation = [];
+            $relation['relationshipType'] = get_class($this->{$relationKey}());
+            $relation['otterResourceName'] = $otterResourceName;
+            $relationalDataArray[$relationKey] = $relation;
+        }
+
+        return $relationalDataArray;
     }
 }
