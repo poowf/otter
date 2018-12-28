@@ -4,7 +4,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ prettyResourceName }}</h3>
+                        <h3 class="card-title">{{ resourceName | beautify }}</h3>
                         <div class="action-container">
                             <a data-toggle="tooltip" data-original-title="Create" class="icon" v-bind:href="`/otter/${resourceName}/create`"><i class="fe fe-plus"></i></a>
                         </div>
@@ -13,7 +13,7 @@
                         <table class="table card-table table-vcenter text-nowrap">
                             <thead>
                                 <tr>
-                                    <th v-for="tableType, tableKey in resourceFields">{{ tableKey | sanitize }}</th>
+                                    <th v-for="tableType, tableKey in resourceFields">{{ tableKey | beautify }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -57,7 +57,6 @@
     export default {
         name: "TableComponent",
         props: [
-            'prettyResourceName',
             'resourceName',
             'resourceFields'
         ],

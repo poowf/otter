@@ -2,6 +2,7 @@
 
 namespace Poowf\Otter\Http\Resources;
 
+use Poowf\Otter\Otter;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OtterResource extends JsonResource
@@ -66,9 +67,14 @@ class OtterResource extends JsonResource
         
         foreach($this::relations() as $relationKey => $otterResourceName)
         {
+            $otterResourceNamespace = 'App\\Otter\\';
+            $otterResource = $otterResourceNamespace . $otterResourceName;
+
             $relation = [];
-            $relation['relationshipType'] = get_class($this->{$relationKey}());
+            $relation['relationshipType'] = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($this->{$relationKey}()));
             $relation['otterResourceName'] = $otterResourceName;
+            $relation['resourceUrlName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
+            $relation['resourceFields'] = Otter::getAvailableFields($otterResource);
             $relationalDataArray[$relationKey] = $relation;
         }
 

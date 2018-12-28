@@ -29,7 +29,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
-    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'action'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'action'],
     data: function data() {
         return {
             handleText: 'Create',
@@ -176,10 +176,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "ShowComponent",
-    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'],
+    props: ['resourceId', 'resourceName', 'resourceFields'],
     data: function data() {
         return {
             loading: false,
@@ -297,7 +307,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "TableComponent",
-    props: ['prettyResourceName', 'resourceName', 'resourceFields'],
+    props: ['resourceName', 'resourceFields'],
     data: function data() {
         return {
             loading: false,
@@ -1037,7 +1047,7 @@ var render = function() {
               "aria-expanded": "false"
             }
           },
-          [_vm._v(_vm._s(_vm._f("capitalize")(resourceName)))]
+          [_vm._v(_vm._s(_vm._f("beautify")(resourceName)))]
         ),
         _vm._v(" "),
         _c(
@@ -1099,7 +1109,7 @@ var render = function() {
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
         _c("h3", { staticClass: "card-title" }, [
-          _vm._v(_vm._s(_vm.prettyResourceName))
+          _vm._v(_vm._s(_vm._f("beautify")(_vm.resourceName)))
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-options" }, [
@@ -1137,7 +1147,7 @@ var render = function() {
           _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
             return _c("div", { staticClass: "col-12" }, [
               _c("div", { staticClass: "h6" }, [
-                _vm._v(_vm._s(_vm._f("sanitize")(fieldKey)))
+                _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
               ]),
               _vm._v(" "),
               _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
@@ -1146,7 +1156,35 @@ var render = function() {
           0
         )
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.resourceData["relations"]
+      ? _c(
+          "div",
+          _vm._l(_vm.resourceData["relations"], function(
+            relation,
+            relationKey
+          ) {
+            return _c("div", [
+              relation.relationshipType === "HasMany"
+                ? _c(
+                    "div",
+                    [
+                      _c("table-component", {
+                        attrs: {
+                          "resource-name": relation.resourceUrlName,
+                          "resource-fields": relation.resourceFields
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ])
+          }),
+          0
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -1190,7 +1228,7 @@ var render = function() {
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-header" }, [
               _c("h3", { staticClass: "card-title" }, [
-                _vm._v(_vm._s(_vm.prettyResourceName))
+                _vm._v(_vm._s(_vm._f("beautify")(_vm.resourceName)))
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "action-container" }, [
@@ -1223,7 +1261,7 @@ var render = function() {
                           tableKey
                         ) {
                           return _c("th", [
-                            _vm._v(_vm._s(_vm._f("sanitize")(tableKey)))
+                            _vm._v(_vm._s(_vm._f("beautify")(tableKey)))
                           ])
                         }),
                         _vm._v(" "),
@@ -1472,7 +1510,11 @@ var render = function() {
     _c("form", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("h3", { staticClass: "card-title" }, [
-          _vm._v(_vm._s(_vm.handleText) + " " + _vm._s(_vm.prettyResourceName))
+          _vm._v(
+            _vm._s(_vm.handleText) +
+              " " +
+              _vm._s(_vm._f("beautify")(_vm.resourceName))
+          )
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
@@ -1482,7 +1524,7 @@ var render = function() {
             _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
               return _c("div", { staticClass: "form-group" }, [
                 _c("label", { staticClass: "form-label" }, [
-                  _vm._v(_vm._s(_vm._f("sanitize")(fieldKey)))
+                  _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
                 ]),
                 _vm._v(" "),
                 fieldType === "checkbox"
@@ -13065,7 +13107,7 @@ Vue.filter("capitalize", function (value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 });
 
-Vue.filter("sanitize", function (value) {
+Vue.filter("beautify", function (value) {
   if (!value) return '';
   value = value.toString().match(/[A-Za-z][a-z]*/g) || [];
   return value.join(' ').replace(/\b\w/g, function (l) {

@@ -48,7 +48,7 @@ class Otter
      * @param  \Closure  $callback
      * @return static
      */
-    public static function getResourceNames()
+    public static function getResourceNames($pretty = false)
     {
         $directory = app_path('Otter/');
         $files = File::files($directory);
@@ -60,9 +60,9 @@ class Otter
             $class = str_replace('.php', '', $path);
             $baseResourceName = basename($class);
 
-            $pluralName = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $baseResourceName)));
+            $resourceName = ($pretty) ? str_plural(preg_replace('/\B([A-Z])/', ' $1', $baseResourceName)) : str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $baseResourceName)));
 
-            $names->push($pluralName);
+            $names->push($resourceName);
         }
 
         return $names;
@@ -91,5 +91,17 @@ class Otter
     public static function getModelInstance($object, $modelName)
     {
        return ($object instanceof $modelName) ? $object  : $modelName::findOrFail($object);
+    }
+
+    /**
+     * Retrieve all the fields that are not hidden in the resource collection
+     *
+     * @param  array $fields
+     * @param  array $hidden
+     * @return array
+     */
+    public static function getAvailableFields($otterResource)
+    {
+        return array_diff_key($otterResource::fields(), array_flip($otterResource::hidden()));
     }
 }

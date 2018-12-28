@@ -30,7 +30,7 @@ Vue.filter("capitalize", value => {
     return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
-Vue.filter("sanitize", value => {
+Vue.filter("beautify", value => {
     if (!value) return ''
     value = value.toString().match(/[A-Za-z][a-z]*/g) || [];
     return value.join(' ').replace(/\b\w/g, l => l.toUpperCase());

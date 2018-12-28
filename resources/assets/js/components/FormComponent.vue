@@ -2,11 +2,11 @@
     <div>
         <form class="card">
             <div class="card-body">
-                <h3 class="card-title">{{ handleText }} {{ prettyResourceName }}</h3>
+                <h3 class="card-title">{{ handleText }} {{ resourceName | beautify }}</h3>
                 <div class="row">
                     <div class="col-md-12">
                         <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
-                            <label class="form-label">{{ fieldKey | sanitize }}</label>
+                            <label class="form-label">{{ fieldKey | beautify }}</label>
                             <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
                         </div>
                     </div>
@@ -23,7 +23,6 @@
     export default {
         name: "FormComponent",
         props: [
-            'prettyResourceName',
             'resourceId',
             'resourceName',
             'resourceFields',

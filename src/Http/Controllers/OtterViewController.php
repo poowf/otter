@@ -47,10 +47,9 @@ class OtterViewController extends Controller
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $resourceName = $this->resourceName;
-        $prettyResourceName = $this->baseResourceName;
-        $resourceFields = json_encode($this->getAvailableFields($this->resource::fields(), $this->resource::hidden()));
+        $resourceFields = json_encode(Otter::getAvailableFields($this->resource));
 
-        return view('otter::pages.index', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
+        return view('otter::pages.index', compact('allResourceNames', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -63,10 +62,9 @@ class OtterViewController extends Controller
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $resourceName = $this->resourceName;
-        $prettyResourceName = $this->baseResourceName;
         $resourceFields = json_encode($this->resource::fields());
 
-        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields'));
+        return view('otter::pages.create', compact('allResourceNames', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -93,12 +91,11 @@ class OtterViewController extends Controller
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $resourceName = $this->resourceName;
-        $prettyResourceName = $this->baseResourceName;
-        $resourceFields = json_encode($this->getAvailableFields($this->resource::fields(), $this->resource::hidden()));
+        $resourceFields = json_encode(Otter::getAvailableFields($this->resource));
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
 
-        return view('otter::pages.show', compact('allResourceNames', 'resourceId', 'prettyResourceName', 'resourceName', 'resourceFields'));
+        return view('otter::pages.show', compact('allResourceNames', 'resourceId', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -115,11 +112,10 @@ class OtterViewController extends Controller
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $resourceName = $this->resourceName;
-        $prettyResourceName = $this->baseResourceName;
         $resourceFields = json_encode($this->resource::fields());
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
-        return view('otter::pages.edit', compact('allResourceNames', 'resourceId', 'prettyResourceName', 'resourceName', 'resourceFields'));
+        return view('otter::pages.edit', compact('allResourceNames', 'resourceId', 'resourceName', 'resourceFields'));
     }
 
     /**
@@ -144,17 +140,5 @@ class OtterViewController extends Controller
     public function destroy($modelInstance)
     {
         //Intentionally Not Implemented
-    }
-
-    /**
-     * Retrieve all the fields that are not hidden in the resource collection
-     *
-     * @param  array $fields
-     * @param  array $hidden
-     * @return array
-     */
-    public function getAvailableFields($fields, $hidden)
-    {
-        return array_diff_key($fields, array_flip($hidden));
     }
 }
