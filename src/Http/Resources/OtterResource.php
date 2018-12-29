@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Http\Resources;
 
 use Poowf\Otter\Otter;
+use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OtterResource extends JsonResource
@@ -17,7 +18,7 @@ class OtterResource extends JsonResource
     {
         $transformed = parent::toArray($request);
         $transformed['route_key'] = $this->{parent::getRouteKeyName()};
-        $transformed['relations'] = !empty($this->getRelationalData()) ? $this->getRelationalData() : null;
+        $transformed['relations'] = !empty($this->getRelationships()) ? $this->getRelationships() : null;
         $transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
         $transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
         $transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
@@ -61,34 +62,8 @@ class OtterResource extends JsonResource
      *
      * @return array
      */
-    private function getRelationalData()
+    private function getRelationships()
     {
-        $relationalDataArray = [];
-
-        foreach($this::relations() as $relationKey => $otterResourceName)
-        {
-            $otterResourceNamespace = 'App\\Otter\\';
-            $otterRelationalResource = $otterResourceNamespace . $otterResourceName;
-            $relationshipType = str_replace('Illuminate\\Database\\Eloquent\\Relations\\', '', get_class($this->{$relationKey}()));
-
-            $relation = [];
-            $relation['relationshipName'] = $relationKey;
-            $relation['relationshipType'] = $relationshipType;
-            $relation['relationshipModel'] = $otterRelationalResource::$model;
-            $relation['resourceName'] = str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $otterResourceName)));
-            $relation['resourceFields'] = Otter::getAvailableFields($otterRelationalResource);
-            if($relationshipType === 'BelongsTo' || $relationshipType === 'HasOne')
-            {
-                $modelInstance = $this->{$relationKey};
-                $relation['resourceId'] = ($modelInstance) ? $modelInstance->{$modelInstance->getRouteKeyName()} : null;
-            }
-            else
-            {
-                $relation['resourceId'] = 'null';
-            }
-            $relationalDataArray[$relationKey] = $relation;
-        }
-
-        return $relationalDataArray;
+        return Otter::getRelationalFields($this, $this->resource);
     }
 }

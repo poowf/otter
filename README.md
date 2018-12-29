@@ -135,6 +135,45 @@ class User extends OtterResource
 }
 ```
 
+## Relationships
+
+Otter has partial support for Eloquent relationships. You have to define your relationships in the `OtterResource` file and define the Relationship method name as the key and the `OtterResource` class name that links to the relationship.
+ 
+You can also define a custom foreign key if you are not using the Laravel defaults.
+
+The `title` property should be the column of the model that will be displayed in the options list during editing/creating of new resources .
+
+```php
+<?php
+
+namespace App\Otter;
+
+use Poowf\Otter\Http\Resources\OtterResource;
+
+class User extends OtterResource
+{
+    /**
+     * The column of the model to display in select options
+     *
+     * @var string
+     */
+    public static $title = 'name';
+        
+    /**
+     * Get the relations used by the resource
+     *
+     * @return array
+     */
+    public function relations()
+    {
+        return [
+            'company' => ['Company', 'company_id'],
+            'company' => 'Company',
+        ];
+    }
+}
+```
+
 # Authorization
 Otter exposes a dashboard at `/otter`. By default, you will only be able to access this dashboard in the local environment. Within your `app/Providers/OtterServiceProvider.php` file, there is a gate method. This authorization gate controls access to Otter in non-local environments. You are free to modify this gate as needed to restrict access to your Otter installation:
 

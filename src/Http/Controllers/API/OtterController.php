@@ -18,7 +18,7 @@ class OtterController extends Controller
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
             //TODO: This is ugly, try to look for an alternative way to transform the string.
-            $this->baseResourceName = str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $this->resourceName))));
+            $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->modelName = $this->resource::$model;
         }
@@ -34,7 +34,6 @@ class OtterController extends Controller
         $modelName = $this->modelName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
-
         //Return an Otter resource of the model
         return $this->resource::collection(($modelInstance)::all());
     }
@@ -51,12 +50,9 @@ class OtterController extends Controller
         //Instantiate new model instance
         $modelInstance = new $modelName;
 
-        if($request->input('relations'))
+        if($request->input('relationalFields'))
         {
-            $relations = $request->input('relations');
             $relationalFields = $request->input('relationalFields');
-
-            $request->request->remove('relations');
             $request->request->remove('relationalFields');
 
             foreach($relationalFields as $relationalField)
@@ -64,21 +60,15 @@ class OtterController extends Controller
                 $relationshipModel = $relationalField['relationshipModel'];
                 $relationshipName = $relationalField['relationshipName'];
                 $relationshipType = $relationalField['relationshipType'];
+                $relationshipId = $relationalField['relationshipId'];
 
-                if($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo')
+                if($relationshipType === 'BelongsTo')
                 {
-                    $modelInstance->{$relationshipName}()->associate($relations[$relationshipName]);
-                }
-                elseif($relationshipType === 'HasMany')
-                {
-//                    foreach($relations[$relationshipName] as $relationItem)
-//                    {
-//                        $modelInstance->{$relationshipName}()->findOrFail()->associate($relationItem);
-//                    }
+                    $modelInstance->{$relationshipName}()->associate($relationshipId);
                 }
                 elseif($relationshipType === 'BelongsToMany')
                 {
-                    $modelInstance->{$relationshipName}()->attach($relations[$relationshipName]);
+                    $modelInstance->{$relationshipName}()->attach($relationshipId);
                 }
             }
         }
@@ -120,6 +110,30 @@ class OtterController extends Controller
     {
         //Retrieve the model instance
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+
+        if($request->input('relationalFields'))
+        {
+            $relationalFields = $request->input('relationalFields');
+            $request->request->remove('relationalFields');
+
+            foreach($relationalFields as $relationalField)
+            {
+                $relationshipModel = $relationalField['relationshipModel'];
+                $relationshipName = $relationalField['relationshipName'];
+                $relationshipType = $relationalField['relationshipType'];
+                $relationshipId = $relationalField['relationshipId'];
+
+                if($relationshipType === 'BelongsTo')
+                {
+                    $modelInstance->{$relationshipName}()->associate($relationshipId);
+                }
+                elseif($relationshipType === 'BelongsToMany')
+                {
+                    $modelInstance->{$relationshipName}()->sync($relationshipId);
+                }
+            }
+        }
+
         $modelInstance->fill($request->all());
         $modelInstance->save();
 
@@ -149,13 +163,11 @@ class OtterController extends Controller
     /**
      * Get all relational data in storage.
      *
-     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function relational()
     {
         $resource = $this->resource;
-        //Retrieve the model instance
         $relationalData = Otter::getRelationalData($resource);
 
         return response()->json([

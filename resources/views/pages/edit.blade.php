@@ -17,6 +17,7 @@
                     resource-id="{{ $resourceId }}"
                     action="edit"
                     :resource-fields="{{ $resourceFields }}"
+                    :relational-fields="{{ $relationalFields }}"
             ></form-component>
         </div>
 @stop

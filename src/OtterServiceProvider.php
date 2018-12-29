@@ -59,7 +59,9 @@ class OtterServiceProvider extends ServiceProvider
         ], function () use($names) {
             foreach($names as $pluralName)
             {
-                Route::resource($pluralName, 'OtterViewController', [ 'as' => 'web.otter' ]);
+                Route::resource($pluralName, 'OtterViewController', [ 'as' => 'web.otter' ])->only([
+                    'index', 'show', 'create', 'edit'
+                ]);
             }
         });
     }

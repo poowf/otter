@@ -16,7 +16,7 @@ class OtterViewController extends Controller
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
             //TODO: This is ugly, try to look for an alternative way to transform the string.
-            $this->baseResourceName = str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $this->resourceName))));
+            $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
             $this->allResourceNames = Otter::getResourceNames();
@@ -99,7 +99,6 @@ class OtterViewController extends Controller
         $resourceFields = json_encode(Otter::getAvailableFields($this->resource));
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
 
-
         return view('otter::pages.show', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'));
     }
 
@@ -120,8 +119,9 @@ class OtterViewController extends Controller
         $resourceName = $this->resourceName;
         $resourceFields = json_encode($this->resource::fields());
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
+        $relationalFields = json_encode(Otter::getRelationalFields($this->resource, $modelInstance));
 
-        return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields'));
+        return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'relationalFields'));
     }
 
     /**
