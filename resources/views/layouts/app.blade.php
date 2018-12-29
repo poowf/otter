@@ -76,6 +76,30 @@
                 margin-left: 0;
             }
 
+            th.sortable {
+                cursor: pointer;
+            }
+
+            th.sortable.sorted-by.asc::after, th.sortable.sorted-by.desc::after {
+                position: absolute;
+                content: "";
+                width: 0;
+                height: 0;
+                border-style: solid;
+                margin-top: 8px;
+                margin-left: 4px;
+            }
+
+            th.sortable.sorted-by.asc::after {
+                border-width: 0 5px 5px 5px;
+                border-color: transparent transparent #6e7687 transparent;
+            }
+
+            th.sortable.sorted-by.desc::after {
+                border-width: 5px 5px 0 5px;
+                border-color: #6e7687 transparent transparent transparent;
+            }
+
             @media (min-width: 992px) {
                 .fixed {
                     flex: 0 0 200px;

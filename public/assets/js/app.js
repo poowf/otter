@@ -1,4 +1,26 @@
-webpackJsonp([1],{
+webpackJsonp([0],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AlertComponent.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "AlertComponent",
+    props: ['alertLevel', 'alertMessage']
+});
+
+/***/ }),
 
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/FormComponent.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -39,15 +61,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
-    props: ['resourceId', 'resourceName', 'resourceFields', 'relationalFields', 'action'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'relationalFields', 'singularResourceName', 'action'],
     data: function data() {
         return {
             handleText: 'Create',
             handleButtonText: 'Create',
             loading: false,
+            alertData: [],
             resourceData: {},
             relationalData: {}
         };
@@ -82,9 +118,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.relationalData = response.data.data;
             }).catch(function (e) {
                 _this2.error = 'Could not retrieve ' + _this2.resourceName + '. Server error.';
-            }).finally(function () {});
+            }).finally(function () {
+                $('select').selectize({});
+            });
         },
         handleAction: function handleAction(action) {
+            this.loading = true;
             if (action === 'edit') {
                 this.handleUpdate();
             } else if (action === 'create') {
@@ -112,8 +151,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.resourceData.relationalFields = this.relationalFields;
 
             axios.patch('/api/otter/' + this.resourceName + '/' + this.resourceId, this.resourceData).then(function (response) {
-                console.log("success");
                 _this4.fetchResource();
+                _this4.alertData.push({
+                    "level": "success",
+                    "message": _this4.$options.filters.beautify(_this4.singularResourceName) + " has been successfully updated"
+                });
             }).catch(function (e) {
                 _this4.error = 'Could not update. Please check your values or try again later.';
             }).finally(function () {
@@ -332,6 +374,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuzzaldrin_plus__ = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/fuzzaldrin.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuzzaldrin_plus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fuzzaldrin_plus__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -388,14 +446,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "TableComponent",
     props: ['resourceName', 'resourceFields'],
     data: function data() {
         return {
+            query: '',
             loading: false,
             resourceData: [],
+            resourceMetaData: [],
+            resourceLinksData: [],
             currentSelectedResource: null,
+            currentPage: 1,
+            currentSortKey: 'id',
+            currentSortDirection: 'asc',
             modal: {
                 title: null,
                 action: null,
@@ -409,11 +474,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {},
 
     methods: {
+        prevPage: function prevPage() {
+            this.fetchResourceIndex(this.resourceLinksData.prev);
+        },
+        nextPage: function nextPage() {
+            this.fetchResourceIndex(this.resourceLinksData.next);
+        },
+
+        sort: function sort(sortParameter) {
+            //if sortParameter == current sort, reverse
+            if (sortParameter === this.currentSortKey) {
+                this.currentSortDirection = this.currentSortDirection === 'asc' ? 'desc' : 'asc';
+            }
+            this.currentSortKey = sortParameter;
+        },
         fetchResourceIndex: function fetchResourceIndex() {
             var _this = this;
 
-            axios.get('/api/otter/' + this.resourceName).then(function (response) {
+            var resourceUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '/api/otter/' + this.resourceName + '?page=' + this.currentPage;
+
+            axios.get(resourceUrl).then(function (response) {
                 _this.resourceData = response.data.data;
+                _this.resourceMetaData = response.data.meta;
+                _this.resourceLinksData = response.data.links;
+                _this.currentPage = _this.resourceMetaData.current_page;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
             }).finally(function () {});
@@ -439,6 +523,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         resetModal: function resetModal() {
             this.modal.visible = false;
             this.currentSelectedResource = null;
+        },
+        getSearchFields: function getSearchFields(option) {
+            var mappedFieldKeys = Object.keys(this.resourceFields).map(function (fieldKey) {
+                return option[fieldKey];
+            });
+            mappedFieldKeys.push(option.id);
+
+            return mappedFieldKeys;
+        }
+    },
+    computed: {
+        sortedResources: function sortedResources() {
+            var _this3 = this;
+
+            return this.resourceData.sort(function (nextResource, currentResource) {
+                var modifier = 1;
+                if (_this3.currentSortDirection === 'desc') modifier = -1;
+                if (nextResource[_this3.currentSortKey] < currentResource[_this3.currentSortKey]) return -1 * modifier;
+                if (nextResource[_this3.currentSortKey] > currentResource[_this3.currentSortKey]) return 1 * modifier;
+                return 0;
+            });
+        },
+        filterResults: function filterResults() {
+            var _this4 = this;
+
+            if (!this.query) return this.sortedResources;
+
+            var preparedQuery = __WEBPACK_IMPORTED_MODULE_0_fuzzaldrin_plus___default.a.prepareQuery(this.query);
+            var scores = {};
+
+            return this.sortedResources.map(function (option, index) {
+                var scorableFields = _this4.getSearchFields(option);
+                var scoredFields = scorableFields.map(function (toScore) {
+                    return __WEBPACK_IMPORTED_MODULE_0_fuzzaldrin_plus___default.a.score(toScore, _this4.query, { preparedQuery: preparedQuery });
+                });
+
+                scores[option.id] = Math.max.apply(Math, _toConsumableArray(scoredFields));
+
+                return option;
+            }).filter(function (option) {
+                return scores[option.id] > 1;
+            }).sort(function (a, b) {
+                return scores[b.id] - scores[a.id];
+            });
         }
     }
 });
@@ -539,6 +667,919 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/filter.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function() {
+  var Query, pathScorer, pluckCandidates, scorer, sortCandidates;
+
+  scorer = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/scorer.js");
+
+  pathScorer = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/pathScorer.js");
+
+  Query = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/query.js");
+
+  pluckCandidates = function(a) {
+    return a.candidate;
+  };
+
+  sortCandidates = function(a, b) {
+    return b.score - a.score;
+  };
+
+  module.exports = function(candidates, query, options) {
+    var bKey, candidate, key, maxInners, maxResults, score, scoreProvider, scoredCandidates, spotLeft, string, usePathScoring, _i, _len;
+    scoredCandidates = [];
+    key = options.key, maxResults = options.maxResults, maxInners = options.maxInners, usePathScoring = options.usePathScoring;
+    spotLeft = (maxInners != null) && maxInners > 0 ? maxInners : candidates.length + 1;
+    bKey = key != null;
+    scoreProvider = usePathScoring ? pathScorer : scorer;
+    for (_i = 0, _len = candidates.length; _i < _len; _i++) {
+      candidate = candidates[_i];
+      string = bKey ? candidate[key] : candidate;
+      if (!string) {
+        continue;
+      }
+      score = scoreProvider.score(string, query, options);
+      if (score > 0) {
+        scoredCandidates.push({
+          candidate: candidate,
+          score: score
+        });
+        if (!--spotLeft) {
+          break;
+        }
+      }
+    }
+    scoredCandidates.sort(sortCandidates);
+    candidates = scoredCandidates.map(pluckCandidates);
+    if (maxResults != null) {
+      candidates = candidates.slice(0, maxResults);
+    }
+    return candidates;
+  };
+
+}).call(this);
+
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/fuzzaldrin.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {(function() {
+  var Query, defaultPathSeparator, filter, matcher, parseOptions, pathScorer, preparedQueryCache, scorer;
+
+  filter = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/filter.js");
+
+  matcher = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/matcher.js");
+
+  scorer = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/scorer.js");
+
+  pathScorer = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/pathScorer.js");
+
+  Query = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/query.js");
+
+  preparedQueryCache = null;
+
+  defaultPathSeparator = (typeof process !== "undefined" && process !== null ? process.platform : void 0) === "win32" ? '\\' : '/';
+
+  module.exports = {
+    filter: function(candidates, query, options) {
+      if (options == null) {
+        options = {};
+      }
+      if (!((query != null ? query.length : void 0) && (candidates != null ? candidates.length : void 0))) {
+        return [];
+      }
+      options = parseOptions(options, query);
+      return filter(candidates, query, options);
+    },
+    score: function(string, query, options) {
+      if (options == null) {
+        options = {};
+      }
+      if (!((string != null ? string.length : void 0) && (query != null ? query.length : void 0))) {
+        return 0;
+      }
+      options = parseOptions(options, query);
+      if (options.usePathScoring) {
+        return pathScorer.score(string, query, options);
+      } else {
+        return scorer.score(string, query, options);
+      }
+    },
+    match: function(string, query, options) {
+      var _i, _ref, _results;
+      if (options == null) {
+        options = {};
+      }
+      if (!string) {
+        return [];
+      }
+      if (!query) {
+        return [];
+      }
+      if (string === query) {
+        return (function() {
+          _results = [];
+          for (var _i = 0, _ref = string.length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
+          return _results;
+        }).apply(this);
+      }
+      options = parseOptions(options, query);
+      return matcher.match(string, query, options);
+    },
+    wrap: function(string, query, options) {
+      if (options == null) {
+        options = {};
+      }
+      if (!string) {
+        return [];
+      }
+      if (!query) {
+        return [];
+      }
+      options = parseOptions(options, query);
+      return matcher.wrap(string, query, options);
+    },
+    prepareQuery: function(query, options) {
+      if (options == null) {
+        options = {};
+      }
+      options = parseOptions(options, query);
+      return options.preparedQuery;
+    }
+  };
+
+  parseOptions = function(options, query) {
+    if (options.allowErrors == null) {
+      options.allowErrors = false;
+    }
+    if (options.usePathScoring == null) {
+      options.usePathScoring = true;
+    }
+    if (options.useExtensionBonus == null) {
+      options.useExtensionBonus = false;
+    }
+    if (options.pathSeparator == null) {
+      options.pathSeparator = defaultPathSeparator;
+    }
+    if (options.optCharRegEx == null) {
+      options.optCharRegEx = null;
+    }
+    if (options.wrap == null) {
+      options.wrap = null;
+    }
+    if (options.preparedQuery == null) {
+      options.preparedQuery = preparedQueryCache && preparedQueryCache.query === query ? preparedQueryCache : (preparedQueryCache = new Query(query, options));
+    }
+    return options;
+  };
+
+}).call(this);
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/matcher.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function() {
+  var basenameMatch, computeMatch, isMatch, isWordStart, match, mergeMatches, scoreAcronyms, scoreCharacter, scoreConsecutives, _ref;
+
+  _ref = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/scorer.js"), isMatch = _ref.isMatch, isWordStart = _ref.isWordStart, scoreConsecutives = _ref.scoreConsecutives, scoreCharacter = _ref.scoreCharacter, scoreAcronyms = _ref.scoreAcronyms;
+
+  exports.match = match = function(string, query, options) {
+    var allowErrors, baseMatches, matches, pathSeparator, preparedQuery, string_lw;
+    allowErrors = options.allowErrors, preparedQuery = options.preparedQuery, pathSeparator = options.pathSeparator;
+    if (!(allowErrors || isMatch(string, preparedQuery.core_lw, preparedQuery.core_up))) {
+      return [];
+    }
+    string_lw = string.toLowerCase();
+    matches = computeMatch(string, string_lw, preparedQuery);
+    if (matches.length === 0) {
+      return matches;
+    }
+    if (string.indexOf(pathSeparator) > -1) {
+      baseMatches = basenameMatch(string, string_lw, preparedQuery, pathSeparator);
+      matches = mergeMatches(matches, baseMatches);
+    }
+    return matches;
+  };
+
+  exports.wrap = function(string, query, options) {
+    var matchIndex, matchPos, matchPositions, output, strPos, tagClass, tagClose, tagOpen, _ref1;
+    if ((options.wrap != null)) {
+      _ref1 = options.wrap, tagClass = _ref1.tagClass, tagOpen = _ref1.tagOpen, tagClose = _ref1.tagClose;
+    }
+    if (tagClass == null) {
+      tagClass = 'highlight';
+    }
+    if (tagOpen == null) {
+      tagOpen = '<strong class="' + tagClass + '">';
+    }
+    if (tagClose == null) {
+      tagClose = '</strong>';
+    }
+    if (string === query) {
+      return tagOpen + string + tagClose;
+    }
+    matchPositions = match(string, query, options);
+    if (matchPositions.length === 0) {
+      return string;
+    }
+    output = '';
+    matchIndex = -1;
+    strPos = 0;
+    while (++matchIndex < matchPositions.length) {
+      matchPos = matchPositions[matchIndex];
+      if (matchPos > strPos) {
+        output += string.substring(strPos, matchPos);
+        strPos = matchPos;
+      }
+      while (++matchIndex < matchPositions.length) {
+        if (matchPositions[matchIndex] === matchPos + 1) {
+          matchPos++;
+        } else {
+          matchIndex--;
+          break;
+        }
+      }
+      matchPos++;
+      if (matchPos > strPos) {
+        output += tagOpen;
+        output += string.substring(strPos, matchPos);
+        output += tagClose;
+        strPos = matchPos;
+      }
+    }
+    if (strPos <= string.length - 1) {
+      output += string.substring(strPos);
+    }
+    return output;
+  };
+
+  basenameMatch = function(subject, subject_lw, preparedQuery, pathSeparator) {
+    var basePos, depth, end;
+    end = subject.length - 1;
+    while (subject[end] === pathSeparator) {
+      end--;
+    }
+    basePos = subject.lastIndexOf(pathSeparator, end);
+    if (basePos === -1) {
+      return [];
+    }
+    depth = preparedQuery.depth;
+    while (depth-- > 0) {
+      basePos = subject.lastIndexOf(pathSeparator, basePos - 1);
+      if (basePos === -1) {
+        return [];
+      }
+    }
+    basePos++;
+    end++;
+    return computeMatch(subject.slice(basePos, end), subject_lw.slice(basePos, end), preparedQuery, basePos);
+  };
+
+  mergeMatches = function(a, b) {
+    var ai, bj, i, j, m, n, out;
+    m = a.length;
+    n = b.length;
+    if (n === 0) {
+      return a.slice();
+    }
+    if (m === 0) {
+      return b.slice();
+    }
+    i = -1;
+    j = 0;
+    bj = b[j];
+    out = [];
+    while (++i < m) {
+      ai = a[i];
+      while (bj <= ai && ++j < n) {
+        if (bj < ai) {
+          out.push(bj);
+        }
+        bj = b[j];
+      }
+      out.push(ai);
+    }
+    while (j < n) {
+      out.push(b[j++]);
+    }
+    return out;
+  };
+
+  computeMatch = function(subject, subject_lw, preparedQuery, offset) {
+    var DIAGONAL, LEFT, STOP, UP, acro_score, align, backtrack, csc_diag, csc_row, csc_score, i, j, m, matches, move, n, pos, query, query_lw, score, score_diag, score_row, score_up, si_lw, start, trace;
+    if (offset == null) {
+      offset = 0;
+    }
+    query = preparedQuery.query;
+    query_lw = preparedQuery.query_lw;
+    m = subject.length;
+    n = query.length;
+    acro_score = scoreAcronyms(subject, subject_lw, query, query_lw).score;
+    score_row = new Array(n);
+    csc_row = new Array(n);
+    STOP = 0;
+    UP = 1;
+    LEFT = 2;
+    DIAGONAL = 3;
+    trace = new Array(m * n);
+    pos = -1;
+    j = -1;
+    while (++j < n) {
+      score_row[j] = 0;
+      csc_row[j] = 0;
+    }
+    i = -1;
+    while (++i < m) {
+      score = 0;
+      score_up = 0;
+      csc_diag = 0;
+      si_lw = subject_lw[i];
+      j = -1;
+      while (++j < n) {
+        csc_score = 0;
+        align = 0;
+        score_diag = score_up;
+        if (query_lw[j] === si_lw) {
+          start = isWordStart(i, subject, subject_lw);
+          csc_score = csc_diag > 0 ? csc_diag : scoreConsecutives(subject, subject_lw, query, query_lw, i, j, start);
+          align = score_diag + scoreCharacter(i, j, start, acro_score, csc_score);
+        }
+        score_up = score_row[j];
+        csc_diag = csc_row[j];
+        if (score > score_up) {
+          move = LEFT;
+        } else {
+          score = score_up;
+          move = UP;
+        }
+        if (align > score) {
+          score = align;
+          move = DIAGONAL;
+        } else {
+          csc_score = 0;
+        }
+        score_row[j] = score;
+        csc_row[j] = csc_score;
+        trace[++pos] = score > 0 ? move : STOP;
+      }
+    }
+    i = m - 1;
+    j = n - 1;
+    pos = i * n + j;
+    backtrack = true;
+    matches = [];
+    while (backtrack && i >= 0 && j >= 0) {
+      switch (trace[pos]) {
+        case UP:
+          i--;
+          pos -= n;
+          break;
+        case LEFT:
+          j--;
+          pos--;
+          break;
+        case DIAGONAL:
+          matches.push(i + offset);
+          j--;
+          i--;
+          pos -= n + 1;
+          break;
+        default:
+          backtrack = false;
+      }
+    }
+    matches.reverse();
+    return matches;
+  };
+
+}).call(this);
+
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/pathScorer.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function() {
+  var computeScore, countDir, file_coeff, getExtension, getExtensionScore, isMatch, scorePath, scoreSize, tau_depth, _ref;
+
+  _ref = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/scorer.js"), isMatch = _ref.isMatch, computeScore = _ref.computeScore, scoreSize = _ref.scoreSize;
+
+  tau_depth = 20;
+
+  file_coeff = 2.5;
+
+  exports.score = function(string, query, options) {
+    var allowErrors, preparedQuery, score, string_lw;
+    preparedQuery = options.preparedQuery, allowErrors = options.allowErrors;
+    if (!(allowErrors || isMatch(string, preparedQuery.core_lw, preparedQuery.core_up))) {
+      return 0;
+    }
+    string_lw = string.toLowerCase();
+    score = computeScore(string, string_lw, preparedQuery);
+    score = scorePath(string, string_lw, score, options);
+    return Math.ceil(score);
+  };
+
+  scorePath = function(subject, subject_lw, fullPathScore, options) {
+    var alpha, basePathScore, basePos, depth, end, extAdjust, fileLength, pathSeparator, preparedQuery, useExtensionBonus;
+    if (fullPathScore === 0) {
+      return 0;
+    }
+    preparedQuery = options.preparedQuery, useExtensionBonus = options.useExtensionBonus, pathSeparator = options.pathSeparator;
+    end = subject.length - 1;
+    while (subject[end] === pathSeparator) {
+      end--;
+    }
+    basePos = subject.lastIndexOf(pathSeparator, end);
+    fileLength = end - basePos;
+    extAdjust = 1.0;
+    if (useExtensionBonus) {
+      extAdjust += getExtensionScore(subject_lw, preparedQuery.ext, basePos, end, 2);
+      fullPathScore *= extAdjust;
+    }
+    if (basePos === -1) {
+      return fullPathScore;
+    }
+    depth = preparedQuery.depth;
+    while (basePos > -1 && depth-- > 0) {
+      basePos = subject.lastIndexOf(pathSeparator, basePos - 1);
+    }
+    basePathScore = basePos === -1 ? fullPathScore : extAdjust * computeScore(subject.slice(basePos + 1, end + 1), subject_lw.slice(basePos + 1, end + 1), preparedQuery);
+    alpha = 0.5 * tau_depth / (tau_depth + countDir(subject, end + 1, pathSeparator));
+    return alpha * basePathScore + (1 - alpha) * fullPathScore * scoreSize(0, file_coeff * fileLength);
+  };
+
+  exports.countDir = countDir = function(path, end, pathSeparator) {
+    var count, i;
+    if (end < 1) {
+      return 0;
+    }
+    count = 0;
+    i = -1;
+    while (++i < end && path[i] === pathSeparator) {
+      continue;
+    }
+    while (++i < end) {
+      if (path[i] === pathSeparator) {
+        count++;
+        while (++i < end && path[i] === pathSeparator) {
+          continue;
+        }
+      }
+    }
+    return count;
+  };
+
+  exports.getExtension = getExtension = function(str) {
+    var pos;
+    pos = str.lastIndexOf(".");
+    if (pos < 0) {
+      return "";
+    } else {
+      return str.substr(pos + 1);
+    }
+  };
+
+  getExtensionScore = function(candidate, ext, startPos, endPos, maxDepth) {
+    var m, matched, n, pos;
+    if (!ext.length) {
+      return 0;
+    }
+    pos = candidate.lastIndexOf(".", endPos);
+    if (!(pos > startPos)) {
+      return 0;
+    }
+    n = ext.length;
+    m = endPos - pos;
+    if (m < n) {
+      n = m;
+      m = ext.length;
+    }
+    pos++;
+    matched = -1;
+    while (++matched < n) {
+      if (candidate[pos + matched] !== ext[matched]) {
+        break;
+      }
+    }
+    if (matched === 0 && maxDepth > 0) {
+      return 0.9 * getExtensionScore(candidate, ext, startPos, pos - 2, maxDepth - 1);
+    }
+    return matched / m;
+  };
+
+}).call(this);
+
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/query.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function() {
+  var Query, coreChars, countDir, getCharCodes, getExtension, opt_char_re, truncatedUpperCase, _ref;
+
+  _ref = __webpack_require__("./node_modules/fuzzaldrin-plus/lib/pathScorer.js"), countDir = _ref.countDir, getExtension = _ref.getExtension;
+
+  module.exports = Query = (function() {
+    function Query(query, _arg) {
+      var optCharRegEx, pathSeparator, _ref1;
+      _ref1 = _arg != null ? _arg : {}, optCharRegEx = _ref1.optCharRegEx, pathSeparator = _ref1.pathSeparator;
+      if (!(query && query.length)) {
+        return null;
+      }
+      this.query = query;
+      this.query_lw = query.toLowerCase();
+      this.core = coreChars(query, optCharRegEx);
+      this.core_lw = this.core.toLowerCase();
+      this.core_up = truncatedUpperCase(this.core);
+      this.depth = countDir(query, query.length, pathSeparator);
+      this.ext = getExtension(this.query_lw);
+      this.charCodes = getCharCodes(this.query_lw);
+    }
+
+    return Query;
+
+  })();
+
+  opt_char_re = /[ _\-:\/\\]/g;
+
+  coreChars = function(query, optCharRegEx) {
+    if (optCharRegEx == null) {
+      optCharRegEx = opt_char_re;
+    }
+    return query.replace(optCharRegEx, '');
+  };
+
+  truncatedUpperCase = function(str) {
+    var char, upper, _i, _len;
+    upper = "";
+    for (_i = 0, _len = str.length; _i < _len; _i++) {
+      char = str[_i];
+      upper += char.toUpperCase()[0];
+    }
+    return upper;
+  };
+
+  getCharCodes = function(str) {
+    var charCodes, i, len;
+    len = str.length;
+    i = -1;
+    charCodes = [];
+    while (++i < len) {
+      charCodes[str.charCodeAt(i)] = true;
+    }
+    return charCodes;
+  };
+
+}).call(this);
+
+
+/***/ }),
+
+/***/ "./node_modules/fuzzaldrin-plus/lib/scorer.js":
+/***/ (function(module, exports) {
+
+(function() {
+  var AcronymResult, computeScore, emptyAcronymResult, isAcronymFullWord, isMatch, isSeparator, isWordEnd, isWordStart, miss_coeff, pos_bonus, scoreAcronyms, scoreCharacter, scoreConsecutives, scoreExact, scoreExactMatch, scorePattern, scorePosition, scoreSize, tau_size, wm;
+
+  wm = 150;
+
+  pos_bonus = 20;
+
+  tau_size = 150;
+
+  miss_coeff = 0.75;
+
+  exports.score = function(string, query, options) {
+    var allowErrors, preparedQuery, score, string_lw;
+    preparedQuery = options.preparedQuery, allowErrors = options.allowErrors;
+    if (!(allowErrors || isMatch(string, preparedQuery.core_lw, preparedQuery.core_up))) {
+      return 0;
+    }
+    string_lw = string.toLowerCase();
+    score = computeScore(string, string_lw, preparedQuery);
+    return Math.ceil(score);
+  };
+
+  exports.isMatch = isMatch = function(subject, query_lw, query_up) {
+    var i, j, m, n, qj_lw, qj_up, si;
+    m = subject.length;
+    n = query_lw.length;
+    if (!m || n > m) {
+      return false;
+    }
+    i = -1;
+    j = -1;
+    while (++j < n) {
+      qj_lw = query_lw.charCodeAt(j);
+      qj_up = query_up.charCodeAt(j);
+      while (++i < m) {
+        si = subject.charCodeAt(i);
+        if (si === qj_lw || si === qj_up) {
+          break;
+        }
+      }
+      if (i === m) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  exports.computeScore = computeScore = function(subject, subject_lw, preparedQuery) {
+    var acro, acro_score, align, csc_diag, csc_row, csc_score, csc_should_rebuild, i, j, m, miss_budget, miss_left, n, pos, query, query_lw, record_miss, score, score_diag, score_row, score_up, si_lw, start, sz;
+    query = preparedQuery.query;
+    query_lw = preparedQuery.query_lw;
+    m = subject.length;
+    n = query.length;
+    acro = scoreAcronyms(subject, subject_lw, query, query_lw);
+    acro_score = acro.score;
+    if (acro.count === n) {
+      return scoreExact(n, m, acro_score, acro.pos);
+    }
+    pos = subject_lw.indexOf(query_lw);
+    if (pos > -1) {
+      return scoreExactMatch(subject, subject_lw, query, query_lw, pos, n, m);
+    }
+    score_row = new Array(n);
+    csc_row = new Array(n);
+    sz = scoreSize(n, m);
+    miss_budget = Math.ceil(miss_coeff * n) + 5;
+    miss_left = miss_budget;
+    csc_should_rebuild = true;
+    j = -1;
+    while (++j < n) {
+      score_row[j] = 0;
+      csc_row[j] = 0;
+    }
+    i = -1;
+    while (++i < m) {
+      si_lw = subject_lw[i];
+      if (!si_lw.charCodeAt(0) in preparedQuery.charCodes) {
+        if (csc_should_rebuild) {
+          j = -1;
+          while (++j < n) {
+            csc_row[j] = 0;
+          }
+          csc_should_rebuild = false;
+        }
+        continue;
+      }
+      score = 0;
+      score_diag = 0;
+      csc_diag = 0;
+      record_miss = true;
+      csc_should_rebuild = true;
+      j = -1;
+      while (++j < n) {
+        score_up = score_row[j];
+        if (score_up > score) {
+          score = score_up;
+        }
+        csc_score = 0;
+        if (query_lw[j] === si_lw) {
+          start = isWordStart(i, subject, subject_lw);
+          csc_score = csc_diag > 0 ? csc_diag : scoreConsecutives(subject, subject_lw, query, query_lw, i, j, start);
+          align = score_diag + scoreCharacter(i, j, start, acro_score, csc_score);
+          if (align > score) {
+            score = align;
+            miss_left = miss_budget;
+          } else {
+            if (record_miss && --miss_left <= 0) {
+              return Math.max(score, score_row[n - 1]) * sz;
+            }
+            record_miss = false;
+          }
+        }
+        score_diag = score_up;
+        csc_diag = csc_row[j];
+        csc_row[j] = csc_score;
+        score_row[j] = score;
+      }
+    }
+    score = score_row[n - 1];
+    return score * sz;
+  };
+
+  exports.isWordStart = isWordStart = function(pos, subject, subject_lw) {
+    var curr_s, prev_s;
+    if (pos === 0) {
+      return true;
+    }
+    curr_s = subject[pos];
+    prev_s = subject[pos - 1];
+    return isSeparator(prev_s) || (curr_s !== subject_lw[pos] && prev_s === subject_lw[pos - 1]);
+  };
+
+  exports.isWordEnd = isWordEnd = function(pos, subject, subject_lw, len) {
+    var curr_s, next_s;
+    if (pos === len - 1) {
+      return true;
+    }
+    curr_s = subject[pos];
+    next_s = subject[pos + 1];
+    return isSeparator(next_s) || (curr_s === subject_lw[pos] && next_s !== subject_lw[pos + 1]);
+  };
+
+  isSeparator = function(c) {
+    return c === ' ' || c === '.' || c === '-' || c === '_' || c === '/' || c === '\\';
+  };
+
+  scorePosition = function(pos) {
+    var sc;
+    if (pos < pos_bonus) {
+      sc = pos_bonus - pos;
+      return 100 + sc * sc;
+    } else {
+      return Math.max(100 + pos_bonus - pos, 0);
+    }
+  };
+
+  exports.scoreSize = scoreSize = function(n, m) {
+    return tau_size / (tau_size + Math.abs(m - n));
+  };
+
+  scoreExact = function(n, m, quality, pos) {
+    return 2 * n * (wm * quality + scorePosition(pos)) * scoreSize(n, m);
+  };
+
+  exports.scorePattern = scorePattern = function(count, len, sameCase, start, end) {
+    var bonus, sz;
+    sz = count;
+    bonus = 6;
+    if (sameCase === count) {
+      bonus += 2;
+    }
+    if (start) {
+      bonus += 3;
+    }
+    if (end) {
+      bonus += 1;
+    }
+    if (count === len) {
+      if (start) {
+        if (sameCase === len) {
+          sz += 2;
+        } else {
+          sz += 1;
+        }
+      }
+      if (end) {
+        bonus += 1;
+      }
+    }
+    return sameCase + sz * (sz + bonus);
+  };
+
+  exports.scoreCharacter = scoreCharacter = function(i, j, start, acro_score, csc_score) {
+    var posBonus;
+    posBonus = scorePosition(i);
+    if (start) {
+      return posBonus + wm * ((acro_score > csc_score ? acro_score : csc_score) + 10);
+    }
+    return posBonus + wm * csc_score;
+  };
+
+  exports.scoreConsecutives = scoreConsecutives = function(subject, subject_lw, query, query_lw, i, j, startOfWord) {
+    var k, m, mi, n, nj, sameCase, sz;
+    m = subject.length;
+    n = query.length;
+    mi = m - i;
+    nj = n - j;
+    k = mi < nj ? mi : nj;
+    sameCase = 0;
+    sz = 0;
+    if (query[j] === subject[i]) {
+      sameCase++;
+    }
+    while (++sz < k && query_lw[++j] === subject_lw[++i]) {
+      if (query[j] === subject[i]) {
+        sameCase++;
+      }
+    }
+    if (sz < k) {
+      i--;
+    }
+    if (sz === 1) {
+      return 1 + 2 * sameCase;
+    }
+    return scorePattern(sz, n, sameCase, startOfWord, isWordEnd(i, subject, subject_lw, m));
+  };
+
+  exports.scoreExactMatch = scoreExactMatch = function(subject, subject_lw, query, query_lw, pos, n, m) {
+    var end, i, pos2, sameCase, start;
+    start = isWordStart(pos, subject, subject_lw);
+    if (!start) {
+      pos2 = subject_lw.indexOf(query_lw, pos + 1);
+      if (pos2 > -1) {
+        start = isWordStart(pos2, subject, subject_lw);
+        if (start) {
+          pos = pos2;
+        }
+      }
+    }
+    i = -1;
+    sameCase = 0;
+    while (++i < n) {
+      if (query[pos + i] === subject[i]) {
+        sameCase++;
+      }
+    }
+    end = isWordEnd(pos + n - 1, subject, subject_lw, m);
+    return scoreExact(n, m, scorePattern(n, n, sameCase, start, end), pos);
+  };
+
+  AcronymResult = (function() {
+    function AcronymResult(score, pos, count) {
+      this.score = score;
+      this.pos = pos;
+      this.count = count;
+    }
+
+    return AcronymResult;
+
+  })();
+
+  emptyAcronymResult = new AcronymResult(0, 0.1, 0);
+
+  exports.scoreAcronyms = scoreAcronyms = function(subject, subject_lw, query, query_lw) {
+    var count, fullWord, i, j, m, n, qj_lw, sameCase, score, sepCount, sumPos;
+    m = subject.length;
+    n = query.length;
+    if (!(m > 1 && n > 1)) {
+      return emptyAcronymResult;
+    }
+    count = 0;
+    sepCount = 0;
+    sumPos = 0;
+    sameCase = 0;
+    i = -1;
+    j = -1;
+    while (++j < n) {
+      qj_lw = query_lw[j];
+      if (isSeparator(qj_lw)) {
+        i = subject_lw.indexOf(qj_lw, i + 1);
+        if (i > -1) {
+          sepCount++;
+          continue;
+        } else {
+          break;
+        }
+      }
+      while (++i < m) {
+        if (qj_lw === subject_lw[i] && isWordStart(i, subject, subject_lw)) {
+          if (query[j] === subject[i]) {
+            sameCase++;
+          }
+          sumPos += i;
+          count++;
+          break;
+        }
+      }
+      if (i === m) {
+        break;
+      }
+    }
+    if (count < 2) {
+      return emptyAcronymResult;
+    }
+    fullWord = count === n ? isAcronymFullWord(subject, subject_lw, query, count) : false;
+    score = scorePattern(count, n, sameCase, true, fullWord);
+    return new AcronymResult(score, sumPos / count, count + sepCount);
+  };
+
+  isAcronymFullWord = function(subject, subject_lw, query, nbAcronymInQuery) {
+    var count, i, m, n;
+    m = subject.length;
+    n = query.length;
+    count = 0;
+    if (m > 12 * n) {
+      return false;
+    }
+    i = -1;
+    while (++i < m) {
+      if (isWordStart(i, subject, subject_lw) && ++count > nbAcronymInQuery) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+}).call(this);
 
 
 /***/ }),
@@ -1109,6 +2150,47 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-059dd878\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AlertComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      {
+        class: [
+          "alert",
+          "alert-" + _vm.alertLevel,
+          "alert-dismissible",
+          "text-left"
+        ]
+      },
+      [
+        _c("button", {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "alert" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v(_vm._s(_vm.alertMessage))])
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-059dd878", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d893ab8\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SidebarComponent.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1280,10 +2362,36 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "action-container" }, [
+                _c("div", { staticClass: "input-icon d-inline-block pr-3" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.query,
+                        expression: "query"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Search..." },
+                    domProps: { value: _vm.query },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.query = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ]),
+                _vm._v(" "),
                 _c(
                   "a",
                   {
-                    staticClass: "icon",
+                    staticClass: "icon d-inline-block",
                     attrs: {
                       "data-toggle": "tooltip",
                       "data-original-title": "Create",
@@ -1308,9 +2416,26 @@ var render = function() {
                           tableType,
                           tableKey
                         ) {
-                          return _c("th", [
-                            _vm._v(_vm._s(_vm._f("beautify")(tableKey)))
-                          ])
+                          return _c(
+                            "th",
+                            {
+                              class: [
+                                "sortable",
+                                {
+                                  "sorted-by": _vm.currentSortKey === tableKey
+                                },
+                                _vm.currentSortKey === tableKey
+                                  ? _vm.currentSortDirection
+                                  : ""
+                              ],
+                              on: {
+                                click: function($event) {
+                                  _vm.sort(tableKey)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm._f("beautify")(tableKey)))]
+                          )
                         }),
                         _vm._v(" "),
                         _c("th")
@@ -1321,7 +2446,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "tbody",
-                    _vm._l(_vm.resourceData, function(resource, index) {
+                    _vm._l(_vm.filterResults, function(resource, index) {
                       return _c(
                         "tr",
                         [
@@ -1426,6 +2551,40 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-between" }, [
+        _c("div", { staticClass: "col-2" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-pill btn-secondary",
+              attrs: { disabled: _vm.resourceLinksData.prev == null },
+              on: {
+                click: function($event) {
+                  _vm.prevPage()
+                }
+              }
+            },
+            [_vm._v("Prev Page")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-2" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-pill btn-secondary float-right",
+              attrs: { disabled: _vm.resourceLinksData.next == null },
+              on: {
+                click: function($event) {
+                  _vm.nextPage()
+                }
+              }
+            },
+            [_vm._v("Next Page")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
       _c(
         "modal-component",
         {
@@ -1476,7 +2635,16 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "input-icon-addon pr-3" }, [
+      _c("i", { staticClass: "fe fe-search" })
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -1648,317 +2816,377 @@ var render = function() {
   return _c("div", [
     _c("form", [
       _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "card-header" }, [
           _c("h3", { staticClass: "card-title" }, [
             _vm._v(
               _vm._s(_vm.handleText) +
                 " " +
                 _vm._s(_vm._f("beautify")(_vm.resourceName))
             )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "col-md-12" },
-              [
-                _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
-                  return _c("div", { staticClass: "form-group" }, [
-                    _c("label", { staticClass: "form, mn7654b3-label" }, [
-                      _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
-                    ]),
-                    _vm._v(" "),
-                    fieldType === "checkbox"
-                      ? _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.resourceData["" + fieldKey],
-                              expression: "resourceData[`${fieldKey}`]"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "checkbox" },
-                          domProps: {
-                            checked: Array.isArray(
-                              _vm.resourceData["" + fieldKey]
-                            )
-                              ? _vm._i(_vm.resourceData["" + fieldKey], null) >
-                                -1
-                              : _vm.resourceData["" + fieldKey]
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.resourceData["" + fieldKey],
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.resourceData,
-                                      "" + fieldKey,
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.resourceData,
-                                      "" + fieldKey,
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.resourceData, "" + fieldKey, $$c)
-                              }
-                            }
-                          }
-                        })
-                      : fieldType === "radio"
-                      ? _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.resourceData["" + fieldKey],
-                              expression: "resourceData[`${fieldKey}`]"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "radio" },
-                          domProps: {
-                            checked: _vm._q(
-                              _vm.resourceData["" + fieldKey],
-                              null
-                            )
-                          },
-                          on: {
-                            change: function($event) {
-                              _vm.$set(_vm.resourceData, "" + fieldKey, null)
-                            }
-                          }
-                        })
-                      : _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.resourceData["" + fieldKey],
-                              expression: "resourceData[`${fieldKey}`]"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: fieldType },
-                          domProps: { value: _vm.resourceData["" + fieldKey] },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.resourceData,
-                                "" + fieldKey,
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                  ])
-                }),
-                _vm._v(" "),
-                _vm._l(_vm.relationalFields, function(
-                  relationalMetaData,
-                  relationalKey
-                ) {
-                  return (_vm.relationalData &&
-                    relationalMetaData.relationshipType === "BelongsTo") ||
-                    relationalMetaData.relationshipType === "BelongsToMany"
-                    ? _c("div", { staticClass: "form-group" }, [
-                        _c("label", { staticClass: "form-label" }, [
-                          _vm._v(_vm._s(_vm._f("beautify")(relationalKey)))
-                        ]),
-                        _vm._v(" "),
-                        _vm.relationalData &&
-                        relationalMetaData.relationshipType === "BelongsToMany"
-                          ? _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: relationalMetaData.relationshipId,
-                                    expression:
-                                      "relationalMetaData.relationshipId"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { multiple: "true" },
-                                on: {
-                                  change: function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      relationalMetaData,
-                                      "relationshipId",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c(
-                                  "option",
-                                  { attrs: { disabled: "", selected: "" } },
-                                  [
-                                    _vm._v(
-                                      "Select " +
-                                        _vm._s(
-                                          _vm._f("beautify")(relationalKey)
-                                        )
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _vm._l(
-                                  _vm.relationalData["" + relationalKey],
-                                  function(option) {
-                                    return _vm.relationalData
-                                      ? _c(
-                                          "option",
-                                          { domProps: { value: option.id } },
-                                          [
-                                            _vm._v(
-                                              _vm._s(
-                                                option[
-                                                  "" +
-                                                    relationalMetaData.resourceTitle
-                                                ]
-                                              )
-                                            )
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  }
-                                )
-                              ],
-                              2
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.relationalData &&
-                        relationalMetaData.relationshipType === "BelongsTo"
-                          ? _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: relationalMetaData.relationshipId,
-                                    expression:
-                                      "relationalMetaData.relationshipId"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                on: {
-                                  change: function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      relationalMetaData,
-                                      "relationshipId",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c(
-                                  "option",
-                                  { attrs: { disabled: "", selected: "" } },
-                                  [
-                                    _vm._v(
-                                      "Select " +
-                                        _vm._s(
-                                          _vm._f("beautify")(relationalKey)
-                                        )
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _vm._l(
-                                  _vm.relationalData["" + relationalKey],
-                                  function(option) {
-                                    return _vm.relationalData
-                                      ? _c(
-                                          "option",
-                                          { domProps: { value: option.id } },
-                                          [
-                                            _vm._v(
-                                              _vm._s(
-                                                option[
-                                                  "" +
-                                                    relationalMetaData.resourceTitle
-                                                ]
-                                              )
-                                            )
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  }
-                                )
-                              ],
-                              2
-                            )
-                          : _vm._e()
-                      ])
-                    : _vm._e()
-                })
-              ],
-              2
-            )
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "card-footer text-right" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-block",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.handleAction(_vm.action)
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { class: ["dimmer", this.loading ? "active" : ""] }, [
+            _c("div", { staticClass: "loader" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "dimmer-content" }, [
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-md-12" },
+                  [
+                    _vm._l(_vm.resourceFields, function(fieldType, fieldKey) {
+                      return _c("div", { staticClass: "form-group" }, [
+                        _c("label", { staticClass: "form, mn7654b3-label" }, [
+                          _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
+                        ]),
+                        _vm._v(" "),
+                        fieldType === "checkbox"
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.resourceData["" + fieldKey],
+                                  expression: "resourceData[`${fieldKey}`]"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                checked: Array.isArray(
+                                  _vm.resourceData["" + fieldKey]
+                                )
+                                  ? _vm._i(
+                                      _vm.resourceData["" + fieldKey],
+                                      null
+                                    ) > -1
+                                  : _vm.resourceData["" + fieldKey]
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.resourceData["" + fieldKey],
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        _vm.$set(
+                                          _vm.resourceData,
+                                          "" + fieldKey,
+                                          $$a.concat([$$v])
+                                        )
+                                    } else {
+                                      $$i > -1 &&
+                                        _vm.$set(
+                                          _vm.resourceData,
+                                          "" + fieldKey,
+                                          $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1))
+                                        )
+                                    }
+                                  } else {
+                                    _vm.$set(
+                                      _vm.resourceData,
+                                      "" + fieldKey,
+                                      $$c
+                                    )
+                                  }
+                                }
+                              }
+                            })
+                          : fieldType === "radio"
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.resourceData["" + fieldKey],
+                                  expression: "resourceData[`${fieldKey}`]"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "radio" },
+                              domProps: {
+                                checked: _vm._q(
+                                  _vm.resourceData["" + fieldKey],
+                                  null
+                                )
+                              },
+                              on: {
+                                change: function($event) {
+                                  _vm.$set(
+                                    _vm.resourceData,
+                                    "" + fieldKey,
+                                    null
+                                  )
+                                }
+                              }
+                            })
+                          : _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.resourceData["" + fieldKey],
+                                  expression: "resourceData[`${fieldKey}`]"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: fieldType },
+                              domProps: {
+                                value: _vm.resourceData["" + fieldKey]
+                              },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.resourceData,
+                                    "" + fieldKey,
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                      ])
+                    }),
+                    _vm._v(" "),
+                    _vm._l(_vm.relationalFields, function(
+                      relationalMetaData,
+                      relationalKey
+                    ) {
+                      return (_vm.relationalData &&
+                        relationalMetaData.relationshipType === "BelongsTo") ||
+                        relationalMetaData.relationshipType === "BelongsToMany"
+                        ? _c("div", { staticClass: "form-group" }, [
+                            _c("label", { staticClass: "form-label" }, [
+                              _vm._v(_vm._s(_vm._f("beautify")(relationalKey)))
+                            ]),
+                            _vm._v(" "),
+                            _vm.relationalData &&
+                            relationalMetaData.relationshipType ===
+                              "BelongsToMany"
+                              ? _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value:
+                                          relationalMetaData.relationshipId,
+                                        expression:
+                                          "relationalMetaData.relationshipId"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: { multiple: "true" },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          relationalMetaData,
+                                          "relationshipId",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "option",
+                                      {
+                                        attrs: {
+                                          disabled: "",
+                                          selected: "",
+                                          value: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "Select " +
+                                            _vm._s(
+                                              _vm._f("beautify")(relationalKey)
+                                            )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(
+                                      _vm.relationalData["" + relationalKey],
+                                      function(option) {
+                                        return _vm.relationalData
+                                          ? _c(
+                                              "option",
+                                              {
+                                                domProps: { value: option.id }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    option[
+                                                      "" +
+                                                        relationalMetaData.resourceTitle
+                                                    ]
+                                                  )
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      }
+                                    )
+                                  ],
+                                  2
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.relationalData &&
+                            relationalMetaData.relationshipType === "BelongsTo"
+                              ? _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value:
+                                          relationalMetaData.relationshipId,
+                                        expression:
+                                          "relationalMetaData.relationshipId"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          relationalMetaData,
+                                          "relationshipId",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "option",
+                                      {
+                                        attrs: {
+                                          disabled: "",
+                                          selected: "",
+                                          value: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "Select " +
+                                            _vm._s(
+                                              _vm._f("beautify")(relationalKey)
+                                            )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(
+                                      _vm.relationalData["" + relationalKey],
+                                      function(option) {
+                                        return _vm.relationalData
+                                          ? _c(
+                                              "option",
+                                              {
+                                                domProps: { value: option.id }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    option[
+                                                      "" +
+                                                        relationalMetaData.resourceTitle
+                                                    ]
+                                                  )
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      }
+                                    )
+                                  ],
+                                  2
+                                )
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    })
+                  ],
+                  2
+                )
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "card-footer text-right" },
+          [
+            _vm._l(_vm.alertData, function(alert, alertIndex) {
+              return _c("alert-component", {
+                key: alertIndex,
+                attrs: { alertLevel: alert.level, alertMessage: alert.message }
+              })
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                class: [
+                  "btn",
+                  "btn-primary",
+                  "btn-block",
+                  this.loading ? "btn-loading" : ""
+                ],
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.handleAction(_vm.action)
+                  }
                 }
-              }
-            },
-            [_vm._v(_vm._s(_vm.handleButtonText))]
-          )
-        ])
+              },
+              [_vm._v(_vm._s(_vm.handleButtonText))]
+            )
+          ],
+          2
+        )
       ])
     ])
   ])
@@ -13414,6 +14642,7 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
+Vue.component('alert-component', __webpack_require__("./resources/assets/js/components/AlertComponent.vue"));
 Vue.component('table-component', __webpack_require__("./resources/assets/js/components/TableComponent.vue"));
 Vue.component('form-component', __webpack_require__("./resources/assets/js/components/FormComponent.vue"));
 Vue.component('show-component', __webpack_require__("./resources/assets/js/components/ShowComponent.vue"));
@@ -13444,6 +14673,54 @@ Vue.filter("beautify", function (value) {
 var app = new Vue({
   el: '#app'
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/AlertComponent.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/AlertComponent.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-059dd878\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/AlertComponent.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/AlertComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-059dd878", Component.options)
+  } else {
+    hotAPI.reload("data-v-059dd878", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

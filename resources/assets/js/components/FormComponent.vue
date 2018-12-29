@@ -2,30 +2,43 @@
     <div>
         <form>
             <div class="card">
-                <div class="card-body">
+                <div class="card-header">
                     <h3 class="card-title">{{ handleText }} {{ resourceName | beautify }}</h3>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
-                                <label class="form, mn7654b3-label">{{ fieldKey | beautify }}</label>
-                                <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
-                            </div>
-                            <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany'" class="form-group">
-                                <label class="form-label">{{ relationalKey | beautify }}</label>
-                                <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsToMany'" v-model="relationalMetaData.relationshipId">
-                                    <option disabled selected>Select {{ relationalKey | beautify }}</option>
-                                    <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
-                                </select>
-                                <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalMetaData.relationshipId">
-                                    <option disabled selected>Select {{ relationalKey | beautify }}</option>
-                                    <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
-                                </select>
+                </div>
+                <div class="card-body">
+                    <div :class="['dimmer', (this.loading ? 'active' : '')]">
+                        <div class="loader"></div>
+                        <div class="dimmer-content">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
+                                        <label class="form, mn7654b3-label">{{ fieldKey | beautify }}</label>
+                                        <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
+                                    </div>
+                                    <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany'" class="form-group">
+                                        <label class="form-label">{{ relationalKey | beautify }}</label>
+                                        <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsToMany'" v-model="relationalMetaData.relationshipId">
+                                            <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
+                                            <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
+                                        </select>
+                                        <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalMetaData.relationshipId">
+                                            <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
+                                            <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button type="button" class="btn btn-primary btn-block" @click="handleAction(action)">{{ handleButtonText }}</button>
+                    <alert-component
+                            v-for="alert, alertIndex in alertData"
+                            :key="alertIndex"
+                            :alertLevel="alert.level"
+                            :alertMessage="alert.message"
+                    ></alert-component>
+                    <button type="button" :class="['btn', 'btn-primary', 'btn-block', (this.loading ? 'btn-loading' : '')]" @click="handleAction(action)">{{ handleButtonText }}</button>
                 </div>
             </div>
         </form>
@@ -40,6 +53,7 @@
             'resourceName',
             'resourceFields',
             'relationalFields',
+            'singularResourceName',
             'action',
         ],
         data() {
@@ -47,6 +61,7 @@
                 handleText: 'Create',
                 handleButtonText: 'Create',
                 loading: false,
+                alertData: [],
                 resourceData: {},
                 relationalData: {},
             }
@@ -83,14 +98,15 @@
                 axios.get(`/api/otter/${this.resourceName}/relational`)
                     .then(response=>{
                         this.relationalData = response.data.data;
-                    })
-                    .catch(e => {
+                    }).catch(e => {
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
                     })
                     .finally(() => {
+                        $('select').selectize({});
                     });
             },
             handleAction(action) {
+                this.loading = true;
                 if(action === 'edit')
                 {
                     this.handleUpdate();
@@ -121,8 +137,11 @@
 
                 axios.patch(`/api/otter/${this.resourceName}/${this.resourceId}`, this.resourceData)
                     .then(response => {
-                        console.log("success");
                         this.fetchResource();
+                        this.alertData.push({
+                            "level" : "success",
+                            "message" : this.$options.filters.beautify(this.singularResourceName) + " has been successfully updated"
+                        });
                     })
                     .catch(e => {
                         this.error = 'Could not update. Please check your values or try again later.';

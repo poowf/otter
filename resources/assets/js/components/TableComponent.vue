@@ -6,19 +6,23 @@
                     <div class="card-header">
                         <h3 class="card-title">{{ resourceName | beautify }}</h3>
                         <div class="action-container">
-                            <a data-toggle="tooltip" data-original-title="Create" class="icon" v-bind:href="`/otter/${resourceName}/create`"><i class="fe fe-plus"></i></a>
+                            <div class="input-icon d-inline-block pr-3">
+                                <input type="text" class="form-control" placeholder="Search..." v-model="query">
+                                <span class="input-icon-addon pr-3"><i class="fe fe-search"></i></span>
+                            </div>
+                            <a data-toggle="tooltip" data-original-title="Create" class="icon d-inline-block" v-bind:href="`/otter/${resourceName}/create`"><i class="fe fe-plus"></i></a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table card-table table-vcenter text-nowrap">
                             <thead>
                                 <tr>
-                                    <th v-for="tableType, tableKey in resourceFields">{{ tableKey | beautify }}</th>
+                                    <th v-for="tableType, tableKey in resourceFields" @click="sort(tableKey)" :class=" ['sortable', { 'sorted-by' : currentSortKey === tableKey },  (currentSortKey === tableKey ? currentSortDirection : '')]">{{ tableKey | beautify }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="resource, index in resourceData">
+                                <tr v-for="resource, index in filterResults">
                                     <td v-for="fieldType, fieldKey in resourceFields">{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-secondary btn-sm" v-bind:href="`/otter/${resourceName}/${resource.route_key}/`">View</a>
@@ -41,6 +45,14 @@
                 </div>
             </div>
         </div>
+        <div class="row justify-content-between">
+            <div class="col-2">
+                <button class="btn btn-pill btn-secondary" @click="prevPage()" :disabled="resourceLinksData.prev == null">Prev Page</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-pill btn-secondary float-right" @click="nextPage()" :disabled="resourceLinksData.next == null">Next Page</button>
+            </div>
+        </div>
         <modal-component :id="`modal-confirmation`" :title="modal.title" :action="modal.action" :visible="modal.visible" @close="resetModal()">
             <div slot="body">
                 <p class="">{{ modal.action }} Resource?</p>
@@ -54,6 +66,7 @@
 </template>
 
 <script>
+    import fz from 'fuzzaldrin-plus';
     export default {
         name: "TableComponent",
         props: [
@@ -62,9 +75,15 @@
         ],
         data() {
             return {
+                query: '',
                 loading: false,
                 resourceData: [],
+                resourceMetaData: [],
+                resourceLinksData: [],
                 currentSelectedResource: null,
+                currentPage: 1,
+                currentSortKey:'id',
+                currentSortDirection:'asc',
                 modal: {
                     title: null,
                     action: null,
@@ -78,10 +97,26 @@
         mounted() {
         },
         methods: {
-            fetchResourceIndex() {
-                axios.get(`/api/otter/${this.resourceName}`)
+            prevPage() {
+                this.fetchResourceIndex(this.resourceLinksData.prev);
+            },
+            nextPage() {
+                this.fetchResourceIndex(this.resourceLinksData.next);
+            },
+            sort:function(sortParameter) {
+                //if sortParameter == current sort, reverse
+                if(sortParameter === this.currentSortKey) {
+                    this.currentSortDirection = this.currentSortDirection === 'asc' ? 'desc' : 'asc';
+                }
+                this.currentSortKey = sortParameter;
+            },
+            fetchResourceIndex(resourceUrl = `/api/otter/${this.resourceName}?page=${this.currentPage}`) {
+                axios.get(resourceUrl)
                     .then(response=>{
                         this.resourceData = response.data.data;
+                        this.resourceMetaData = response.data.meta;
+                        this.resourceLinksData = response.data.links;
+                        this.currentPage = this.resourceMetaData.current_page;
                     })
                     .catch(e => {
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
@@ -112,6 +147,43 @@
                 this.modal.visible = false;
                 this.currentSelectedResource = null;
             },
+            getSearchFields(option) {
+                let mappedFieldKeys = Object.keys(this.resourceFields).map(fieldKey => {
+                    return option[fieldKey];
+                })
+                mappedFieldKeys.push(option.id);
+
+                return mappedFieldKeys;
+            },
+        },
+        computed:{
+            sortedResources() {
+                return this.resourceData.sort((nextResource, currentResource) => {
+                    let modifier = 1;
+                    if(this.currentSortDirection === 'desc') modifier = -1;
+                    if(nextResource[this.currentSortKey] < currentResource[this.currentSortKey]) return -1 * modifier;
+                    if(nextResource[this.currentSortKey] > currentResource[this.currentSortKey]) return 1 * modifier;
+                    return 0;
+                });
+            },
+            filterResults() {
+                if(!this.query) return this.sortedResources;
+
+                const preparedQuery = fz.prepareQuery(this.query);
+                const scores = {};
+
+                return this.sortedResources
+                    .map((option, index) => {
+                        const scorableFields = this.getSearchFields(option);
+                        let scoredFields = scorableFields.map(toScore => fz.score(toScore, this.query, { preparedQuery }));
+
+                        scores[option.id] = Math.max(...scoredFields);
+
+                        return option;
+                    })
+                    .filter(option => scores[option.id] > 1)
+                    .sort((a, b) => scores[b.id] - scores[a.id]);
+            }
         }
     }
 </script>

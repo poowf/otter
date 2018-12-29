@@ -35,7 +35,7 @@ class OtterController extends Controller
         //Instantiate new model instance
         $modelInstance = new $modelName;
         //Return an Otter resource of the model
-        return $this->resource::collection(($modelInstance)::all());
+        return $this->resource::collection(($modelInstance)::paginate(10));
     }
 
     /**

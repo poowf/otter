@@ -12,6 +12,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('selectize');
 } catch (e) {}
 
 window['require'] = function(modules, callback) {

@@ -13,6 +13,7 @@
                 </h1>
             </div>
             <form-component
+                    singular-resource-name="{{ $prettyResourceName }}"
                     resource-name="{{ $resourceName }}"
                     resource-id="{{ $resourceId }}"
                     action="edit"
