@@ -31,7 +31,7 @@ class OtterResource extends JsonResource
      *
      * @return array
      */
-    public function fields()
+    public static function fields()
     {
         return [];
     }
@@ -41,7 +41,7 @@ class OtterResource extends JsonResource
      *
      * @return array
      */
-    public function relations()
+    public static function relations()
     {
         return [
         ];
@@ -52,7 +52,7 @@ class OtterResource extends JsonResource
      *
      * @return array
      */
-    public function hidden()
+    public static function hidden()
     {
         return [];
     }
