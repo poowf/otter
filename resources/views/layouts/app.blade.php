@@ -6,15 +6,15 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta http-equiv="Content-Language" content="en" />
-        <meta name="msapplication-TileColor" content="#2d89ef">
-        <meta name="theme-color" content="#4188c9">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="HandheldFriendly" content="True">
-        <meta name="MobileOptimized" content="320">
-        <link rel="icon" href="{{ asset('vendor/otter/favicon.ico') }}" type="image/x-icon"/>
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('vendor/otter/favicon.ico') }}" />
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vendor/otter/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vendor/otter/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vendor/otter/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('vendor/otter/site.webmanifest') }}">
+        <link rel="mask-icon" href="{{ asset('vendor/otter/safari-pinned-tab.svg') }}" color="#5bbad5">
+        <meta name="apple-mobile-web-app-title" content="Otter">
+        <meta name="application-name" content="Otter">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
         <title>Otter</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
@@ -100,6 +100,15 @@
                 border-color: #6e7687 transparent transparent transparent;
             }
 
+            .header-brand-img {
+                height: 3rem;
+                line-height: 3rem;
+            }
+
+            .flex-grow {
+                flex:1;
+            }
+
             @media (min-width: 992px) {
                 .fixed {
                     flex: 0 0 200px;
@@ -114,10 +123,6 @@
                 .header .header-brand {
                     display: none;
                 }
-            }
-
-            .flex-grow {
-                flex:1;
             }
         </style>
         @yield("head")

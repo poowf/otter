@@ -49,7 +49,6 @@ mix
     .sass('resources/assets/sass/app.scss', 'public/assets/css')
 
     .copy('node_modules/tabler-ui/dist/assets/css/tabler.css', 'public/assets/css/tabler.css')
-    .copy('node_modules/tabler-ui/dist/demo/brand/tabler.svg', 'public/assets/images/tabler.svg')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.eot', 'public/assets/fonts/feather/feather-webfont.eot')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.svg', 'public/assets/fonts/feather/feather-webfont.svg')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.ttf', 'public/assets/fonts/feather/feather-webfont.ttf')
