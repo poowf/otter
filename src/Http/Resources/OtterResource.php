@@ -37,11 +37,11 @@ class OtterResource extends JsonResource
     }
 
     /**
-     * Get the relations used by the resource
+     * Get the validations used by the resource
      *
      * @return array
      */
-    public static function relations()
+    public static function validations()
     {
         return [
         ];
@@ -55,6 +55,17 @@ class OtterResource extends JsonResource
     public static function hidden()
     {
         return [];
+    }
+
+    /**
+     * Get the relations used by the resource
+     *
+     * @return array
+     */
+    public static function relations()
+    {
+        return [
+        ];
     }
 
     /**

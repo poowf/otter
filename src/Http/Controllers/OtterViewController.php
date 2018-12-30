@@ -65,10 +65,12 @@ class OtterViewController extends Controller
         $allResourceNames = $this->allResourceNames;
         $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
-        $resourceFields = json_encode($this->resource::fields());
-        $relationalFields = json_encode(Otter::getRelationalFields($this->resource));
+        $resource = $this->resource;
+        $resourceFields = json_encode($resource::fields());
+        $relationalFields = json_encode(Otter::getRelationalFields($resource));
+        $validationFields = json_encode($resource::validations()['client']);
 
-        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields', 'relationalFields'));
+        return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields', 'relationalFields', 'validationFields'));
     }
 
     /**
@@ -117,11 +119,13 @@ class OtterViewController extends Controller
         $allResourceNames = $this->allResourceNames;
         $prettyResourceName = $this->prettyResourceName;
         $resourceName = $this->resourceName;
-        $resourceFields = json_encode($this->resource::fields());
+        $resource = $this->resource;
+        $resourceFields = json_encode($resource::fields());
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
-        $relationalFields = json_encode(Otter::getRelationalFields($this->resource, $modelInstance));
+        $relationalFields = json_encode(Otter::getRelationalFields($resource, $modelInstance));
+        $validationFields = json_encode($resource::validations()['client']);
 
-        return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'relationalFields'));
+        return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'relationalFields', 'validationFields'));
     }
 
     /**

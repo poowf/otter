@@ -202,6 +202,7 @@ class Otter
 
         return $relationalDataArray;
     }
+
     /**
      * Retrieve all the relational data in an OtterResource
      *
@@ -223,5 +224,4 @@ class Otter
 
         return $relationalDataArray;
     }
-
 }

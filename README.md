@@ -2,7 +2,9 @@
 A relatively automatic CRUD backend administration panel
 
 # Introduction
-Otter was created as an open-source alternative to Laravel Nova. The backend administration panel is built with the beautiful tabler template and follows the structure of the popular laravel extension packages like horizon and telescope
+Otter was created as an open-source alternative to Laravel Nova. The backend administration panel is built with the beautiful tabler template and follows the structure of the popular laravel extension packages like horizon and telescope.
+
+Otter is designed to handle almost everything for you through `OtterResource` files that essentially tie to your Eloquent Models.
 
 # Installation
 
@@ -135,6 +137,47 @@ class User extends OtterResource
 }
 ```
 
+## Validation
+When creating or updating the resources in storage, you should add some validation rules to ensure that the data is stored correctly. You can do this for both the client and server side by defining a `validations` method in the `OtterResource`. The below example has defined rules for both the client and server side for the create and updated methods.
+The client side is utilising VeeValidate for validation so please see the available rules at the [VeeValidate Rules Documentation](https://baianat.github.io/vee-validate/guide/rules.html). The server side is utilising the default [Laravel Validation Rules](https://laravel.com/docs/validation#available-validation-rules).
+
+```php
+/**
+ * Get the validation rules used by the resource
+ *
+ * @return array
+ */
+public static function validations()
+{
+    return [
+        'client' => [
+            'create' => [
+                'name' => 'required|min:4',
+                'email' => 'required|email',
+                'password' => 'required',
+            ],
+            'update' => [
+                'name' => 'required|min:4',
+                'email' => 'required|email',
+                'password' => '',
+            ]
+        ],
+        'server' => [
+            'create' => [
+                'name' => 'required|min:4',
+                'email' => 'required|email|unique:users',
+                'password' => 'required',
+            ],
+            'update' => [
+                'name' => 'required|string|min:4',
+                'email' => 'required|email|unique:users,email,' . auth()->user()->id,
+                'password' => 'required',
+            ]
+        ],
+    ];
+}
+```
+
 ## Relationships
 
 Otter has partial support for Eloquent relationships. You have to define your relationships in the `OtterResource` file and define the Relationship method name as the key and the `OtterResource` class name that links to the relationship.
@@ -196,10 +239,18 @@ protected function gate()
 ```
 
 # Configuration
-After publishing Otter's assets, its primary configuration file will be located at `config/otter.php`. This configuration file will allow you to configure the middleware for both the `api` and `web` routes that is automatically registered by Otter. You can also configure the keys of the `Auth::user()` instance for the `name` and `email` properties.
+After publishing Otter's assets, its primary configuration file will be located at `config/otter.php`. 
+
+This configuration file will allow you to configure the middleware for both the `api` and `web` routes that is automatically registered by Otter. 
+
+You can also configure the keys of the `Auth::user()` instance for the `name` and `email` properties that is used in the top right dropdown. 
+
+The `pagination` configuration value is used to display the number of records in the index pages.
 ```php
 'middleware.web' => ['web'],
 'middleware.api' => ['api'],
+
+'pagination' => 20,
 
 'user' => [
     'name' => 'name',

@@ -12,8 +12,15 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
-                                        <label class="form, mn7654b3-label">{{ fieldKey | beautify }}</label>
-                                        <input class="form-control" v-model="resourceData[`${fieldKey}`]" v-bind:type="fieldType">
+                                        <label class="form-label">{{ fieldKey | beautify }}</label>
+                                        <input
+                                                :class="['form-control', (errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
+                                                v-model="resourceData[`${fieldKey}`]"
+                                                v-bind:name="fieldKey"
+                                                :data-vv-as="fieldKey | beautify"
+                                                v-bind:type="fieldType"
+                                                v-validate="(validationFields ? validationFields[action][fieldKey] : '')">
+                                        <div class="invalid-feedback">{{ errors.first(fieldKey) }}</div>
                                     </div>
                                     <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany'" class="form-group">
                                         <label class="form-label">{{ relationalKey | beautify }}</label>
@@ -52,6 +59,7 @@
             'resourceId',
             'resourceName',
             'resourceFields',
+            'validationFields',
             'relationalFields',
             'singularResourceName',
             'action',
@@ -67,7 +75,7 @@
             }
         },
         created() {
-            if(this.action === 'edit')
+            if(this.action === 'update')
             {
                 this.handleText = "Edit";
                 this.handleButtonText = "Update";
@@ -106,15 +114,19 @@
                     });
             },
             handleAction(action) {
-                this.loading = true;
-                if(action === 'edit')
-                {
-                    this.handleUpdate();
-                }
-                else if(action === 'create')
-                {
-                    this.handleStore();
-                }
+                this.$validator.validate().then(valid => {
+                    if (valid) {
+                        this.loading = true;
+                        if(action === 'update')
+                        {
+                            this.handleUpdate();
+                        }
+                        else if(action === 'create')
+                        {
+                            this.handleStore();
+                        }
+                    }
+                });
             },
             handleStore(e) {
                 this.resourceData.relationalFields = this.relationalFields;
@@ -126,7 +138,10 @@
                         window.location = `/otter/${this.resourceName}`;
                     })
                     .catch(e => {
-                        this.error = 'Could not save. Please check your values or try again later.';
+                        this.alertData.push({
+                            "level" : "danger",
+                            "message" : this.$options.filters.beautify(this.singularResourceName) + " could not be saved. Please check your values or try again later."
+                        });
                     })
                     .finally(() => {
                         this.loading = false;
@@ -144,7 +159,10 @@
                         });
                     })
                     .catch(e => {
-                        this.error = 'Could not update. Please check your values or try again later.';
+                        this.alertData.push({
+                            "level" : "danger",
+                            "message" : this.$options.filters.beautify(this.singularResourceName) + " could not be updated. Please check your values or try again later."
+                        });
                     })
                     .finally(() => {
                         this.loading = false;

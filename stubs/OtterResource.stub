@@ -30,26 +30,4 @@ class DummyClass extends OtterResource
         return [
         ];
     }
-
-    /**
-     * Get the relations used by the resource
-     *`
-     * @return array
-     */
-    public static function relations()
-    {
-        return [
-        ];
-    }
-
-    /**
-     * Fields to be hidden in the resource collection
-     *
-     * @return array
-     */
-    public static function hidden()
-    {
-        return [
-        ];
-    }
 }

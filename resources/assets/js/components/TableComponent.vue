@@ -7,7 +7,7 @@
                         <h3 class="card-title">{{ resourceName | beautify }}</h3>
                         <div class="action-container">
                             <div class="input-icon d-inline-block pr-3">
-                                <input type="text" class="form-control" placeholder="Search..." v-model="query">
+                                <input type="text" class="form-control" placeholder="Search..." v-model.lazy="query" v-debounce="300">
                                 <span class="input-icon-addon pr-3"><i class="fe fe-search"></i></span>
                             </div>
                             <a data-toggle="tooltip" data-original-title="Create" class="icon d-inline-block" v-bind:href="`/otter/${resourceName}/create`"><i class="fe fe-plus"></i></a>
@@ -23,7 +23,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="resource, index in filterResults">
-                                    <td v-for="fieldType, fieldKey in resourceFields">{{ resource[`${fieldKey}`] }}</td>
+                                    <td v-for="fieldType, fieldKey in resourceFields" v-html="highlight(resource[fieldKey])">{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-secondary btn-sm" v-bind:href="`/otter/${resourceName}/${resource.route_key}/`">View</a>
                                         <div class="dropdown">
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-    import fz from 'fuzzaldrin-plus';
     export default {
         name: "TableComponent",
         props: [
@@ -146,6 +145,10 @@
             resetModal() {
                 this.modal.visible = false;
                 this.currentSelectedResource = null;
+            },
+            highlight(text) {
+                if(!this.query) return text;
+                return String(text).replace(new RegExp(this.query, 'gi'), '<span class="highlight">$&</span>');
             },
             getSearchFields(option) {
                 let mappedFieldKeys = Object.keys(this.resourceFields).map(fieldKey => {

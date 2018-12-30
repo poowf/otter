@@ -16,7 +16,7 @@
                     singular-resource-name="{{ $prettyResourceName }}"
                     resource-name="{{ $resourceName }}"
                     resource-id="{{ $resourceId }}"
-                    action="edit"
+                    action="update"
                     :resource-fields="{{ $resourceFields }}"
                     :relational-fields="{{ $relationalFields }}"
             ></form-component>

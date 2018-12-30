@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Poowf\Otter\Otter;
 use Poowf\Otter\Http\Controllers\Controller;
 
@@ -46,9 +47,20 @@ class OtterController extends Controller
      */
     public function store(Request $request)
     {
+        $resource = $this->resource;
         $modelName = $this->modelName;
+        $baseResourceName = $this->baseResourceName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
+
+        $validator = Validator::make($request->all(), $resource::validations()['server']['create']);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Failed creating a new {$baseResourceName} resource",
+                'errors' => $validator->messages(),
+            ]);;
+        }
 
         if($request->input('relationalFields'))
         {
@@ -109,6 +121,18 @@ class OtterController extends Controller
     public function update(Request $request, $modelInstance)
     {
         //Retrieve the model instance
+        $resource = $this->resource;
+        $baseResourceName = $this->baseResourceName;
+
+        $validator = Validator::make($request->all(), $resource::validations()['server']['update']);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Failed creating a new {$baseResourceName} resource",
+                'errors' => $validator->messages(),
+            ]);;
+        }
+
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
 
         if($request->input('relationalFields'))
@@ -161,7 +185,7 @@ class OtterController extends Controller
     }
 
     /**
-     * Get all relational data in storage.
+     * Get all relational data from the OtterResource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -171,7 +195,6 @@ class OtterController extends Controller
         $relationalData = Otter::getRelationalData($resource);
 
         return response()->json([
-            'status' => 'success',
             'data' => $relationalData
         ]);
     }

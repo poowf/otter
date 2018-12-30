@@ -18,6 +18,7 @@
                 action="create"
                 :resource-fields="{{ $resourceFields }}"
                 :relational-fields="{{ $relationalFields }}"
+                :validation-fields="{{ $validationFields }}"
         ></form-component>
     </div>
 @stop
