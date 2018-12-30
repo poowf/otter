@@ -6,6 +6,10 @@
  */
 
 window.Vue = require('vue');
+window.VeeValidate = require('vee-validate');
+window.fz = require('fuzzaldrin-plus');
+
+Vue.use(VeeValidate);
 
 /**
  * The following block of code may be used to automatically register your
@@ -18,11 +22,37 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
+Vue.component('alert-component', require('./components/AlertComponent.vue'));
 Vue.component('table-component', require('./components/TableComponent.vue'));
 Vue.component('form-component', require('./components/FormComponent.vue'));
 Vue.component('show-component', require('./components/ShowComponent.vue'));
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue'));
 Vue.component('modal-component', require('./components/ModalComponent.vue'));
+Vue.component('single-resource-component', require('./components/SingleResourceComponent.vue'));
+
+window.debounce = function debounce(fn, delay = 300) {
+    var timeoutID = null;
+
+    return function () {
+        clearTimeout(timeoutID);
+
+        var args = arguments;
+        var that = this;
+
+        timeoutID = setTimeout(function () {
+            fn.apply(that, args);
+        }, delay);
+    }
+};
+
+Vue.directive('debounce', (el, binding) => {
+    if (binding.value !== binding.oldValue) {
+        // window.debounce is our global function what we defined at the very top!
+        el.oninput = debounce(ev => {
+            el.dispatchEvent(new Event('change'));
+        }, parseInt(binding.value) || 300);
+    }
+});
 
 Vue.filter("capitalize", value => {
     if (!value) return ''
@@ -30,7 +60,7 @@ Vue.filter("capitalize", value => {
     return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
-Vue.filter("sanitize", value => {
+Vue.filter("beautify", value => {
     if (!value) return ''
     value = value.toString().match(/[A-Za-z][a-z]*/g) || [];
     return value.join(' ').replace(/\b\w/g, l => l.toUpperCase());

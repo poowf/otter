@@ -14,7 +14,6 @@
         </div>
         <show-component
                 resource-name="{{ $resourceName }}"
-                pretty-resource-name="{{ $prettyResourceName }}"
                 resource-id="{{ $resourceId }}"
                 :resource-fields="{{ $resourceFields }}"
         ></show-component>

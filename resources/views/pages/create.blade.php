@@ -13,10 +13,12 @@
             </h1>
         </div>
         <form-component
+                singular-resource-name="{{ $prettyResourceName }}"
                 resource-name="{{ $resourceName }}"
-                pretty-resource-name="{{ $prettyResourceName }}"
                 action="create"
                 :resource-fields="{{ $resourceFields }}"
+                :relational-fields="{{ $relationalFields }}"
+                :validation-fields="{{ $validationFields }}"
         ></form-component>
     </div>
 @stop

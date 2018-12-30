@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Poowf\Otter\Otter;
 use Poowf\Otter\Http\Controllers\Controller;
 
@@ -13,11 +14,13 @@ class OtterController extends Controller
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
         if(!app()->runningInConsole())
         {
+            //TODO: Retreiving the resource name like this means it's highly reliant on the singular and plural words of the model
+            // Wondering if there is a way to decouple it.
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
-            $this->baseResourceName = ucfirst(str_singular($this->resourceName));
+            //TODO: This is ugly, try to look for an alternative way to transform the string.
+            $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
-            /** @var TYPE_NAME $model */
             $this->modelName = $this->resource::$model;
         }
     }
@@ -29,13 +32,11 @@ class OtterController extends Controller
      */
     public function index()
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
+        $modelName = $this->modelName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
-
         //Return an Otter resource of the model
-        return $this->resource::collection($modelInstance::all());
+        return $this->resource::collection(($modelInstance)::paginate(config('otter.pagination', 10)));
     }
 
     /**
@@ -46,19 +47,53 @@ class OtterController extends Controller
      */
     public function store(Request $request)
     {
-        /** @var TYPE_NAME $model */
-        $modelName = $this->resource::$model;
+        $resource = $this->resource;
+        $modelName = $this->modelName;
+        $baseResourceName = $this->baseResourceName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
+
+        $validator = Validator::make($request->all(), $resource::validations()['server']['create']);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Failed creating a new {$baseResourceName} resource",
+                'errors' => $validator->messages(),
+            ]);;
+        }
+
+        if($request->input('relationalFields'))
+        {
+            $relationalFields = $request->input('relationalFields');
+            $request->request->remove('relationalFields');
+
+            foreach($relationalFields as $relationalField)
+            {
+                $relationshipModel = $relationalField['relationshipModel'];
+                $relationshipName = $relationalField['relationshipName'];
+                $relationshipType = $relationalField['relationshipType'];
+                $relationshipId = $relationalField['relationshipId'];
+
+                if($relationshipType === 'BelongsTo')
+                {
+                    $modelInstance->{$relationshipName}()->associate($relationshipId);
+                }
+                elseif($relationshipType === 'BelongsToMany')
+                {
+                    $modelInstance->{$relationshipName}()->attach($relationshipId);
+                }
+            }
+        }
+
         //Force filling of variables into model instance
         $modelInstance->forceFill($request->all());
         //Save model instance
         $modelInstance->save();
-
+        
         //Return response
         return response()->json([
             'status' => 'success',
-            new $this->resource($modelInstance),
+            'data' => new $this->resource($modelInstance),
         ]);
     }
 
@@ -86,13 +121,49 @@ class OtterController extends Controller
     public function update(Request $request, $modelInstance)
     {
         //Retrieve the model instance
+        $resource = $this->resource;
+        $baseResourceName = $this->baseResourceName;
+
+        $validator = Validator::make($request->all(), $resource::validations()['server']['update']);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Failed creating a new {$baseResourceName} resource",
+                'errors' => $validator->messages(),
+            ]);;
+        }
+
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+
+        if($request->input('relationalFields'))
+        {
+            $relationalFields = $request->input('relationalFields');
+            $request->request->remove('relationalFields');
+
+            foreach($relationalFields as $relationalField)
+            {
+                $relationshipModel = $relationalField['relationshipModel'];
+                $relationshipName = $relationalField['relationshipName'];
+                $relationshipType = $relationalField['relationshipType'];
+                $relationshipId = $relationalField['relationshipId'];
+
+                if($relationshipType === 'BelongsTo')
+                {
+                    $modelInstance->{$relationshipName}()->associate($relationshipId);
+                }
+                elseif($relationshipType === 'BelongsToMany')
+                {
+                    $modelInstance->{$relationshipName}()->sync($relationshipId);
+                }
+            }
+        }
+
         $modelInstance->fill($request->all());
         $modelInstance->save();
 
         return response()->json([
             'status' => 'success',
-            new $this->resource($modelInstance),
+            'data' => new $this->resource($modelInstance),
         ]);
     }
 
@@ -110,6 +181,21 @@ class OtterController extends Controller
 
         return response()->json([
             'status' => 'success'
+        ]);
+    }
+
+    /**
+     * Get all relational data from the OtterResource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function relational()
+    {
+        $resource = $this->resource;
+        $relationalData = Otter::getRelationalData($resource);
+
+        return response()->json([
+            'data' => $relationalData
         ]);
     }
 }
