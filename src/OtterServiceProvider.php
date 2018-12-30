@@ -36,6 +36,11 @@ class OtterServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Register the Otter Resource Routes
+     *
+     * @return void
+     */
     protected function registerResourceRoutes()
     {
         $names = Otter::getResourceNames();
@@ -78,6 +83,8 @@ class OtterServiceProvider extends ServiceProvider
 
     /**
      * Merge configuration.
+     *
+     * @return void
      */
     private function mergeConfig()
     {

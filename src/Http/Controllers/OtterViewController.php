@@ -9,13 +9,11 @@ class OtterViewController extends Controller
 {
     public function __construct(Request $request) {
         parent::__construct();
-        //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
         //Check if application is running in console as the exploding of the route will fail if the app is running in console
         if(!app()->runningInConsole())
         {
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
-            //TODO: This is ugly, try to look for an alternative way to transform the string.
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
@@ -77,7 +75,7 @@ class OtterViewController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function store(Request $request)
     {
@@ -133,7 +131,7 @@ class OtterViewController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param  \Illuminate\Database\Eloquent\Model $modelInstance
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function update(Request $request, $modelInstance)
     {
@@ -144,8 +142,7 @@ class OtterViewController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Database\Eloquent\Model $modelInstance
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return void
      */
     public function destroy($modelInstance)
     {

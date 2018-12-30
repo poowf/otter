@@ -3,7 +3,6 @@
 namespace Poowf\Otter;
 
 use Closure;
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Poowf\Otter\Http\Resources\OtterResource;
@@ -48,8 +47,8 @@ class Otter
     /**
      * Retrieve the Names of the Otter Resources
      *
-     * @param  \Closure  $callback
-     * @return static
+     * @param bool $pretty
+     * @return Collection
      */
     public static function getResourceNames($pretty = false)
     {
@@ -76,6 +75,7 @@ class Otter
      *
      * user_addresses = UserAddress
      *
+     * @param $routeName
      * @return string
      */
     public static function getClassNameFromRouteName($routeName)
@@ -88,6 +88,7 @@ class Otter
      *
      * UserAddress = user_addresses
      *
+     * @param $className
      * @return string
      */
     public static function getRouteNameFromClassName($className)
@@ -98,6 +99,7 @@ class Otter
     /**
      * Get the base class name from a fully qualified class name
      *
+     * @param $className
      * @return string
      */
     public static function getBaseClassName($className)
@@ -108,6 +110,7 @@ class Otter
     /**
      * Retrieve the users's gravatar photo
      *
+     * @param $email
      * @return string
      */
     public static function getGravatarLink($email)
@@ -119,10 +122,11 @@ class Otter
 
     /**
      * Retrieve the model instance
-     * This method checks if the object is an instance of the model and if it is not, 
+     * This method checks if the object is an instance of the model and if it is not,
      * it will take the object as the primary key of the model and retrieve it
      *
-     * @param  \Closure  $callback
+     * @param $object
+     * @param $modelName
      * @return static
      */
     public static function getModelInstance($object, $modelName)
@@ -153,6 +157,7 @@ class Otter
      * $relationshipForeignKey is the type of Foreign Key used for the Eloquent Relation
      *
      * @param  OtterResource $otterResource
+     * @param null $modelObject
      * @return array
      */
     public static function getRelationalFields($otterResource, $modelObject = null)
@@ -219,6 +224,7 @@ class Otter
             $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
             $otterRelationResource = $otterResourceNamespace . $otterRelationBaseClassName;
 
+            /** @var TYPE_NAME $model */
             $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model)::all());
         }
 

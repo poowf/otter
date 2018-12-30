@@ -18,7 +18,6 @@ class OtterController extends Controller
             // Wondering if there is a way to decouple it.
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = 'App\\Otter\\';
-            //TODO: This is ugly, try to look for an alternative way to transform the string.
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->modelName = $this->resource::$model;
@@ -28,6 +27,7 @@ class OtterController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return void
      */
     public function index(Request $request)
@@ -117,7 +117,7 @@ class OtterController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param $modelInstance
      * @return \Illuminate\Http\Response
      */
     public function show($modelInstance)
@@ -131,8 +131,8 @@ class OtterController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param $modelInstance
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $modelInstance)
@@ -187,7 +187,7 @@ class OtterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param $modelInstance
      * @return \Illuminate\Http\Response
      */
     public function destroy($modelInstance)
