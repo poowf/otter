@@ -1,5 +1,7 @@
-# Otter
-A relatively automatic CRUD backend administration panel
+<p align="center">
+<img height="150" width="450" src="https://user-images.githubusercontent.com/4265429/50548443-72f09b00-0c87-11e9-9f3c-62466d0582f8.png">
+</p>
+<p align="center">A relatively automatic CRUD backend administration panel</p>
 
 # Introduction
 Otter was created as an open-source alternative to Laravel Nova. The backend administration panel is built with the beautiful tabler template and follows the structure of the popular laravel extension packages like horizon and telescope.
