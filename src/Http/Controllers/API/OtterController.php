@@ -79,7 +79,7 @@ class OtterController extends Controller
             ]);;
         }
 
-        if($request->input('relationalFields'))
+        if($request->has('relationalFields'))
         {
             $relationalFields = $request->input('relationalFields');
             $request->request->remove('relationalFields');
@@ -152,7 +152,7 @@ class OtterController extends Controller
 
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
 
-        if($request->input('relationalFields'))
+        if($request->has('relationalFields'))
         {
             $relationalFields = $request->input('relationalFields');
             $request->request->remove('relationalFields');
