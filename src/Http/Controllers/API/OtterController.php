@@ -30,13 +30,30 @@ class OtterController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
         $modelName = $this->modelName;
         //Instantiate new model instance
         $modelInstance = new $modelName;
         //Return an Otter resource of the model
-        return $this->resource::collection(($modelInstance)::paginate(config('otter.pagination', 10)));
+
+        if($request->has('resourceId') && $request->has('relationshipName') && $request->has('relationshipResourceName'))
+        {
+            $resourceId = $request->query('resourceId');
+            $relationshipName = $request->query('relationshipName');
+            $relationshipResourceName = $request->query('relationshipResourceName');
+
+            $modelInstance = $modelInstance->findOrFail($resourceId);
+            $relationshipResource = $this->resourceNamespace . Otter::getClassNameFromRouteName($relationshipResourceName);
+
+            $data = $modelInstance->{$relationshipName}()->paginate(config('otter.pagination', 10));
+
+            return $relationshipResource::collection($data);
+        }
+        else
+        {
+            return $this->resource::collection(($modelInstance)::paginate(config('otter.pagination', 10)));
+        }
     }
 
     /**
