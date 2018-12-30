@@ -21,7 +21,7 @@ class OtterViewController extends Controller
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
             $this->allResourceNames = Otter::getResourceNames();
             /** @var TYPE_NAME $model */
-            $this->modelName = (route_is('web.otter.dashboard')) ? null : $this->resource::$model;
+            $this->modelName = ($request->is('otter')) ? null : $this->resource::$model;
         }
     }
 
