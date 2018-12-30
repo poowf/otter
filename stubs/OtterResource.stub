@@ -30,4 +30,50 @@ class DummyClass extends OtterResource
         return [
         ];
     }
+
+    /**
+     * Fields to be hidden in the resource collection
+     *
+     * @return array
+     */
+    public static function hidden()
+    {
+        return [
+        ];
+    }
+
+    /**
+    * Get the validation rules used by the resource
+    *
+    * @return array
+    */
+    public static function validations()
+    {
+        return [
+        'client' => [
+            'create' => [
+                /**
+                * Client side create resource validation
+                */
+            ],
+            'update' => [
+                /**
+                * Client side update resource validation
+                */
+            ]
+        ],
+        'server' => [
+            'create' => [
+                /**
+                * Server side create resource validation
+                */
+            ],
+            'update' => [
+                /**
+                * Server side update resource validation
+                */
+            ]
+        ],
+    ];
+    }
 }
