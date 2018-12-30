@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-between">
+        <div class="row justify-content-between mb-3">
             <div class="col-2">
                 <button class="btn btn-pill btn-secondary" @click="prevPage()" :disabled="resourceLinksData.prev == null">Prev Page</button>
             </div>
@@ -69,8 +69,12 @@
     export default {
         name: "TableComponent",
         props: [
+            'resourceId',
             'resourceName',
-            'resourceFields'
+            'resourceFields',
+            'relationship',
+            'relation',
+            'parentResourceName'
         ],
         data() {
             return {
@@ -79,6 +83,7 @@
                 resourceData: [],
                 resourceMetaData: [],
                 resourceLinksData: [],
+                resourceEndpoint: `/api/otter/${this.resourceName}?page=${this.currentPage}`,
                 currentSelectedResource: null,
                 currentPage: 1,
                 currentSortKey:'id',
@@ -91,6 +96,10 @@
             }
         },
         created() {
+            if(this.relationship)
+            {
+                this.resourceEndpoint = `/api/otter/${this.parentResourceName}?page=${this.currentPage}&resourceId=${this.resourceId}&relationshipName=${this.relation.relationshipName}&relationshipResourceName=${this.relation.resourceName}`;
+            }
             this.fetchResourceIndex();
         },
         mounted() {
@@ -109,7 +118,7 @@
                 }
                 this.currentSortKey = sortParameter;
             },
-            fetchResourceIndex(resourceUrl = `/api/otter/${this.resourceName}?page=${this.currentPage}`) {
+            fetchResourceIndex(resourceUrl = this.resourceEndpoint) {
                 axios.get(resourceUrl)
                     .then(response=>{
                         this.resourceData = response.data.data;

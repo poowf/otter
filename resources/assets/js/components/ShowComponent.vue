@@ -9,6 +9,10 @@
             <div v-for="relation, relationKey in resourceData['relations']">
                 <div v-if="relation.relationshipType === 'HasMany' || relation.relationshipType === 'BelongsToMany'">
                     <table-component
+                            relationship="true"
+                            :relation="relation"
+                            :resource-id="resourceId"
+                            :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"
                     ></table-component>

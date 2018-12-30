@@ -265,6 +265,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "ShowComponent",
@@ -465,7 +469,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "TableComponent",
-    props: ['resourceName', 'resourceFields'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'relationship', 'relation', 'parentResourceName'],
     data: function data() {
         return {
             query: '',
@@ -473,6 +477,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             resourceData: [],
             resourceMetaData: [],
             resourceLinksData: [],
+            resourceEndpoint: '/api/otter/' + this.resourceName + '?page=' + this.currentPage,
             currentSelectedResource: null,
             currentPage: 1,
             currentSortKey: 'id',
@@ -485,6 +490,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
     },
     created: function created() {
+        if (this.relationship) {
+            this.resourceEndpoint = '/api/otter/' + this.parentResourceName + '?page=' + this.currentPage + '&resourceId=' + this.resourceId + '&relationshipName=' + this.relation.relationshipName + '&relationshipResourceName=' + this.relation.resourceName;
+        }
         this.fetchResourceIndex();
     },
     mounted: function mounted() {},
@@ -507,7 +515,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         fetchResourceIndex: function fetchResourceIndex() {
             var _this = this;
 
-            var resourceUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '/api/otter/' + this.resourceName + '?page=' + this.currentPage;
+            var resourceUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.resourceEndpoint;
 
             axios.get(resourceUrl).then(function (response) {
                 _this.resourceData = response.data.data;
@@ -11059,6 +11067,10 @@ var render = function() {
                       [
                         _c("table-component", {
                           attrs: {
+                            relationship: "true",
+                            relation: relation,
+                            "resource-id": _vm.resourceId,
+                            "parent-resource-name": _vm.resourceName,
                             "resource-name": relation.resourceName,
                             "resource-fields": relation.resourceFields
                           }
@@ -11326,7 +11338,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row justify-content-between" }, [
+      _c("div", { staticClass: "row justify-content-between mb-3" }, [
         _c("div", { staticClass: "col-2" }, [
           _c(
             "button",
