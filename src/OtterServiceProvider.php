@@ -136,10 +136,6 @@ class OtterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('otter', function ($app) {
-            return $app->make(Otter::class);
-        });
-
         $this->mergeConfig();
         $this->registerCommands();
     }

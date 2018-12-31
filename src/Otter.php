@@ -16,6 +16,8 @@ class Otter
      */
     public static $authUsing;
 
+    public static $otterBaseNamespace = '\\Otter';
+
     public static $otterResourceNamespace = 'App\\Otter\\';
 
     /**
@@ -154,7 +156,13 @@ class Otter
      * $relationshipModel is the full class name of the Eloquent Model defined in the OtterResource
      * $relationshipModelInstance is an instance of the Eloquent Model defined in the OtterResource
      * $relationshipType is the type of Eloquent Relation
-     * $relationshipForeignKey is the type of Foreign Key used for the Eloquent Relation
+     * $relationshipForeignKey is the name of the Foreign Key used for the Eloquent Relation
+     * $relation['relationshipId'] is the actual id of relationship that ties the models together
+     *
+     * $relation['resourceName'] is the plural name of the resource used to generate the routes
+     * $relation['resourceTitle']  is the title column of the resource to display the listing in options
+     * $relation['resourceFields']  is the fields of the resource
+     * $relation['resourceId']  is the the model key value so that it works with route model binding or without
      *
      * @param  OtterResource $otterResource
      * @param null $modelObject

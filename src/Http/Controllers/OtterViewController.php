@@ -13,7 +13,7 @@ class OtterViewController extends Controller
         if(!app()->runningInConsole())
         {
             $this->resourceName = explode('.', $request->route()->getName())[2];
-            $this->resourceNamespace = 'App\\Otter\\';
+            $this->resourceNamespace = Otter::$otterResourceNamespace;
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
