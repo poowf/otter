@@ -16,9 +16,26 @@ class Otter
      */
     public static $authUsing;
 
+    /**
+     * Base Namespace for Otter
+     *
+     * @var bool
+     */
     public static $otterBaseNamespace = '\\Otter';
 
+    /**
+     * Full Namespace for Otter
+     *
+     * @var bool
+     */
     public static $otterResourceNamespace = 'App\\Otter\\';
+
+    /**
+     * Indicates if Otter should use the dark theme.
+     *
+     * @var bool
+     */
+    public static $useDarkTheme = false;
 
     /**
      * Determine if the given request can access the Otter dashboard.
@@ -120,6 +137,18 @@ class Otter
         $hash = md5(strtolower(trim($email)));
 
         return "//www.gravatar.com/avatar/$hash";
+    }
+
+    /**
+     * Specifies that Otter should use the dark theme.
+     *
+     * @return static
+     */
+    public static function night()
+    {
+        static::$useDarkTheme = true;
+
+        return new static;
     }
 
     /**
