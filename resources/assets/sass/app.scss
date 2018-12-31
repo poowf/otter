@@ -1,14 +1,27 @@
-.sidebar {
-  background: #fff;
-  border-right: 1px solid rgba(0, 40, 100, 0.12);
+.header .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+  width: 100%;
+  display: block;
 }
+
+.nav-tabs .nav-link.active + .nav-child {
+  display: block;
+}
+
+.nav-child {
+  display: none;
+}
+
 .sidebar.fixed {
   display: none;
 }
 
-.sidebar .nav-tabs .nav-item {
-  width: 100%;
-  display: block;
+.sidebar .nav-tabs .nav-item a {
+  color: #E2EDF4;
+}
+
+.sidebar .nav-tabs .nav-item a:hover {
+  color: #D2BCA7;
+  background-color: #343434;
 }
 
 .sidebar .nav-tabs .nav-link {

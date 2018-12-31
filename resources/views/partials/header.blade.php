@@ -30,27 +30,15 @@
     <div class="header collapse p-0" id="headerMenuCollapse">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-3 ml-auto">
-                    <form class="input-icon my-3 my-lg-0">
-                        <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
-                        <div class="input-icon-addon">
-                            <i class="fe fe-search"></i>
-                        </div>
-                    </form>
-                </div>
                 <div class="col-lg order-lg-first">
                     <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
-                        <li class="nav-item">
-                            <a href="/otter" class="nav-link active"><i class="fe fe-home"></i> Home</a>
+                        <li class="nav-item p-0">
+                            <a href="/otter" class="nav-link pl-4"><i class="fe fe-home"></i> Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="mobile-menu" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Interface</a>
-                            <div id="mobile-menu" class="dropdown-menu dropdown-menu-arrow">
-                                <a href="./cards.html" class="dropdown-item ">Cards design</a>
-                                <a href="./charts.html" class="dropdown-item ">Charts</a>
-                                <a href="./pricing-cards.html" class="dropdown-item ">Pricing cards</a>
-                            </div>
-                        </li>
+                        <header-component
+                                :all-resource-names="{{ $allResourceNames }}"
+                                current-route="{{ Route::currentRouteName() }}"
+                        ></header-component>
                     </ul>
                 </div>
             </div>

@@ -21,7 +21,6 @@
         <link rel="stylesheet" href="{{ asset(mix((\Poowf\Otter\Otter::$useDarkTheme) ? 'assets/css/app-dark.css' : 'assets/css/app.css', 'vendor/otter')) }}">
 
         <style>
-
         </style>
         @yield("head")
     </head>

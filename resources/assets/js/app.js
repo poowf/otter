@@ -27,6 +27,7 @@ Vue.component('table-component', require('./components/TableComponent.vue'));
 Vue.component('form-component', require('./components/FormComponent.vue'));
 Vue.component('show-component', require('./components/ShowComponent.vue'));
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue'));
+Vue.component('header-component', require('./components/HeaderComponent.vue'));
 Vue.component('modal-component', require('./components/ModalComponent.vue'));
 Vue.component('single-resource-component', require('./components/SingleResourceComponent.vue'));
 
