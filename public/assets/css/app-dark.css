@@ -35,6 +35,15 @@ span {
   border-bottom: 1px solid rgba(210, 188, 167, 0.12);
 }
 
+.card .card-footer {
+  border-top: 1px solid rgba(210, 188, 167, 0.12);
+}
+
+.btn-dark {
+  color: #E2EDF4;
+  background-color: #343434;
+}
+
 .btn.btn-pill.btn-secondary.btn-resource-navigation {
   color: #E2EDF4;
   background-color: #120F12;
@@ -94,17 +103,56 @@ span {
   background-color: #343434;
 }
 
-input.form-control.resource-search {
+input.form-control,
+.selectize-control.form-control .selectize-input,
+.selectize-control.form-control .selectize-dropdown,
+.selectize-control.form-control.single .selectize-input.input-active {
+  color: #E2EDF4;
+  background-color: #343434;
+}
+
+input.form-control:focus,
+input.form-control:active {
+  color: #E2EDF4;
   background-color: #1C1C1C;
+}
+
+.selectize-control.single .selectize-input:after {
+  background: transparent;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-top: .200em;
+  margin-left: .255em;
+  vertical-align: .255em;
+  border-top: .3em solid;
+  border-right: .3em solid transparent;
+  border-bottom: 0;
+  border-left: .3em solid transparent;
+}
+
+.header .nav-tabs .nav-link:hover:not(.disabled) {
+  color: #D2BCA7;
+  background-color: #343434;
+  border-bottom: 1px solid rgba(210, 188, 167, 0.12);
+}
+
+.header .nav-tabs .nav-item,
+.sidebar .nav-tabs .nav-item {
+  width: 100%;
+  display: block;
+}
+
+.nav-tabs .nav-link.active + .nav-child {
+  display: block;
+}
+
+.nav-child {
+  display: none;
 }
 
 .sidebar.fixed {
   display: none;
-}
-
-.sidebar .nav-tabs .nav-item {
-  width: 100%;
-  display: block;
 }
 
 .sidebar .nav-tabs .nav-item a {
