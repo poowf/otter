@@ -72,6 +72,10 @@ class Otter
     public static function getResourceNames($pretty = false)
     {
         $directory = app_path('Otter/');
+        if(!File::exists($directory)) {
+            return [];
+        }
+
         $files = File::files($directory);
         $names = new Collection;
 
