@@ -137,6 +137,14 @@ input.form-control:active {
   border-bottom: 1px solid rgba(210, 188, 167, 0.12);
 }
 
+.highlight {
+  background-color: #343434;
+}
+
+.alert span {
+  color: initial;
+}
+
 .header .nav-tabs .nav-item,
 .sidebar .nav-tabs .nav-item {
   width: 100%;

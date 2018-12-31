@@ -66,7 +66,9 @@ class OtterViewController extends Controller
         $resource = $this->resource;
         $resourceFields = json_encode($resource::fields());
         $relationalFields = json_encode(Otter::getRelationalFields($resource));
-        $validationFields = json_encode($resource::validations()['client']);
+
+        $validationRules = ($resource::validations() && $resource::validations()['client'] && $resource::validations()['client']['create']) ? $resource::validations()['client']['create'] : null;
+        $validationFields = json_encode($validationRules);
 
         return view('otter::pages.create', compact('allResourceNames', 'prettyResourceName', 'resourceName', 'resourceFields', 'relationalFields', 'validationFields'));
     }
@@ -121,7 +123,9 @@ class OtterViewController extends Controller
         $resourceFields = json_encode($resource::fields());
         $resourceId = $modelInstance->{$modelInstance->getRouteKeyName()};
         $relationalFields = json_encode(Otter::getRelationalFields($resource, $modelInstance));
-        $validationFields = json_encode($resource::validations()['client']);
+
+        $validationRules = ($resource::validations() && $resource::validations()['client'] && $resource::validations()['client']['update']) ? $resource::validations()['client']['update'] : null;
+        $validationFields = json_encode($validationRules);
 
         return view('otter::pages.edit', compact('allResourceNames', 'prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'relationalFields', 'validationFields'));
     }

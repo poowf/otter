@@ -90,6 +90,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             handleText: 'Create',
             handleButtonText: 'Create',
             loading: false,
+            selectizeEventFired: false,
             alertData: [],
             resourceData: {},
             relationalData: {}
@@ -126,7 +127,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (e) {
                 _this2.error = 'Could not retrieve ' + _this2.resourceName + '. Server error.';
             }).finally(function () {
-                $('select').selectize({});
+                var self = _this2;
+                $('select').selectize({}).on('change', function (e) {
+                    if (!self.selectizeEventFired) {
+                        self.selectizeEventFired = true;
+                        var event = new Event('change');
+                        e.target.dispatchEvent(event);
+                    } else {
+                        self.selectizeEventFired = false;
+                    }
+                });
             });
         },
         handleAction: function handleAction(action) {
@@ -207,9 +217,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "HeaderComponent",
     props: ['allResourceNames', 'currentRoute'],
-    mounted: function mounted() {
-        console.log(this.currentRoute);
-    }
+    mounted: function mounted() {}
 });
 
 /***/ }),
@@ -11779,10 +11787,10 @@ var render = function() {
                                   name: "validate",
                                   rawName: "v-validate",
                                   value: _vm.validationFields
-                                    ? _vm.validationFields[_vm.action][fieldKey]
+                                    ? _vm.validationFields[fieldKey]
                                     : "",
                                   expression:
-                                    "(validationFields ? validationFields[action][fieldKey] : '')"
+                                    "(validationFields ? validationFields[fieldKey] : '')"
                                 }
                               ],
                               class: [
@@ -11857,10 +11865,10 @@ var render = function() {
                                   name: "validate",
                                   rawName: "v-validate",
                                   value: _vm.validationFields
-                                    ? _vm.validationFields[_vm.action][fieldKey]
+                                    ? _vm.validationFields[fieldKey]
                                     : "",
                                   expression:
-                                    "(validationFields ? validationFields[action][fieldKey] : '')"
+                                    "(validationFields ? validationFields[fieldKey] : '')"
                                 }
                               ],
                               class: [
@@ -11905,10 +11913,10 @@ var render = function() {
                                   name: "validate",
                                   rawName: "v-validate",
                                   value: _vm.validationFields
-                                    ? _vm.validationFields[_vm.action][fieldKey]
+                                    ? _vm.validationFields[fieldKey]
                                     : "",
                                   expression:
-                                    "(validationFields ? validationFields[action][fieldKey] : '')"
+                                    "(validationFields ? validationFields[fieldKey] : '')"
                                 }
                               ],
                               class: [

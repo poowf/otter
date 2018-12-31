@@ -165,7 +165,7 @@
                 return mappedFieldKeys;
             },
         },
-        computed:{
+        computed: {
             currentPage() {
                 return this.currentPageIndex;
             },

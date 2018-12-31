@@ -70,20 +70,33 @@ class OtterController extends Controller
         //Instantiate new model instance
         $modelInstance = new $modelName;
 
-        $validator = Validator::make($request->all(), $resource::validations()['server']['create']);
+        $validationRules = ($resource::validations() && $resource::validations()['server'] && $resource::validations()['server']['create']) ? $resource::validations()['server']['create'] : [];
+
+        $validator = Validator::make($request->all(), $validationRules);
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'message' => "Failed creating a new {$baseResourceName} resource",
                 'errors' => $validator->messages(),
-            ]);;
+            ], 422);
         }
+
+        $relationalFields = null;
 
         if($request->has('relationalFields'))
         {
             $relationalFields = $request->input('relationalFields');
             $request->request->remove('relationalFields');
+        }
 
+        //Force filling of variables into model instance
+        $modelInstance->forceFill($request->all());
+
+        //Save model instance
+        $modelInstance->save();
+
+        if($relationalFields)
+        {
             foreach($relationalFields as $relationalField)
             {
                 $relationshipModel = $relationalField['relationshipModel'];
@@ -100,12 +113,10 @@ class OtterController extends Controller
                     $modelInstance->{$relationshipName}()->attach($relationshipId);
                 }
             }
-        }
 
-        //Force filling of variables into model instance
-        $modelInstance->forceFill($request->all());
-        //Save model instance
-        $modelInstance->save();
+            //Save model instance
+            $modelInstance->save();
+        }
         
         //Return response
         return response()->json([
@@ -141,13 +152,15 @@ class OtterController extends Controller
         $resource = $this->resource;
         $baseResourceName = $this->baseResourceName;
 
-        $validator = Validator::make($request->all(), $resource::validations()['server']['update']);
+        $validationRules = ($resource::validations() && $resource::validations()['server'] && $resource::validations()['server']['update']) ? $resource::validations()['server']['update'] : [];
+
+        $validator = Validator::make($request->all(), $validationRules);
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'message' => "Failed creating a new {$baseResourceName} resource",
                 'errors' => $validator->messages(),
-            ]);;
+            ], 422);
         }
 
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);

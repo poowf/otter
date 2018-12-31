@@ -18,7 +18,6 @@
             'currentRoute'
         ],
         mounted() {
-            console.log(this.currentRoute);
         },
     }
 </script>

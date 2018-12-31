@@ -19,7 +19,7 @@
                                                 v-bind:name="fieldKey"
                                                 :data-vv-as="fieldKey | beautify"
                                                 v-bind:type="fieldType"
-                                                v-validate="(validationFields ? validationFields[action][fieldKey] : '')">
+                                                v-validate="(validationFields ? validationFields[fieldKey] : '')">
                                         <div class="invalid-feedback">{{ errors.first(fieldKey) }}</div>
                                     </div>
                                     <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany'" class="form-group">
@@ -69,6 +69,7 @@
                 handleText: 'Create',
                 handleButtonText: 'Create',
                 loading: false,
+                selectizeEventFired: false,
                 alertData: [],
                 resourceData: {},
                 relationalData: {},
@@ -110,7 +111,21 @@
                         this.error = `Could not retrieve ${this.resourceName}. Server error.`;
                     })
                     .finally(() => {
-                        $('select').selectize({});
+                        let self = this;
+                        $('select')
+                            .selectize({})
+                            .on('change', function(e) {
+                                if(!self.selectizeEventFired)
+                                {
+                                    self.selectizeEventFired = true;
+                                    let event = new Event('change');
+                                    e.target.dispatchEvent(event);
+                                }
+                                else
+                                {
+                                    self.selectizeEventFired = false;
+                                }
+                            });
                     });
             },
             handleAction(action) {
