@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="d-flex">
                     <a class="header-sidebar-brand" href="/otter">
-                        <img src="{{ asset('vendor/otter/assets/img/logo.png') }}" class="header-brand-img" alt="tabler logo">
+                        <img src="{{ asset('vendor/otter/assets/img/logo.svg') }}" class="header-brand-img" alt="tabler logo">
                     </a>
                 </div>
             </div>

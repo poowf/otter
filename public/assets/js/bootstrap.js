@@ -29810,6 +29810,13 @@ if (token) {
 
 /***/ }),
 
+/***/ "./resources/assets/sass/app-dark.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/assets/sass/app.scss":
 /***/ (function(module, exports) {
 
@@ -29821,7 +29828,8 @@ if (token) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/bootstrap.js");
-module.exports = __webpack_require__("./resources/assets/sass/app.scss");
+__webpack_require__("./resources/assets/sass/app.scss");
+module.exports = __webpack_require__("./resources/assets/sass/app-dark.scss");
 
 
 /***/ })

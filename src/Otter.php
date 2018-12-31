@@ -238,6 +238,11 @@ class Otter
             {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
             }
+            elseif($relationshipType === 'HasMany')
+            {
+                $relation['relationshipId'] = $otterResource->id;
+            }
+
 
             $relationalDataArray[$relationshipName] = $relation;
         }

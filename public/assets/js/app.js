@@ -474,12 +474,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return {
             query: '',
             loading: false,
+            currentPageIndex: 1,
             resourceData: [],
             resourceMetaData: [],
             resourceLinksData: [],
-            resourceEndpoint: '/api/otter/' + this.resourceName + '?page=' + this.currentPage,
             currentSelectedResource: null,
-            currentPage: 1,
             currentSortKey: 'id',
             currentSortDirection: 'asc',
             modal: {
@@ -490,19 +489,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
     },
     created: function created() {
-        if (this.relationship) {
-            this.resourceEndpoint = '/api/otter/' + this.parentResourceName + '?page=' + this.currentPage + '&resourceId=' + this.parentResourceId + '&relationshipName=' + this.relation.relationshipName + '&relationshipResourceName=' + this.relation.resourceName;
-        }
         this.fetchResourceIndex();
     },
     mounted: function mounted() {},
 
     methods: {
         prevPage: function prevPage() {
-            this.fetchResourceIndex(this.resourceLinksData.prev);
+            this.currentPageIndex = --this.currentPageIndex;
+            this.fetchResourceIndex();
         },
         nextPage: function nextPage() {
-            this.fetchResourceIndex(this.resourceLinksData.next);
+            this.currentPageIndex = ++this.currentPageIndex;
+            this.fetchResourceIndex();
         },
 
         sort: function sort(sortParameter) {
@@ -521,7 +519,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 _this.resourceData = response.data.data;
                 _this.resourceMetaData = response.data.meta;
                 _this.resourceLinksData = response.data.links;
-                _this.currentPage = _this.resourceMetaData.current_page;
+                _this.currentPageIndex = _this.resourceMetaData.current_page;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
             }).finally(function () {});
@@ -562,6 +560,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
     },
     computed: {
+        currentPage: function currentPage() {
+            return this.currentPageIndex;
+        },
+        resourceEndpoint: function resourceEndpoint() {
+            if (this.relationship) {
+                return '/api/otter/' + this.parentResourceName + '?page=' + this.currentPage + '&resourceId=' + this.parentResourceId + '&relationshipName=' + this.relation.relationshipName + '&relationshipResourceName=' + this.relation.resourceName;
+            } else {
+                return '/api/otter/' + this.resourceName + '?page=' + this.currentPage;
+            }
+        },
         sortedResources: function sortedResources() {
             var _this3 = this;
 
@@ -11069,7 +11077,7 @@ var render = function() {
                           attrs: {
                             relationship: "true",
                             relation: relation,
-                            "parent-resource-id": _vm.resourceId,
+                            "parent-resource-id": relation.relationshipId,
                             "parent-resource-name": _vm.resourceName,
                             "resource-name": relation.resourceName,
                             "resource-fields": relation.resourceFields
@@ -11154,7 +11162,7 @@ var render = function() {
                         expression: "300"
                       }
                     ],
-                    staticClass: "form-control",
+                    staticClass: "form-control resource-search",
                     attrs: { type: "text", placeholder: "Search..." },
                     domProps: { value: _vm.query },
                     on: {
@@ -11250,7 +11258,8 @@ var render = function() {
                             _c(
                               "a",
                               {
-                                staticClass: "btn btn-secondary btn-sm",
+                                staticClass:
+                                  "btn btn-secondary btn-sm btn-action",
                                 attrs: {
                                   href:
                                     "/otter/" +
@@ -11268,7 +11277,7 @@ var render = function() {
                                 "button",
                                 {
                                   staticClass:
-                                    "btn btn-secondary btn-sm dropdown-toggle",
+                                    "btn btn-secondary btn-sm btn-dropdown-action dropdown-toggle",
                                   attrs: {
                                     type: "button",
                                     "data-toggle": "dropdown"
@@ -11277,52 +11286,61 @@ var render = function() {
                                 [_vm._v("Action")]
                               ),
                               _vm._v(" "),
-                              _c("div", { staticClass: "dropdown-menu" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: {
-                                      href:
-                                        "/otter/" +
-                                        _vm.resourceName +
-                                        "/" +
-                                        resource.route_key +
-                                        "/edit/"
-                                    }
-                                  },
-                                  [
-                                    _c("i", { staticClass: "fe fe-edit mr-3" }),
-                                    _vm._v(
-                                      "Edit\n                                            "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn dropdown-item",
-                                    on: {
-                                      click: function($event) {
-                                        $event.stopPropagation()
-                                        _vm.handleAction(
-                                          "Delete",
-                                          resource.route_key
-                                        )
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "dropdown-menu dropdown-menu-dark"
+                                },
+                                [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: {
+                                        href:
+                                          "/otter/" +
+                                          _vm.resourceName +
+                                          "/" +
+                                          resource.route_key +
+                                          "/edit/"
                                       }
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fe fe-delete mr-3"
-                                    }),
-                                    _vm._v(
-                                      "Delete\n                                            "
-                                    )
-                                  ]
-                                )
-                              ])
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fe fe-edit mr-3"
+                                      }),
+                                      _vm._v(
+                                        "Edit\n                                            "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn dropdown-item",
+                                      on: {
+                                        click: function($event) {
+                                          $event.stopPropagation()
+                                          _vm.handleAction(
+                                            "Delete",
+                                            resource.route_key
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fe fe-delete mr-3"
+                                      }),
+                                      _vm._v(
+                                        "Delete\n                                            "
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
                             ])
                           ])
                         ],
@@ -11343,7 +11361,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-pill btn-secondary",
+              staticClass: "btn btn-pill btn-secondary btn-resource-navigation",
               attrs: { disabled: _vm.resourceLinksData.prev == null },
               on: {
                 click: function($event) {
@@ -11359,7 +11377,8 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-pill btn-secondary float-right",
+              staticClass:
+                "btn btn-pill btn-secondary btn-resource-navigation float-right",
               attrs: { disabled: _vm.resourceLinksData.next == null },
               on: {
                 click: function($event) {
@@ -11465,26 +11484,33 @@ var render = function() {
           _c("div", { staticClass: "dropdown card-options-dropdown" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "dropdown-item",
-                  attrs: {
-                    href:
-                      "/otter/" +
-                      _vm.resourceName +
-                      "/" +
-                      _vm.resourceId +
-                      "/edit/"
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fe fe-edit mr-3" }),
-                  _vm._v("Edit\n                        ")
-                ]
-              )
-            ])
+            _c(
+              "div",
+              {
+                staticClass:
+                  "dropdown-menu dropdown-menu-dark dropdown-menu-right"
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "dropdown-item",
+                    attrs: {
+                      href:
+                        "/otter/" +
+                        _vm.resourceName +
+                        "/" +
+                        _vm.resourceId +
+                        "/edit/"
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fe fe-edit mr-3" }),
+                    _vm._v("Edit\n                        ")
+                  ]
+                )
+              ]
+            )
           ])
         ])
       ]),

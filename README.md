@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/4265429/50553696-9c8cdf00-0ce6-11e9-8dc2-11327196256c.png">
+<img src="https://poowf.blob.core.windows.net/otter/assets/otterbanner.svg">
 </p>
 <p align="center">A relatively ottermatic (automatic) CRUD backend administration panel</p>
 
@@ -251,3 +251,6 @@ The `pagination` configuration value is used to display the number of records in
     'email' => 'email',
 ],
 ```
+
+# Extras
+A dark/night theme can be enabled by specifying `Otter::night()` in the boot method of the OtterServiceProvider
