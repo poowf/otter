@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/4265429/50553696-9c8cdf00-0ce6-11e9-8dc2-11327196256c.png">
+<img src="https://poowf.blob.core.windows.net/otter/assets/otterbanner.svg">
 </p>
 <p align="center">A relatively ottermatic (automatic) CRUD backend administration panel</p>
 
@@ -16,9 +16,9 @@ Install Otter with [composer](https://getcomposer.org/doc/00-intro.md):
 $ composer require poowf/otter
 ```
 
-> In Laravel 5.5+, [service providers and aliases are automatically registered](https://laravel.com/docs/5.5/packages#package-discovery). If you're using Laravel 5.5+, skip ahead directly to step 3.
+> In Laravel 5.5+, [service providers and aliases are automatically registered](https://laravel.com/docs/packages#package-discovery). If you're using Laravel 5.5+, skip ahead directly to step 3.
 
-Once the composer installation completes, you can add the service provider and alias the facade. Open `config/app.php`, and make the following changes:
+Once the composer installation completes, all you need to do is add the service provider. Open `config/app.php`, and make the following changes:
 
 1) Add a new item to the `providers` array:
 
@@ -26,15 +26,7 @@ Once the composer installation completes, you can add the service provider and a
     Poowf\Otter\OtterServiceProvider::class,
     ```
 
-2) Add a new item to the `aliases` array:
-
-    ```php
-    'Otter' => Poowf\Otter\OtterFacade::class,
-    ```
-
-    This part is optional. If you don't want to use the facade, you can skip step 3.
-
-3) Now, you need to install all the relevant Otter assets
+2) Install all the relevant Otter assets:
     > If you are updating Otter, run `php artisan otter:publish` instead
     ```bash
     php artisan otter:install
@@ -259,3 +251,6 @@ The `pagination` configuration value is used to display the number of records in
     'email' => 'email',
 ],
 ```
+
+# Extras
+A dark/night theme can be enabled by specifying `Otter::night()` in the boot method of the OtterServiceProvider

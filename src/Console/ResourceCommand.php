@@ -2,6 +2,7 @@
 
 namespace Poowf\Otter\Console;
 
+use Poowf\Otter\Otter;
 use Illuminate\Console\GeneratorCommand;
 
 class ResourceCommand extends GeneratorCommand
@@ -73,7 +74,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Otter';
+        return $rootNamespace . Otter::$otterBaseNamespace;
     }
 
     /**

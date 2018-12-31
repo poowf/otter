@@ -17,7 +17,7 @@ class OtterController extends Controller
             //TODO: Retreiving the resource name like this means it's highly reliant on the singular and plural words of the model
             // Wondering if there is a way to decouple it.
             $this->resourceName = explode('.', $request->route()->getName())[2];
-            $this->resourceNamespace = 'App\\Otter\\';
+            $this->resourceNamespace = Otter::$otterResourceNamespace;
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace . $this->baseResourceName;
             $this->modelName = $this->resource::$model;

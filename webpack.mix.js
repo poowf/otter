@@ -45,8 +45,9 @@ mix
     .js('resources/assets/js/bootstrap.js', 'assets/js')
     .js('resources/assets/js/app.js', 'assets/js')
     .js('node_modules/tabler-ui/dist/assets/js/core.js', 'assets/js')
-    
+
     .sass('resources/assets/sass/app.scss', 'public/assets/css')
+    .sass('resources/assets/sass/app-dark.scss', 'public/assets/css')
 
     .copy('node_modules/tabler-ui/dist/assets/css/tabler.css', 'public/assets/css/tabler.css')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.eot', 'public/assets/fonts/feather/feather-webfont.eot')

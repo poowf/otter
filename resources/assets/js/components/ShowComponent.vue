@@ -11,7 +11,7 @@
                     <table-component
                             relationship="true"
                             :relation="relation"
-                            :parent-resource-id="resourceId"
+                            :parent-resource-id="relation.relationshipId"
                             :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"

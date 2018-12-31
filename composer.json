@@ -31,10 +31,7 @@
         "laravel": {
             "providers": [
                 "Poowf\\Otter\\OtterServiceProvider"
-            ],
-            "aliases": {
-                "Otter": "Poowf\\Otter\\Facade"
-            }
+            ]
         }
     },
     "config": {

@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
-                    Copyright © {{ date('Y') }} <a href="//github.com/poowf/otter">Otter</a>. All rights reserved.
+                    Copyright © {{ date('Y') }} <a href="//github.com/poowf/otter">Otter</a>.<span class="pl-2">All rights reserved.</span>
                 </div>
             </div>
         </div>

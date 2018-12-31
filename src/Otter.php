@@ -16,7 +16,26 @@ class Otter
      */
     public static $authUsing;
 
+    /**
+     * Base Namespace for Otter
+     *
+     * @var bool
+     */
+    public static $otterBaseNamespace = '\\Otter';
+
+    /**
+     * Full Namespace for Otter
+     *
+     * @var bool
+     */
     public static $otterResourceNamespace = 'App\\Otter\\';
+
+    /**
+     * Indicates if Otter should use the dark theme.
+     *
+     * @var bool
+     */
+    public static $useDarkTheme = false;
 
     /**
      * Determine if the given request can access the Otter dashboard.
@@ -121,6 +140,18 @@ class Otter
     }
 
     /**
+     * Specifies that Otter should use the dark theme.
+     *
+     * @return static
+     */
+    public static function night()
+    {
+        static::$useDarkTheme = true;
+
+        return new static;
+    }
+
+    /**
      * Retrieve the model instance
      * This method checks if the object is an instance of the model and if it is not,
      * it will take the object as the primary key of the model and retrieve it
@@ -154,7 +185,13 @@ class Otter
      * $relationshipModel is the full class name of the Eloquent Model defined in the OtterResource
      * $relationshipModelInstance is an instance of the Eloquent Model defined in the OtterResource
      * $relationshipType is the type of Eloquent Relation
-     * $relationshipForeignKey is the type of Foreign Key used for the Eloquent Relation
+     * $relationshipForeignKey is the name of the Foreign Key used for the Eloquent Relation
+     * $relation['relationshipId'] is the actual id of relationship that ties the models together
+     *
+     * $relation['resourceName'] is the plural name of the resource used to generate the routes
+     * $relation['resourceTitle']  is the title column of the resource to display the listing in options
+     * $relation['resourceFields']  is the fields of the resource
+     * $relation['resourceId']  is the the model key value so that it works with route model binding or without
      *
      * @param  OtterResource $otterResource
      * @param null $modelObject
@@ -201,6 +238,11 @@ class Otter
             {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
             }
+            elseif($relationshipType === 'HasMany')
+            {
+                $relation['relationshipId'] = $otterResource->id;
+            }
+
 
             $relationalDataArray[$relationshipName] = $relation;
         }
