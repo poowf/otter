@@ -2,7 +2,6 @@
 
 namespace Poowf\Otter;
 
-use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Poowf\Otter\Http\Resources\OtterResource;
@@ -17,14 +16,14 @@ class Otter
     public static $authUsing;
 
     /**
-     * Base Namespace for Otter
+     * Base Namespace for Otter.
      *
      * @var bool
      */
     public static $otterBaseNamespace = '\\Otter';
 
     /**
-     * Full Namespace for Otter
+     * Full Namespace for Otter.
      *
      * @var bool
      */
@@ -64,7 +63,7 @@ class Otter
     }
 
     /**
-     * Retrieve the Names of the Otter Resources
+     * Retrieve the Names of the Otter Resources.
      *
      * @param bool $pretty
      * @return Collection
@@ -72,15 +71,14 @@ class Otter
     public static function getResourceNames($pretty = false)
     {
         $directory = app_path('Otter/');
-        if(!File::exists($directory)) {
+        if (! File::exists($directory)) {
             return new Collection;
         }
 
         $files = File::files($directory);
         $names = new Collection;
 
-        foreach($files as $file)
-        {
+        foreach ($files as $file) {
             $path = $file->getPathname();
             $class = str_replace('.php', '', $path);
             $baseResourceName = basename($class);
@@ -94,7 +92,7 @@ class Otter
     }
 
     /**
-     * Retrieve them class name from a route name
+     * Retrieve them class name from a route name.
      *
      * user_addresses = UserAddress
      *
@@ -107,7 +105,7 @@ class Otter
     }
 
     /**
-     * Get the route name from a class name
+     * Get the route name from a class name.
      *
      * UserAddress = user_addresses
      *
@@ -120,7 +118,7 @@ class Otter
     }
 
     /**
-     * Get the base class name from a fully qualified class name
+     * Get the base class name from a fully qualified class name.
      *
      * @param $className
      * @return string
@@ -131,7 +129,7 @@ class Otter
     }
 
     /**
-     * Retrieve the users's gravatar photo
+     * Retrieve the users's gravatar photo.
      *
      * @param $email
      * @return string
@@ -158,7 +156,7 @@ class Otter
     /**
      * Retrieve the model instance
      * This method checks if the object is an instance of the model and if it is not,
-     * it will take the object as the primary key of the model and retrieve it
+     * it will take the object as the primary key of the model and retrieve it.
      *
      * @param $object
      * @param $modelName
@@ -166,11 +164,11 @@ class Otter
      */
     public static function getModelInstance($object, $modelName)
     {
-       return ($object instanceof $modelName) ? $object  : $modelName::findOrFail($object);
+        return ($object instanceof $modelName) ? $object : $modelName::findOrFail($object);
     }
 
     /**
-     * Retrieve all the fields that are not hidden in the resource collection
+     * Retrieve all the fields that are not hidden in the resource collection.
      *
      * @param  OtterResource $otterResource
      * @return array
@@ -181,7 +179,7 @@ class Otter
     }
 
     /**
-     * Retrieve all the fields that are relational in an OtterResource
+     * Retrieve all the fields that are relational in an OtterResource.
      *
      * $otterRelationBaseClassName is the class name of the OtterResource
      * $otterRelationResource is the full class name of the OtterResource
@@ -208,10 +206,9 @@ class Otter
 
         $modelInstance = ($modelObject) ? self::getModelInstance($modelObject, $otterResource::$model) : new $otterResource::$model;
 
-        foreach($otterResource::relations() as $relationshipName => $otterRelationData)
-        {
+        foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
             $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
-            $otterRelationResource = $otterResourceNamespace . $otterRelationBaseClassName;
+            $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
 
             $relationshipType = self::getBaseClassName(get_class($modelInstance->{$relationshipName}()));
             $relationshipModel = $otterRelationResource::$model;
@@ -231,22 +228,16 @@ class Otter
             $relation['resourceFields'] = self::getAvailableFields($otterRelationResource);
             $relation['resourceId'] = 'null';
 
-            if($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo')
-            {
+            if ($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipForeignKey}) ? $modelInstance->{$relationshipForeignKey} : null;
 
                 $relationModelInstance = $modelInstance->{$relationshipName};
                 $relation['resourceId'] = ($relationModelInstance) ? $relationModelInstance->{$relationModelInstance->getRouteKeyName()} : null;
-            }
-            elseif($relationshipType === 'BelongsToMany')
-            {
+            } elseif ($relationshipType === 'BelongsToMany') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
-            }
-            elseif($relationshipType === 'HasMany')
-            {
+            } elseif ($relationshipType === 'HasMany') {
                 $relation['relationshipId'] = $otterResource->id;
             }
-
 
             $relationalDataArray[$relationshipName] = $relation;
         }
@@ -255,7 +246,7 @@ class Otter
     }
 
     /**
-     * Retrieve all the relational data in an OtterResource
+     * Retrieve all the relational data in an OtterResource.
      *
      * @param  OtterResource $otterResource
      * @return array
@@ -265,12 +256,11 @@ class Otter
         $relationalDataArray = [];
         $otterResourceNamespace = self::$otterResourceNamespace;
 
-        foreach($otterResource::relations() as $relationshipName => $otterRelationData)
-        {
+        foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
             $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
-            $otterRelationResource = $otterResourceNamespace . $otterRelationBaseClassName;
+            $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
 
-            /** @var TYPE_NAME $model */
+            /* @var TYPE_NAME $model */
             $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model)::all());
         }
 

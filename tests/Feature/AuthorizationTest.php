@@ -2,13 +2,13 @@
 
 namespace Poowf\Otter\Tests\Feature;
 
+use Poowf\Otter\Otter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Orchestra\Testbench\Http\Middleware\VerifyCsrfToken;
-use Poowf\Otter\Otter;
 use Poowf\Otter\Tests\FeatureTestCase;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Poowf\Otter\OtterApplicationServiceProvider;
+use Orchestra\Testbench\Http\Middleware\VerifyCsrfToken;
 
 class AuthorizationTest extends FeatureTestCase
 {

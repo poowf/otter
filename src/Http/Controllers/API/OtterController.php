@@ -2,24 +2,24 @@
 
 namespace Poowf\Otter\Http\Controllers\API;
 
+use Poowf\Otter\Otter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Poowf\Otter\Otter;
 use Poowf\Otter\Http\Controllers\Controller;
 
 class OtterController extends Controller
 {
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
         parent::__construct();
         //        $resourceName = str_replace('api/otter/', '', $request->route()->uri);
-        if(!app()->runningInConsole())
-        {
+        if (! app()->runningInConsole()) {
             //TODO: Retreiving the resource name like this means it's highly reliant on the singular and plural words of the model
             // Wondering if there is a way to decouple it.
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = Otter::$otterResourceNamespace;
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
-            $this->resource = $this->resourceNamespace . $this->baseResourceName;
+            $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->modelName = $this->resource::$model;
         }
     }
@@ -37,21 +37,18 @@ class OtterController extends Controller
         $modelInstance = new $modelName;
         //Return an Otter resource of the model
 
-        if($request->has('resourceId') && $request->has('relationshipName') && $request->has('relationshipResourceName'))
-        {
+        if ($request->has('resourceId') && $request->has('relationshipName') && $request->has('relationshipResourceName')) {
             $resourceId = $request->query('resourceId');
             $relationshipName = $request->query('relationshipName');
             $relationshipResourceName = $request->query('relationshipResourceName');
 
             $modelInstance = $modelInstance->findOrFail($resourceId);
-            $relationshipResource = $this->resourceNamespace . Otter::getClassNameFromRouteName($relationshipResourceName);
+            $relationshipResource = $this->resourceNamespace.Otter::getClassNameFromRouteName($relationshipResourceName);
 
             $data = $modelInstance->{$relationshipName}()->paginate(config('otter.pagination', 10));
 
             return $relationshipResource::collection($data);
-        }
-        else
-        {
+        } else {
             return $this->resource::collection(($modelInstance)::paginate(config('otter.pagination', 10)));
         }
     }
@@ -83,8 +80,7 @@ class OtterController extends Controller
 
         $relationalFields = null;
 
-        if($request->has('relationalFields'))
-        {
+        if ($request->has('relationalFields')) {
             $relationalFields = $request->input('relationalFields');
             $request->request->remove('relationalFields');
         }
@@ -95,21 +91,16 @@ class OtterController extends Controller
         //Save model instance
         $modelInstance->save();
 
-        if($relationalFields)
-        {
-            foreach($relationalFields as $relationalField)
-            {
+        if ($relationalFields) {
+            foreach ($relationalFields as $relationalField) {
                 $relationshipModel = $relationalField['relationshipModel'];
                 $relationshipName = $relationalField['relationshipName'];
                 $relationshipType = $relationalField['relationshipType'];
                 $relationshipId = $relationalField['relationshipId'];
 
-                if($relationshipType === 'BelongsTo')
-                {
+                if ($relationshipType === 'BelongsTo') {
                     $modelInstance->{$relationshipName}()->associate($relationshipId);
-                }
-                elseif($relationshipType === 'BelongsToMany')
-                {
+                } elseif ($relationshipType === 'BelongsToMany') {
                     $modelInstance->{$relationshipName}()->attach($relationshipId);
                 }
             }
@@ -117,7 +108,7 @@ class OtterController extends Controller
             //Save model instance
             $modelInstance->save();
         }
-        
+
         //Return response
         return response()->json([
             'status' => 'success',
@@ -165,24 +156,19 @@ class OtterController extends Controller
 
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
 
-        if($request->has('relationalFields'))
-        {
+        if ($request->has('relationalFields')) {
             $relationalFields = $request->input('relationalFields');
             $request->request->remove('relationalFields');
 
-            foreach($relationalFields as $relationalField)
-            {
+            foreach ($relationalFields as $relationalField) {
                 $relationshipModel = $relationalField['relationshipModel'];
                 $relationshipName = $relationalField['relationshipName'];
                 $relationshipType = $relationalField['relationshipType'];
                 $relationshipId = $relationalField['relationshipId'];
 
-                if($relationshipType === 'BelongsTo')
-                {
+                if ($relationshipType === 'BelongsTo') {
                     $modelInstance->{$relationshipName}()->associate($relationshipId);
-                }
-                elseif($relationshipType === 'BelongsToMany')
-                {
+                } elseif ($relationshipType === 'BelongsToMany') {
                     $modelInstance->{$relationshipName}()->sync($relationshipId);
                 }
             }
@@ -210,7 +196,7 @@ class OtterController extends Controller
         $modelInstance->delete();
 
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
         ]);
     }
 
@@ -225,7 +211,7 @@ class OtterController extends Controller
         $relationalData = Otter::getRelationalData($resource);
 
         return response()->json([
-            'data' => $relationalData
+            'data' => $relationalData,
         ]);
     }
 }

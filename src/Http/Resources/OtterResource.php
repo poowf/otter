@@ -3,7 +3,6 @@
 namespace Poowf\Otter\Http\Resources;
 
 use Poowf\Otter\Otter;
-use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OtterResource extends JsonResource
@@ -18,16 +17,16 @@ class OtterResource extends JsonResource
     {
         $transformed = parent::toArray($request);
         $transformed['route_key'] = $this->{parent::getRouteKeyName()};
-        $transformed['relations'] = !empty($this->getRelationships()) ? $this->getRelationships() : null;
+        $transformed['relations'] = ! empty($this->getRelationships()) ? $this->getRelationships() : null;
         $transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
         $transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
         $transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
-        
+
         return $transformed;
     }
 
     /**
-     * Get the fields and types used by the resource
+     * Get the fields and types used by the resource.
      *
      * @return array
      */
@@ -37,7 +36,7 @@ class OtterResource extends JsonResource
     }
 
     /**
-     * Get the validations used by the resource
+     * Get the validations used by the resource.
      *
      * @return array
      */
@@ -48,7 +47,7 @@ class OtterResource extends JsonResource
     }
 
     /**
-     * Get the fields to be hidden in the index
+     * Get the fields to be hidden in the index.
      *
      * @return array
      */
@@ -58,7 +57,7 @@ class OtterResource extends JsonResource
     }
 
     /**
-     * Get the relations used by the resource
+     * Get the relations used by the resource.
      *
      * @return array
      */
@@ -69,7 +68,7 @@ class OtterResource extends JsonResource
     }
 
     /**
-     * Get the relational data and the relational type
+     * Get the relational data and the relational type.
      *
      * @return array
      */
