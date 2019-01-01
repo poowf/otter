@@ -1,6 +1,13 @@
 <p align="center">
 <img src="https://poowf.blob.core.windows.net/otter/assets/otterbanner.svg">
 </p>
+<p align="center">
+<a href="https://travis-ci.org/poowf/otter"><img src="https://travis-ci.org/poowf/otter.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/poowf/otter"><img src="https://poser.pugx.org/poowf/otter/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/poowf/otter"><img src="https://poser.pugx.org/poowf/otter/v/unstable.svg" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/poowf/otter"><img src="https://poser.pugx.org/poowf/otter/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/poowf/otter"><img src="https://poser.pugx.org/poowf/otter/license.svg" alt="License"></a>
+</p>
 <p align="center">A relatively ottermatic (automatic) CRUD backend administration panel</p>
 
 # Introduction
