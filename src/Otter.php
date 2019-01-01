@@ -56,7 +56,7 @@ class Otter
      * @param  \Closure  $callback
      * @return static
      */
-    public static function auth(Closure $callback)
+    public static function auth($callback)
     {
         static::$authUsing = $callback;
 
@@ -73,7 +73,7 @@ class Otter
     {
         $directory = app_path('Otter/');
         if(!File::exists($directory)) {
-            return [];
+            return new Collection;
         }
 
         $files = File::files($directory);

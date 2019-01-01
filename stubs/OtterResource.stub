@@ -50,30 +50,41 @@ class DummyClass extends OtterResource
     public static function validations()
     {
         return [
-        'client' => [
-            'create' => [
-                /**
-                * Client side create resource validation
-                */
+            'client' => [
+                'create' => [
+                    /**
+                    * Client side create resource validation
+                    */
+                ],
+                'update' => [
+                    /**
+                    * Client side update resource validation
+                    */
+                ]
             ],
-            'update' => [
-                /**
-                * Client side update resource validation
-                */
-            ]
-        ],
-        'server' => [
-            'create' => [
-                /**
-                * Server side create resource validation
-                */
+            'server' => [
+                'create' => [
+                    /**
+                    * Server side create resource validation
+                    */
+                ],
+                'update' => [
+                    /**
+                    * Server side update resource validation
+                    */
+                ]
             ],
-            'update' => [
-                /**
-                * Server side update resource validation
-                */
-            ]
-        ],
-    ];
+        ];
+    }
+
+    /**
+     * Get the relations used by the resource
+     *
+     * @return array
+     */
+    public static function relations()
+    {
+        return [
+        ];
     }
 }
