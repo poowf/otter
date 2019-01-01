@@ -8,9 +8,9 @@
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="dropdown">
                         <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-                            <span class="avatar" style="background-image: url({{ \Poowf\Otter\Otter::getGravatarLink(auth()->user()->{config('otter.user.email', 'email')}) }})"></span>
+                            <span class="avatar" style="background-image: url({{ \Poowf\Otter\Otter::getGravatarLink(auth()->user()->{config('otter.user.email', 'email')} ?? '') }})"></span>
                             <span class="ml-2 d-none d-lg-block">
-                      <span>{{ auth()->user()->{config('otter.user.name', 'name')} }}</span>
+                      <span>{{ auth()->user()->{config('otter.user.name', 'name')} ?? '' }}</span>
                       <small class="text-muted d-block mt-1">Administrator</small>
                     </span>
                         </a>

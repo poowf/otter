@@ -14,13 +14,19 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
+
         "illuminate/console": "5.5.x|5.6.x|5.7.x",
         "illuminate/routing": "5.5.x|5.6.x|5.7.x"
     },
     "autoload": {
         "psr-4": {
             "Poowf\\Otter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Poowf\\Otter\\Tests\\": "tests/"
         }
     },
     "support" : {
@@ -38,5 +44,8 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "orchestra/testbench": "~3.5"
+    }
 }
