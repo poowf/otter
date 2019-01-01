@@ -2,12 +2,9 @@
 
 namespace Poowf\Otter\Tests;
 
-use Illuminate\Queue\Queue;
-use Illuminate\Foundation\Testing\TestResponse;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase;
-use Poowf\Otter\Otter;
 use Poowf\Otter\OtterServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FeatureTestCase extends TestCase
 {

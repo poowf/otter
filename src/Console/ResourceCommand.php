@@ -61,7 +61,7 @@ class ResourceCommand extends GeneratorCommand
     {
         $model = $this->option('model');
         //Check if class name of the model is supplied and use that, otherwise use the root name space and append the name of the model for the classname
-        $fullModelClassName = ($model) ? str_replace('/', '\\', $model) : $this->rootNamespace() . '\\' . $this->argument('name');
+        $fullModelClassName = ($model) ? str_replace('/', '\\', $model) : $this->rootNamespace().'\\'.$this->argument('name');
         //Replace the text with the full model classname and execute the buildclass to generate the rest of the stub
         return str_replace('DummyFullClass', $fullModelClassName, parent::buildClass($name));
     }
@@ -74,7 +74,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . Otter::$otterBaseNamespace;
+        return $rootNamespace.Otter::$otterBaseNamespace;
     }
 
     /**

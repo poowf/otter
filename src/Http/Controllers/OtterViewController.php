@@ -2,22 +2,22 @@
 
 namespace Poowf\Otter\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Poowf\Otter\Otter;
+use Illuminate\Http\Request;
 
 class OtterViewController extends Controller
 {
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
         parent::__construct();
         //Check if application is running in console as the exploding of the route will fail if the app is running in console
-        if(!app()->runningInConsole())
-        {
+        if (! app()->runningInConsole()) {
             $this->resourceName = explode('.', $request->route()->getName())[2];
             $this->resourceNamespace = Otter::$otterResourceNamespace;
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
-            $this->resource = $this->resourceNamespace . $this->baseResourceName;
+            $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
-            /** @var TYPE_NAME $model */
+            /* @var TYPE_NAME $model */
             $this->modelName = ($request->is('otter')) ? null : $this->resource::$model;
         }
 
@@ -110,7 +110,6 @@ class OtterViewController extends Controller
      *
      * @param  \Illuminate\Database\Eloquent\Model $modelInstance
      * @return \Illuminate\Http\Response
-     *
      */
     public function edit($modelInstance)
     {

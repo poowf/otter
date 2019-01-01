@@ -37,7 +37,7 @@ class OtterServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the Otter Resource Routes
+     * Register the Otter Resource Routes.
      *
      * @return void
      */
@@ -49,11 +49,10 @@ class OtterServiceProvider extends ServiceProvider
             'prefix' => 'api/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers\API',
             'middleware' => config('otter.middleware.api', 'api'),
-        ], function () use($names) {
-            foreach($names as $pluralName)
-            {
+        ], function () use ($names) {
+            foreach ($names as $pluralName) {
                 Route::get("{$pluralName}/relational", 'OtterController@relational')->name("api.otter.{$pluralName}.relational");
-                Route::apiResource($pluralName, 'OtterController', [ 'as' => 'api.otter' ]);
+                Route::apiResource($pluralName, 'OtterController', ['as' => 'api.otter']);
             }
         });
 
@@ -61,11 +60,10 @@ class OtterServiceProvider extends ServiceProvider
             'prefix' => '/otter',
             'namespace' => 'Poowf\Otter\Http\Controllers',
             'middleware' => config('otter.middleware.web', 'web'),
-        ], function () use($names) {
-            foreach($names as $pluralName)
-            {
-                Route::resource($pluralName, 'OtterViewController', [ 'as' => 'web.otter' ])->only([
-                    'index', 'show', 'create', 'edit'
+        ], function () use ($names) {
+            foreach ($names as $pluralName) {
+                Route::resource($pluralName, 'OtterViewController', ['as' => 'web.otter'])->only([
+                    'index', 'show', 'create', 'edit',
                 ]);
             }
         });
@@ -104,7 +102,7 @@ class OtterServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/otter'),
             ], 'otter-assets');
-            
+
             $this->publishes([
                 __DIR__.'/../stubs/OtterServiceProvider.stub' => app_path('Providers/OtterServiceProvider.php'),
             ], 'otter-provider');
