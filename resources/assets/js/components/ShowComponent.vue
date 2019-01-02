@@ -7,11 +7,21 @@
         ></single-resource-component>
         <div v-if="resourceData['relations']">
             <div v-for="relation, relationKey in resourceData['relations']">
-                <div v-if="relation.relationshipType === 'HasMany' || relation.relationshipType === 'BelongsToMany'">
+                <div v-if="relation.relationshipType === 'HasMany'">
                     <table-component
                             relationship="true"
                             :relation="relation"
                             :parent-resource-id="relation.relationshipId"
+                            :parent-resource-name="resourceName"
+                            :resource-name="relation.resourceName"
+                            :resource-fields="relation.resourceFields"
+                    ></table-component>
+                </div>
+                <div v-if="relation.relationshipType === 'BelongsToMany'">
+                    <table-component
+                            relationship="true"
+                            :relation="relation"
+                            :parent-resource-id="relation.resourceId"
                             :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"

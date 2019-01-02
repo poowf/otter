@@ -229,12 +229,13 @@ class Otter
             $relation['resourceId'] = 'null';
 
             if ($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo') {
-                $relation['relationshipId'] = ($modelInstance->{$relationshipForeignKey}) ? $modelInstance->{$relationshipForeignKey} : null;
-
                 $relationModelInstance = $modelInstance->{$relationshipName};
+
+                $relation['relationshipId'] = ($modelInstance->{$relationshipForeignKey}) ? $modelInstance->{$relationshipForeignKey} : null;
                 $relation['resourceId'] = ($relationModelInstance) ? $relationModelInstance->{$relationModelInstance->getRouteKeyName()} : null;
             } elseif ($relationshipType === 'BelongsToMany') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
+                $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
             } elseif ($relationshipType === 'HasMany') {
                 $relation['relationshipId'] = $otterResource->id;
             }
