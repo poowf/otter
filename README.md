@@ -23,7 +23,7 @@ Install Otter with [composer](https://getcomposer.org/doc/00-intro.md):
 $ composer require poowf/otter
 ```
 
-> In Laravel 5.5+, [service providers and aliases are automatically registered](https://laravel.com/docs/packages#package-discovery). If you're using Laravel 5.5+, skip ahead directly to step 3.
+> In Laravel 5.5+, [service providers and aliases are automatically registered](https://laravel.com/docs/packages#package-discovery). If you're using Laravel 5.5+, skip ahead directly to step 2.
 
 Once the composer installation completes, all you need to do is add the service provider. Open `config/app.php`, and make the following changes:
 
