@@ -15,6 +15,12 @@ Otter was created as an open-source alternative to Laravel Nova. The backend adm
 
 Otter is designed to handle almost everything for you through `OtterResource` files that essentially tie to your Eloquent Models.
 
+# Screenshots
+<p align="center">
+<a href="https://imgur.com/a/U4ujI8c"><img width="80" src="https://img.shields.io/badge/Light-lightgrey.svg?colorB=9aa0ac&style=flat-square"></a>
+<a href="https://imgur.com/a/1rdYjbY"><img width="80" src="https://img.shields.io/badge/Dark-black.svg?style=flat-square"></a>
+</p>
+
 # Installation
 
 Install Otter with [composer](https://getcomposer.org/doc/00-intro.md):

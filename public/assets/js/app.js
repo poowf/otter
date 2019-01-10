@@ -12200,7 +12200,7 @@ var render = function() {
                   "btn",
                   "btn-primary",
                   "btn-block",
-                  "btn-dark",
+                  "btn-black",
                   this.loading ? "btn-loading" : ""
                 ],
                 attrs: { type: "button" },

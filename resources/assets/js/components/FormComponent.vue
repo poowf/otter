@@ -45,7 +45,7 @@
                             :alertLevel="alert.level"
                             :alertMessage="alert.message"
                     ></alert-component>
-                    <button type="button" :class="['btn', 'btn-primary', 'btn-block', 'btn-dark', (this.loading ? 'btn-loading' : '')]" @click="handleAction(action)">{{ handleButtonText }}</button>
+                    <button type="button" :class="['btn', 'btn-primary', 'btn-block', 'btn-black', (this.loading ? 'btn-loading' : '')]" @click="handleAction(action)">{{ handleButtonText }}</button>
                 </div>
             </div>
         </form>
