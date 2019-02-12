@@ -21,6 +21,7 @@ class OtterController extends Controller
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->modelName = $this->resource::$model;
+	        $this->resourceRouteKeyName = $this->resource::$routeKeyName;
         }
     }
 
@@ -125,7 +126,7 @@ class OtterController extends Controller
     public function show($modelInstance)
     {
         //Retrieve the model instance
-        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
 
         return new $this->resource($modelInstance);
     }
@@ -154,7 +155,7 @@ class OtterController extends Controller
             ], 422);
         }
 
-        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
 
         if ($request->has('relationalFields')) {
             $relationalFields = $request->input('relationalFields');
@@ -192,7 +193,7 @@ class OtterController extends Controller
     public function destroy($modelInstance)
     {
         //Retrieve the model instance
-        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
         $modelInstance->delete();
 
         return response()->json([

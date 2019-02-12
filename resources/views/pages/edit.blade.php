@@ -20,6 +20,7 @@
                     :resource-fields="{{ $resourceFields }}"
                     :relational-fields="{{ $relationalFields }}"
                     :validation-fields="{{ $validationFields }}"
+                    resource-prefix="{{ config('otter.path', 'otter') }}"
             ></form-component>
         </div>
 @stop

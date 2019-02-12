@@ -7,7 +7,7 @@
                     <div class="dropdown card-options-dropdown">
                         <button type="button" class="btn btn-option dropdown-toggle" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></button>
                         <div class="dropdown-menu dropdown-menu-dark dropdown-menu-right">
-                            <a class="dropdown-item" v-bind:href="`/otter/${resourceName}/${resourceId}/edit/`">
+                            <a class="dropdown-item" v-bind:href="`/${resourcePrefix}/${resourceName}/${resourceId}/edit/`">
                                 <i class="fe fe-edit mr-3"></i>Edit
                             </a>
                         </div>
@@ -34,6 +34,7 @@
             'resourceId',
             'resourceName',
             'resourceFields',
+            'resourcePrefix',
         ],
         data() {
             return {
@@ -48,7 +49,7 @@
         },
         methods: {
             fetchResource() {
-                axios.get(`/api/otter/${this.resourceName}/${this.resourceId}`)
+                axios.get(`/api/${this.resourcePrefix}/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
                     })

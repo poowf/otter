@@ -63,6 +63,7 @@
             'relationalFields',
             'singularResourceName',
             'action',
+            'resourcePrefix',
         ],
         data() {
             return {
@@ -93,7 +94,7 @@
         },
         methods: {
             fetchResource() {
-                axios.get(`/api/otter/${this.resourceName}/${this.resourceId}`)
+                axios.get(`/api/${this.resourcePrefix}/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
                     })
@@ -104,7 +105,7 @@
                     });
             },
             fetchRelationalItems() {
-                axios.get(`/api/otter/${this.resourceName}/relational`)
+                axios.get(`/api/${this.resourcePrefix}/${this.resourceName}/relational`)
                     .then(response=>{
                         this.relationalData = response.data.data;
                     }).catch(e => {
@@ -146,11 +147,11 @@
             handleStore(e) {
                 this.resourceData.relationalFields = this.relationalFields;
 
-                axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
+                axios.post(`/api/${this.resourcePrefix}/${this.resourceName}`, this.resourceData)
                     .then(response => {
                         console.log("success");
                         // window.location = response.data.redirect;
-                        window.location = `/otter/${this.resourceName}`;
+                        window.location = `/${this.resourcePrefix}/${this.resourceName}`;
                     })
                     .catch(e => {
                         this.alertData.push({
@@ -165,7 +166,7 @@
             handleUpdate(e) {
                 this.resourceData.relationalFields = this.relationalFields;
 
-                axios.patch(`/api/otter/${this.resourceName}/${this.resourceId}`, this.resourceData)
+                axios.patch(`/api/${this.resourcePrefix}/${this.resourceName}/${this.resourceId}`, this.resourceData)
                     .then(response => {
                         this.fetchResource();
                         this.alertData.push({
