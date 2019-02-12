@@ -152,7 +152,7 @@ class Otter
 
         return new static;
     }
-
+    
     /**
      * Retrieve the model instance
      * This method checks if the object is an instance of the model and if it is not,
@@ -160,10 +160,15 @@ class Otter
      *
      * @param $object
      * @param $modelName
+     * @param $routeKeyName
+     *
      * @return static
      */
-    public static function getModelInstance($object, $modelName)
+    public static function getModelInstance($object, $modelName, $routeKeyName)
     {
+        if ($routeKeyName != 'id')
+            return ($object instanceof $modelName) ? $object : $modelName::where($routeKeyName, '=',$object)->firstOrFail();
+    
         return ($object instanceof $modelName) ? $object : $modelName::findOrFail($object);
     }
 
@@ -204,7 +209,7 @@ class Otter
         $relationalDataArray = [];
         $otterResourceNamespace = self::$otterResourceNamespace;
 
-        $modelInstance = ($modelObject) ? self::getModelInstance($modelObject, $otterResource::$model) : new $otterResource::$model;
+        $modelInstance = ($modelObject) ? self::getModelInstance($modelObject, $otterResource::$model, $otterResource::$routeKeyName) : new $otterResource::$model;
 
         foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
             $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
@@ -262,7 +267,7 @@ class Otter
             $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
 
             /* @var TYPE_NAME $model */
-            $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model)::all());
+            $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model())::all());
         }
 
         return $relationalDataArray;
