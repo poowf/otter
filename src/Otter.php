@@ -152,7 +152,7 @@ class Otter
 
         return new static;
     }
-    
+
     /**
      * Retrieve the model instance
      * This method checks if the object is an instance of the model and if it is not,
@@ -166,9 +166,10 @@ class Otter
      */
     public static function getModelInstance($object, $modelName, $routeKeyName)
     {
-        if ($routeKeyName != 'id')
-            return ($object instanceof $modelName) ? $object : $modelName::where($routeKeyName, '=',$object)->firstOrFail();
-    
+        if ($routeKeyName != 'id') {
+            return ($object instanceof $modelName) ? $object : $modelName::where($routeKeyName, '=', $object)->firstOrFail();
+        }
+
         return ($object instanceof $modelName) ? $object : $modelName::findOrFail($object);
     }
 
