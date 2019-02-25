@@ -34,7 +34,7 @@
             'resourceId',
             'resourceName',
             'resourceFields',
-            'resourcePrefix',
+            'resourcePrefix'
         ],
         data() {
             return {

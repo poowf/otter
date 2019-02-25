@@ -63,7 +63,7 @@
             'relationalFields',
             'singularResourceName',
             'action',
-            'resourcePrefix',
+            'resourcePrefix'
         ],
         data() {
             return {
