@@ -75,7 +75,7 @@
             'relation',
             'parentResourceId',
             'parentResourceName',
-            'resourcePrefix',
+            'resourcePrefix'
         ],
         data() {
             return {
