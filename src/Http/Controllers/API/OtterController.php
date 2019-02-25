@@ -21,7 +21,7 @@ class OtterController extends Controller
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->modelName = $this->resource::$model;
-	        $this->resourceRouteKeyName = $this->resource::$routeKeyName;
+            $this->resourceRouteKeyName = $this->resource::$routeKeyName;
         }
     }
 

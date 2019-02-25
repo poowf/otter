@@ -17,9 +17,10 @@ class OtterViewController extends Controller
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
-	        
-            if (class_exists($this->resource))
+
+            if (class_exists($this->resource)) {
                 $this->resourceRouteKeyName = $this->resource::$routeKeyName;
+            }
             /* @var TYPE_NAME $model */
             $this->modelName = ($request->is(config('otter.path', 'otter'))) ? null : $this->resource::$model;
         }
