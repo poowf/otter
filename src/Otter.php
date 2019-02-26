@@ -94,6 +94,7 @@ class Otter
     /**
      * Retrieve them class name from a route name.
      *
+     * Example:
      * user_addresses = UserAddress
      *
      * @param $routeName
@@ -107,6 +108,7 @@ class Otter
     /**
      * Get the route name from a class name.
      *
+     * Example:
      * UserAddress = user_addresses
      *
      * @param $className
@@ -166,11 +168,13 @@ class Otter
      */
     public static function getModelInstance($object, $modelName, $routeKeyName)
     {
-        if ($routeKeyName != 'id') {
-            return ($object instanceof $modelName) ? $object : $modelName::where($routeKeyName, '=', $object)->firstOrFail();
+        if($object instanceof $modelName) {
+            return $object;
+        } elseif ($routeKeyName != 'id') {
+            return $modelName::where($routeKeyName, '=', $object)->firstOrFail();
+        } else {
+            return $modelName::findOrFail($object);
         }
-
-        return ($object instanceof $modelName) ? $object : $modelName::findOrFail($object);
     }
 
     /**
@@ -250,6 +254,32 @@ class Otter
         }
 
         return $relationalDataArray;
+    }
+
+    /**
+     * Retrieve all the foreign keys in an OtterResource
+     * 
+     * @param  OtterResource $otterResource
+     * @return array
+     */
+    public static function getRelationalForeignKeys($otterResource)
+    {
+        $relationalForeignKeysArray = [];
+        $otterResourceNamespace = self::$otterResourceNamespace;
+
+        foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
+            $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
+            $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
+
+            $relationshipModel = $otterRelationResource::$model;
+            $relationshipModelInstance = new $relationshipModel;
+            //Check if a foreign key is manually specified and if so, use the specified foreign key
+            $relationshipForeignKey = (is_array($otterRelationData)) ? $otterRelationData[1] : $relationshipModelInstance->getForeignKey();
+            
+            array_push($relationalForeignKeysArray, $relationshipForeignKey);
+        }
+
+        return $relationalForeignKeysArray;
     }
 
     /**

@@ -155,6 +155,10 @@ class OtterController extends Controller
             ], 422);
         }
 
+        //Cleanup request before saving data
+        $request->request->remove('relations');
+        $request->request->remove('route_key');
+
         $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
 
         if ($request->has('relationalFields')) {
@@ -173,9 +177,18 @@ class OtterController extends Controller
                     $modelInstance->{$relationshipName}()->sync($relationshipId);
                 }
             }
+
+            $modelInstance->save();
+        }
+        
+        $relationalForeignKeys = Otter::getRelationalForeignKeys($resource);
+
+        foreach($relationalForeignKeys as $relationalForeignKey)
+        {
+            $request->request->remove($relationalForeignKey);
         }
 
-        $modelInstance->fill($request->all());
+        $modelInstance->forceFill($request->all());
         $modelInstance->save();
 
         return response()->json([
