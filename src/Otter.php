@@ -168,7 +168,7 @@ class Otter
      */
     public static function getModelInstance($object, $modelName, $routeKeyName)
     {
-        if($object instanceof $modelName) {
+        if ($object instanceof $modelName) {
             return $object;
         } elseif ($routeKeyName != 'id') {
             return $modelName::where($routeKeyName, '=', $object)->firstOrFail();
@@ -258,8 +258,8 @@ class Otter
     }
 
     /**
-     * Retrieve all the foreign keys in an OtterResource
-     * 
+     * Retrieve all the foreign keys in an OtterResource.
+     *
      * @param  OtterResource $otterResource
      * @return array
      */
@@ -276,7 +276,7 @@ class Otter
             $relationshipModelInstance = new $relationshipModel;
             //Check if a foreign key is manually specified and if so, use the specified foreign key
             $relationshipForeignKey = (is_array($otterRelationData)) ? $otterRelationData[1] : $relationshipModelInstance->getForeignKey();
-            
+
             array_push($relationalForeignKeysArray, $relationshipForeignKey);
         }
 

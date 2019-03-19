@@ -4,7 +4,7 @@
                 :resource-name="resourceName"
                 :resource-id="resourceId"
                 :resource-fields="resourceFields"
-                :resource-prefix="resourcePrefix"
+                :path-prefix="pathPrefix"
         ></single-resource-component>
         <div v-if="resourceData['relations']">
             <div v-for="relation, relationKey in resourceData['relations']">
@@ -16,7 +16,7 @@
                             :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"
-                            :resource-prefix="resourcePrefix"
+                            :path-prefix="pathPrefix"
                     ></table-component>
                 </div>
                 <div v-if="relation.relationshipType === 'BelongsToMany'">
@@ -27,7 +27,7 @@
                             :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"
-                            :resource-prefix="resourcePrefix"
+                            :path-prefix="pathPrefix"
                     ></table-component>
                 </div>
                 <div v-if="relation.relationshipType === 'BelongsTo' || relation.relationshipType === 'HasOne'">
@@ -36,7 +36,7 @@
                             :resource-name="relation.resourceName"
                             :resource-id="relation.resourceId"
                             :resource-fields="relation.resourceFields"
-                            :resource-prefix="resourcePrefix"
+                            :path-prefix="pathPrefix"
                     ></single-resource-component>
                 </div>
             </div>
@@ -51,7 +51,7 @@
             'resourceId',
             'resourceName',
             'resourceFields',
-            'resourcePrefix'
+            'pathPrefix'
         ],
         data() {
             return {
@@ -66,7 +66,7 @@
         },
         methods: {
             fetchResource() {
-                axios.get(`/api/${this.resourcePrefix}/${this.resourceName}/${this.resourceId}`)
+                axios.get(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
                     })

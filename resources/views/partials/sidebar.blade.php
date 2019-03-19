@@ -15,7 +15,7 @@
             </li>
             <sidebar-component
                     :all-resource-names="{{ $allResourceNames }}"
-                    resource-prefix="{{ config('otter.path', 'otter') }}"
+                    path-prefix="{{ config('otter.path', 'otter') }}"
             ></sidebar-component>
         </ul>
     </div>

@@ -38,7 +38,7 @@
                         <header-component
                                 :all-resource-names="{{ $allResourceNames }}"
                                 current-route="{{ Route::currentRouteName() }}"
-                                resource-prefix="{{ config('otter.path', 'otter') }}"
+                                path-prefix="{{ config('otter.path', 'otter') }}"
                         ></header-component>
                     </ul>
                 </div>

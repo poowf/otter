@@ -16,7 +16,7 @@
             <table-component
                     resource-name="{{ $resourceName }}"
                     :resource-fields="{{ $resourceFields }}"
-                    resource-prefix="{{ config('otter.path', 'otter') }}"
+                    path-prefix="{{ config('otter.path', 'otter') }}"
             ></table-component>
         </div>
     </div>

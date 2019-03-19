@@ -84,7 +84,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
-    props: ['resourceId', 'resourceName', 'resourceFields', 'validationFields', 'relationalFields', 'singularResourceName', 'action', 'resourcePrefix'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'validationFields', 'relationalFields', 'singularResourceName', 'action', 'pathPrefix'],
     data: function data() {
         return {
             handleText: 'Create',
@@ -113,7 +113,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchResource: function fetchResource() {
             var _this = this;
 
-            axios.get('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+            axios.get('/api/' + this.pathPrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
                 _this.resourceData = response.data.data;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
@@ -122,7 +122,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchRelationalItems: function fetchRelationalItems() {
             var _this2 = this;
 
-            axios.get('/api/' + this.resourcePrefix + '/' + this.resourceName + '/relational').then(function (response) {
+            axios.get('/api/' + this.pathPrefix + '/' + this.resourceName + '/relational').then(function (response) {
                 _this2.relationalData = response.data.data;
             }).catch(function (e) {
                 _this2.error = 'Could not retrieve ' + _this2.resourceName + '. Server error.';
@@ -158,10 +158,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.resourceData.relationalFields = this.relationalFields;
 
-            axios.post('/api/' + this.resourcePrefix + '/' + this.resourceName, this.resourceData).then(function (response) {
+            axios.post('/api/' + this.pathPrefix + '/' + this.resourceName, this.resourceData).then(function (response) {
                 console.log("success");
                 // window.location = response.data.redirect;
-                window.location = '/' + _this4.resourcePrefix + '/' + _this4.resourceName;
+                window.location = '/' + _this4.pathPrefix + '/' + _this4.resourceName;
             }).catch(function (e) {
                 _this4.alertData.push({
                     "level": "danger",
@@ -176,7 +176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.resourceData.relationalFields = this.relationalFields;
 
-            axios.patch('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.resourceId, this.resourceData).then(function (response) {
+            axios.patch('/api/' + this.pathPrefix + '/' + this.resourceName + '/' + this.resourceId, this.resourceData).then(function (response) {
                 _this5.fetchResource();
                 _this5.alertData.push({
                     "level": "success",
@@ -216,7 +216,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "HeaderComponent",
-    props: ['allResourceNames', 'currentRoute', 'resourcePrefix'],
+    props: ['allResourceNames', 'currentRoute', 'pathPrefix'],
     mounted: function mounted() {}
 });
 
@@ -322,7 +322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "ShowComponent",
-    props: ['resourceId', 'resourceName', 'resourceFields', 'resourcePrefix'],
+    props: ['resourceId', 'resourceName', 'resourceFields', 'pathPrefix'],
     data: function data() {
         return {
             loading: false,
@@ -338,7 +338,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchResource: function fetchResource() {
             var _this = this;
 
-            axios.get('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+            axios.get('/api/' + this.pathPrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
                 _this.resourceData = response.data.data;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
@@ -371,7 +371,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "SidebarComponent",
-    props: ['allResourceNames', 'resourcePrefix'],
+    props: ['allResourceNames', 'pathPrefix'],
     mounted: function mounted() {}
 });
 
@@ -413,7 +413,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "SingleResourceComponent",
-    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'resourcePrefix'],
+    props: ['prettyResourceName', 'resourceId', 'resourceName', 'resourceFields', 'pathPrefix'],
     data: function data() {
         return {
             loading: false,
@@ -429,7 +429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetchResource: function fetchResource() {
             var _this = this;
 
-            axios.get('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
+            axios.get('/api/' + this.pathPrefix + '/' + this.resourceName + '/' + this.resourceId).then(function (response) {
                 _this.resourceData = response.data.data;
             }).catch(function (e) {
                 _this.error = 'Could not retrieve ' + _this.resourceName + '. Server error.';
@@ -519,7 +519,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "TableComponent",
-    props: ['resourceName', 'resourceFields', 'relationship', 'relation', 'parentResourceId', 'parentResourceName', 'resourcePrefix'],
+    props: ['resourceName', 'resourceFields', 'relationship', 'relation', 'parentResourceId', 'parentResourceName', 'pathPrefix'],
     data: function data() {
         return {
             query: '',
@@ -583,7 +583,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         handleDelete: function handleDelete() {
             var _this2 = this;
 
-            axios.delete('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.currentSelectedResource).then(function (response) {
+            axios.delete('/api/' + this.pathPrefix + '/' + this.resourceName + '/' + this.currentSelectedResource).then(function (response) {
                 console.log("success");
                 _this2.fetchResourceIndex();
             }).catch(function (e) {
@@ -615,9 +615,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
         resourceEndpoint: function resourceEndpoint() {
             if (this.relationship) {
-                return '/api/' + this.resourcePrefix + '/' + this.parentResourceName + '?page=' + this.currentPage + '&resourceId=' + this.parentResourceId + '&relationshipName=' + this.relation.relationshipName + '&relationshipResourceName=' + this.relation.resourceName;
+                return '/api/' + this.pathPrefix + '/' + this.parentResourceName + '?page=' + this.currentPage + '&resourceId=' + this.parentResourceId + '&relationshipName=' + this.relation.relationshipName + '&relationshipResourceName=' + this.relation.resourceName;
             } else {
-                return '/api/' + this.resourcePrefix + '/' + this.resourceName + '?page=' + this.currentPage;
+                return '/api/' + this.pathPrefix + '/' + this.resourceName + '?page=' + this.currentPage;
             }
         },
         sortedResources: function sortedResources() {
@@ -11057,7 +11057,7 @@ var render = function() {
                 "a",
                 {
                   staticClass: "nav-link pl-6",
-                  attrs: { href: "/" + _vm.resourcePrefix + "/" + resourceName }
+                  attrs: { href: "/" + _vm.pathPrefix + "/" + resourceName }
                 },
                 [_vm._v("View")]
               )
@@ -11069,8 +11069,7 @@ var render = function() {
                 {
                   staticClass: "nav-link pl-6",
                   attrs: {
-                    href:
-                      "/" + _vm.resourcePrefix + "/" + resourceName + "/create"
+                    href: "/" + _vm.pathPrefix + "/" + resourceName + "/create"
                   }
                 },
                 [_vm._v("Create")]
@@ -11110,7 +11109,7 @@ var render = function() {
           "resource-name": _vm.resourceName,
           "resource-id": _vm.resourceId,
           "resource-fields": _vm.resourceFields,
-          "resource-prefix": _vm.resourcePrefix
+          "path-prefix": _vm.pathPrefix
         }
       }),
       _vm._v(" "),
@@ -11134,7 +11133,7 @@ var render = function() {
                             "parent-resource-name": _vm.resourceName,
                             "resource-name": relation.resourceName,
                             "resource-fields": relation.resourceFields,
-                            "resource-prefix": _vm.resourcePrefix
+                            "path-prefix": _vm.pathPrefix
                           }
                         })
                       ],
@@ -11154,7 +11153,7 @@ var render = function() {
                             "parent-resource-name": _vm.resourceName,
                             "resource-name": relation.resourceName,
                             "resource-fields": relation.resourceFields,
-                            "resource-prefix": _vm.resourcePrefix
+                            "path-prefix": _vm.pathPrefix
                           }
                         })
                       ],
@@ -11173,7 +11172,7 @@ var render = function() {
                             "resource-name": relation.resourceName,
                             "resource-id": relation.resourceId,
                             "resource-fields": relation.resourceFields,
-                            "resource-prefix": _vm.resourcePrefix
+                            "path-prefix": _vm.pathPrefix
                           }
                         })
                       ],
@@ -11220,7 +11219,7 @@ var render = function() {
               "pl-4",
               _vm.currentRoute.includes(resourceName) ? "active" : ""
             ],
-            attrs: { href: "/" + _vm.resourcePrefix + "/" + resourceName }
+            attrs: { href: "/" + _vm.pathPrefix + "/" + resourceName }
           },
           [_vm._v(_vm._s(_vm._f("beautify")(resourceName)))]
         ),
@@ -11243,7 +11242,7 @@ var render = function() {
                       ? "active"
                       : ""
                   ],
-                  attrs: { href: "/" + _vm.resourcePrefix + "/" + resourceName }
+                  attrs: { href: "/" + _vm.pathPrefix + "/" + resourceName }
                 },
                 [_vm._v("View")]
               )
@@ -11261,8 +11260,7 @@ var render = function() {
                       : ""
                   ],
                   attrs: {
-                    href:
-                      "/" + _vm.resourcePrefix + "/" + resourceName + "/create"
+                    href: "/" + _vm.pathPrefix + "/" + resourceName + "/create"
                   }
                 },
                 [_vm._v("Create")]
@@ -11345,7 +11343,7 @@ var render = function() {
                       "data-original-title": "Create",
                       href:
                         "/" +
-                        _vm.resourcePrefix +
+                        _vm.pathPrefix +
                         "/" +
                         _vm.resourceName +
                         "/create"
@@ -11429,7 +11427,7 @@ var render = function() {
                                 attrs: {
                                   href:
                                     "/" +
-                                    _vm.resourcePrefix +
+                                    _vm.pathPrefix +
                                     "/" +
                                     _vm.resourceName +
                                     "/" +
@@ -11468,7 +11466,7 @@ var render = function() {
                                       attrs: {
                                         href:
                                           "/" +
-                                          _vm.resourcePrefix +
+                                          _vm.pathPrefix +
                                           "/" +
                                           _vm.resourceName +
                                           "/" +
@@ -11668,7 +11666,7 @@ var render = function() {
                     attrs: {
                       href:
                         "/" +
-                        _vm.resourcePrefix +
+                        _vm.pathPrefix +
                         "/" +
                         _vm.resourceName +
                         "/" +

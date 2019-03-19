@@ -16,7 +16,7 @@
                 resource-name="{{ $resourceName }}"
                 resource-id="{{ $resourceId }}"
                 :resource-fields="{{ $resourceFields }}"
-                resource-prefix="{{ config('otter.path', 'otter') }}"
+                path-prefix="{{ config('otter.path', 'otter') }}"
         ></show-component>
     </div>
 @stop

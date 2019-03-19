@@ -180,11 +180,10 @@ class OtterController extends Controller
 
             $modelInstance->save();
         }
-        
+
         $relationalForeignKeys = Otter::getRelationalForeignKeys($resource);
 
-        foreach($relationalForeignKeys as $relationalForeignKey)
-        {
+        foreach ($relationalForeignKeys as $relationalForeignKey) {
             $request->request->remove($relationalForeignKey);
         }
 
