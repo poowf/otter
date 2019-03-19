@@ -175,7 +175,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this5 = this;
 
             this.resourceData.relationalFields = this.relationalFields;
-            console.log(this.resourceData);
 
             axios.patch('/api/' + this.resourcePrefix + '/' + this.resourceName + '/' + this.resourceId, this.resourceData).then(function (response) {
                 _this5.fetchResource();
@@ -11131,7 +11130,7 @@ var render = function() {
                           attrs: {
                             relationship: "true",
                             relation: relation,
-                            "parent-resource-id": relation.relationshipId,
+                            "parent-resource-id": relation.resourceId,
                             "parent-resource-name": _vm.resourceName,
                             "resource-name": relation.resourceName,
                             "resource-fields": relation.resourceFields,
@@ -12016,15 +12015,18 @@ var render = function() {
                     ) {
                       return (_vm.relationalData &&
                         relationalMetaData.relationshipType === "BelongsTo") ||
-                        relationalMetaData.relationshipType === "BelongsToMany"
+                        relationalMetaData.relationshipType ===
+                          "BelongsToMany" ||
+                        relationalMetaData.relationshipType === "HasMany"
                         ? _c("div", { staticClass: "form-group" }, [
                             _c("label", { staticClass: "form-label" }, [
                               _vm._v(_vm._s(_vm._f("beautify")(relationalKey)))
                             ]),
                             _vm._v(" "),
-                            _vm.relationalData &&
-                            relationalMetaData.relationshipType ===
-                              "BelongsToMany"
+                            (_vm.relationalData &&
+                              relationalMetaData.relationshipType ===
+                                "BelongsToMany") ||
+                            relationalMetaData.relationshipType === "HasMany"
                               ? _c(
                                   "select",
                                   {

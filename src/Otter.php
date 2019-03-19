@@ -247,7 +247,8 @@ class Otter
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
                 $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
             } elseif ($relationshipType === 'HasMany') {
-                $relation['relationshipId'] = $otterResource->id;
+                $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->pluck('id') : null;
+                $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
             }
 
             $relationalDataArray[$relationshipName] = $relation;

@@ -12,7 +12,7 @@
                     <table-component
                             relationship="true"
                             :relation="relation"
-                            :parent-resource-id="relation.relationshipId"
+                            :parent-resource-id="relation.resourceId"
                             :parent-resource-name="resourceName"
                             :resource-name="relation.resourceName"
                             :resource-fields="relation.resourceFields"
