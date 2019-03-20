@@ -81,6 +81,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
@@ -12109,6 +12110,14 @@ var render = function() {
                                   ],
                                   2
                                 )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            relationalMetaData.relationshipType === "HasMany"
+                              ? _c("p", { staticStyle: { color: "red" } }, [
+                                  _vm._v(
+                                    "*Removing data from a HasMany relationship will delete the record"
+                                  )
+                                ])
                               : _vm._e(),
                             _vm._v(" "),
                             _vm.relationalData &&

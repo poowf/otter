@@ -28,6 +28,7 @@
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
                                         </select>
+                                        <p v-if="relationalMetaData.relationshipType === 'HasMany'" style="color: red;">*Removing data from a HasMany relationship will delete the record</p>
                                         <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalMetaData.relationshipId">
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>

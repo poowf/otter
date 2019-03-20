@@ -175,6 +175,8 @@ class OtterController extends Controller
                     $modelInstance->{$relationshipName}()->associate($relationshipId);
                 } elseif ($relationshipType === 'BelongsToMany') {
                     $modelInstance->{$relationshipName}()->sync($relationshipId);
+                } elseif ($relationshipType === 'HasMany') {
+                    $modelInstance->{$relationshipName}()->whereNotin('id', $relationshipId)->delete();
                 }
             }
 
