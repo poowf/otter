@@ -22,14 +22,14 @@
                                                 v-validate="(validationFields ? validationFields[fieldKey] : '')">
                                         <div class="invalid-feedback">{{ errors.first(fieldKey) }}</div>
                                     </div>
-                                    <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany' || relationalMetaData.relationshipType === 'HasMany'" class="form-group">
+                                    <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany' || relationalMetaData.relationshipType === 'HasOne' || relationalMetaData.relationshipType === 'HasMany'" class="form-group">
                                         <label class="form-label">{{ relationalKey | beautify }}</label>
                                         <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsToMany' || relationalMetaData.relationshipType === 'HasMany'" v-model="relationalMetaData.relationshipId">
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
                                         </select>
                                         <p v-if="relationalMetaData.relationshipType === 'HasMany'" style="color: red;">*Removing data from a HasMany relationship will delete the record</p>
-                                        <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalMetaData.relationshipId">
+                                        <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'HasOne'" v-model="relationalMetaData.relationshipId">
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
                                         </select>

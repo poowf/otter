@@ -140,6 +140,7 @@
                 axios.delete(`/api/${this.pathPrefix}/${this.resourceName}/${this.currentSelectedResource}`)
                     .then(response => {
                         console.log("success");
+                        this.modal.visible = false;
                         this.fetchResourceIndex();
                     })
                     .catch(e => {

@@ -89,9 +89,6 @@ class OtterController extends Controller
         //Force filling of variables into model instance
         $modelInstance->forceFill($request->all());
 
-        //Save model instance
-        $modelInstance->save();
-
         if ($relationalFields) {
             foreach ($relationalFields as $relationalField) {
                 $relationshipModel = $relationalField['relationshipModel'];
@@ -105,10 +102,10 @@ class OtterController extends Controller
                     $modelInstance->{$relationshipName}()->attach($relationshipId);
                 }
             }
-
-            //Save model instance
-            $modelInstance->save();
         }
+
+        //Save model instance
+        $modelInstance->save();
 
         //Return response
         return response()->json([

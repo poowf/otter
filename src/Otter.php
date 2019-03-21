@@ -238,7 +238,7 @@ class Otter
             $relation['resourceFields'] = self::getAvailableFields($otterRelationResource);
             $relation['resourceId'] = 'null';
 
-            if ($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo') {
+            if ($relationshipType === 'BelongsTo') {
                 $relationModelInstance = $modelInstance->{$relationshipName};
 
                 $relation['relationshipId'] = ($modelInstance->{$relationshipForeignKey}) ? $modelInstance->{$relationshipForeignKey} : null;
@@ -246,6 +246,11 @@ class Otter
             } elseif ($relationshipType === 'BelongsToMany') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
                 $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
+            } elseif ($relationshipType === 'HasOne') {
+                $relationModelInstance = $modelInstance->{$relationshipName};
+
+                $relation['relationshipId'] = ($relationModelInstance) ? $relationModelInstance->id : null;
+                $relation['resourceId'] = ($relationModelInstance) ? $relationModelInstance->{$relationModelInstance->getRouteKeyName()} : null;
             } elseif ($relationshipType === 'HasMany') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->pluck('id') : null;
                 $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;

@@ -7,6 +7,9 @@
                     <div class="dropdown card-options-dropdown">
                         <button type="button" class="btn btn-option dropdown-toggle" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></button>
                         <div class="dropdown-menu dropdown-menu-dark dropdown-menu-right">
+                            <a class="dropdown-item" v-bind:href="`/${pathPrefix}/${resourceName}/${resourceId}/`">
+                                <i class="fe fe-eye mr-3"></i>View
+                            </a>
                             <a class="dropdown-item" v-bind:href="`/${pathPrefix}/${resourceName}/${resourceId}/edit/`">
                                 <i class="fe fe-edit mr-3"></i>Edit
                             </a>
