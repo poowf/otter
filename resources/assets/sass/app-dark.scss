@@ -108,6 +108,7 @@ body {
 }
 
 input.form-control,
+textarea.form-control,
 .selectize-control.form-control .selectize-input,
 .selectize-control.form-control .selectize-dropdown,
 .selectize-control.form-control.single .selectize-input.input-active {
@@ -115,7 +116,8 @@ input.form-control,
   background-color: #343434;
 }
 
-input.form-control:focus, input.form-control:active {
+input.form-control:focus, input.form-control:active,
+textarea.form-control:focus, textarea.form-control:active {
   color: #E2EDF4;
   background-color: #1C1C1C;
 }
@@ -216,6 +218,10 @@ a[data-toggle="collapse"] {
 
 .card-options a.dropdown-item:not(.btn) {
   margin-left: 0;
+}
+
+textarea {
+  font-family: monospace;
 }
 
 th.sortable {

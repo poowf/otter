@@ -17,13 +17,19 @@
                         <table class="table card-table table-vcenter text-nowrap">
                             <thead>
                                 <tr>
-                                    <th v-for="tableType, tableKey in resourceFields" @click="sort(tableKey)" :class=" ['sortable', { 'sorted-by' : currentSortKey === tableKey },  (currentSortKey === tableKey ? currentSortDirection : '')]">{{ tableKey | beautify }}</th>
+                                    <th v-for="tableType, tableKey in resourceFields" @click="sort(tableKey)"
+                                        v-if="tableType != 'textarea'"
+                                        :class=" ['sortable', { 'sorted-by' : currentSortKey === tableKey },  (currentSortKey === tableKey ? currentSortDirection : '')]"
+                                    >{{ tableKey | beautify }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="resource, index in filterResults">
-                                    <td v-for="fieldType, fieldKey in resourceFields" v-html="highlight(resource[fieldKey])">{{ resource[`${fieldKey}`] }}</td>
+                                    <td v-for="fieldType, fieldKey in resourceFields"
+                                        v-if="fieldType != 'textarea'"
+                                        v-html="highlight(resource[fieldKey])"
+                                    >{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-secondary btn-sm btn-action" v-bind:href="`/otter/${resourceName}/${resource.route_key}/`">View</a>
                                         <div class="dropdown">

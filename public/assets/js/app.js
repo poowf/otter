@@ -81,6 +81,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "FormComponent",
@@ -406,6 +415,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "SingleResourceComponent",
@@ -445,6 +455,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -11350,26 +11366,29 @@ var render = function() {
                           tableType,
                           tableKey
                         ) {
-                          return _c(
-                            "th",
-                            {
-                              class: [
-                                "sortable",
+                          return tableType != "textarea"
+                            ? _c(
+                                "th",
                                 {
-                                  "sorted-by": _vm.currentSortKey === tableKey
+                                  class: [
+                                    "sortable",
+                                    {
+                                      "sorted-by":
+                                        _vm.currentSortKey === tableKey
+                                    },
+                                    _vm.currentSortKey === tableKey
+                                      ? _vm.currentSortDirection
+                                      : ""
+                                  ],
+                                  on: {
+                                    click: function($event) {
+                                      _vm.sort(tableKey)
+                                    }
+                                  }
                                 },
-                                _vm.currentSortKey === tableKey
-                                  ? _vm.currentSortDirection
-                                  : ""
-                              ],
-                              on: {
-                                click: function($event) {
-                                  _vm.sort(tableKey)
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm._f("beautify")(tableKey)))]
-                          )
+                                [_vm._v(_vm._s(_vm._f("beautify")(tableKey)))]
+                              )
+                            : _vm._e()
                         }),
                         _vm._v(" "),
                         _c("th")
@@ -11388,17 +11407,19 @@ var render = function() {
                             fieldType,
                             fieldKey
                           ) {
-                            return _c(
-                              "td",
-                              {
-                                domProps: {
-                                  innerHTML: _vm._s(
-                                    _vm.highlight(resource[fieldKey])
-                                  )
-                                }
-                              },
-                              [_vm._v(_vm._s(resource["" + fieldKey]))]
-                            )
+                            return fieldType != "textarea"
+                              ? _c(
+                                  "td",
+                                  {
+                                    domProps: {
+                                      innerHTML: _vm._s(
+                                        _vm.highlight(resource[fieldKey])
+                                      )
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(resource["" + fieldKey]))]
+                                )
+                              : _vm._e()
                           }),
                           _vm._v(" "),
                           _c("td", { staticClass: "text-right" }, [
@@ -11672,7 +11693,9 @@ var render = function() {
                 _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
+              fieldType == "textarea"
+                ? _c("pre", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
+                : _c("p", [_vm._v(_vm._s(_vm.resourceData["" + fieldKey]))])
             ])
           }),
           0
@@ -11802,7 +11825,56 @@ var render = function() {
                           _vm._v(_vm._s(_vm._f("beautify")(fieldKey)))
                         ]),
                         _vm._v(" "),
-                        fieldType === "checkbox"
+                        fieldType == "textarea"
+                          ? _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.resourceData["" + fieldKey],
+                                  expression: "resourceData[`${fieldKey}`]"
+                                },
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: _vm.validationFields
+                                    ? _vm.validationFields[fieldKey]
+                                    : "",
+                                  expression:
+                                    "(validationFields ? validationFields[fieldKey] : '')"
+                                }
+                              ],
+                              class: [
+                                "form-control",
+                                _vm.errors.first(fieldKey) ? "is-invalid" : "",
+                                _vm.fields[fieldKey] &&
+                                _vm.fields[fieldKey].dirty &&
+                                !_vm.errors.first(fieldKey)
+                                  ? "is-valid"
+                                  : ""
+                              ],
+                              attrs: {
+                                rows: "10",
+                                name: fieldKey,
+                                "data-vv-as": _vm._f("beautify")(fieldKey)
+                              },
+                              domProps: {
+                                value: _vm.resourceData["" + fieldKey]
+                              },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.resourceData,
+                                    "" + fieldKey,
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          : fieldType === "checkbox"
                           ? _c("input", {
                               directives: [
                                 {
