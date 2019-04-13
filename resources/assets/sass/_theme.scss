@@ -1,123 +1,125 @@
 body {
-  color: #E2EDF4;
-  background-color: #1C1C1C;
+  color: $text-color;
+  background-color: $background-color;
 }
 
 .page span {
-  color: #E2EDF4;
+  color: $text-color;
 }
 
 .header {
-  background-color: #1C1C1C;
-  color: #E2EDF4;
-  border-bottom: 1px solid rgba(210, 188, 167, 0.12);
+  background-color: $background-color;
+  color: $text-color;
+  border-bottom: 1px solid $border-color;
 }
 
 .footer {
-  background-color: #1C1C1C;
-  color: #E2EDF4;
-  border-top: 1px solid rgba(210, 188, 167, 0.12);
+  background-color: $background-color;
+  color: $text-color;
+  border-top: 1px solid $border-color;
 }
 
 .sidebar {
-  background-color: #1C1C1C;
-  color: #E2EDF4;
-  border-right: 1px solid rgba(210, 188, 167, 0.12);
+  background-color: $background-color;
+  color: $text-color;
+  border-right: 1px solid $border-color;
 }
 
 .card {
-  color: #E2EDF4;
-  background-color: #120F12;
+  color: $card-text-color;
+  background-color: $card-background-color;
   border: none;
 }
 
 .card .card-header {
-  border-bottom: 1px solid rgba(210, 188, 167, 0.12);
+  border-bottom: 1px solid $card-border-color;
 }
 
 .card .card-footer {
-  border-top: 1px solid rgba(210, 188, 167, 0.12);
+  border-top: 1px solid $card-border-color;
 }
 
 .btn-black {
-  color: #E2EDF4;
-  background-color: #343434;
-  border-color: #343434;
+  // TODO: Why is this using the same colors as hover?
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
+  border-color: $menu-hover-border-color;
 }
 
 .btn-black:hover, .btn-black:focus {
-  background-color: #343434;
-  border-color: #343434;
+  background-color: $menu-hover-background-color;
+  border-color: $menu-hover-border-color;
 }
 
 .btn.btn-pill.btn-secondary.btn-resource-navigation {
-  color: #E2EDF4;
-  background-color: #120F12;
+  color: $card-text-color;
+  background-color: $card-background-color;
   border: none;
 }
 
 .btn.btn-pill.btn-secondary.btn-resource-navigation:disabled {
-  background-color: #343434;
+  color: $menu-disabled-text-color;
+  background-color: $menu-disabled-background-color;
 }
 
 .btn.btn-pill.btn-secondary.btn-resource-navigation:hover:enabled {
-  color: #D2BCA7;
-  background-color: #343434;
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
 }
 
 .btn.btn-secondary.btn-action, .btn.btn-secondary.btn-dropdown-action {
-  color: #E2EDF4;
-  background-color: #1C1C1C;
+  color: $text-color;
+  background-color: $background-color;
 }
 
 .btn.btn-secondary.btn-action:active, .btn.btn-secondary.btn-dropdown-action:active {
-  color: #D2BCA7;
-  background-color: #343434;
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
 }
 
 .dropdown-menu.dropdown-menu-dark {
-  color: #E2EDF4;
-  background-color: #1C1C1C;
+  color: $text-color;
+  background-color: $background-color;
 }
 
 .dropdown-menu.dropdown-menu-dark .dropdown-item {
-  color: #E2EDF4;
+  color: $text-color;
 }
 
 .dropdown-menu.dropdown-menu-dark .dropdown-item:hover,
 .dropdown-menu.dropdown-menu-dark .dropdown-item:focus,
 .dropdown-menu.dropdown-menu-dark .dropdown-item:active {
-  color: #D2BCA7;
-  background-color: #343434;
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
 }
 
 .dropdown-menu.dropdown-menu-dark-alternate {
-  color: #E2EDF4;
-  background-color: #120F12;
+  color: $card-text-color;
+  background-color: $card-background-color;
 }
 
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item {
-  color: #E2EDF4;
+  color: inherit;
 }
 
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item:hover,
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item:focus,
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item:active {
-  color: #D2BCA7;
-  background-color: #343434;
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
 }
 
 input.form-control,
 .selectize-control.form-control .selectize-input,
 .selectize-control.form-control .selectize-dropdown,
 .selectize-control.form-control.single .selectize-input.input-active {
-  color: #E2EDF4;
-  background-color: #343434;
+  color: $field-text-color;
+  background-color: $field-background-color;
 }
 
 input.form-control:focus, input.form-control:active {
-  color: #E2EDF4;
-  background-color: #1C1C1C;
+  color: $field-active-text-color;
+  background-color: $field-active-background-color;
 }
 
 .selectize-control.single .selectize-input:after {
@@ -135,13 +137,14 @@ input.form-control:focus, input.form-control:active {
 }
 
 .header .nav-tabs .nav-link:hover:not(.disabled) {
-  color: #D2BCA7;
-  background-color: #343434;
-  border-bottom: 1px solid rgba(210, 188, 167, 0.12);
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
+  border-bottom: 1px solid $menu-hover-border-color;
 }
 
 .highlight {
-  background-color: #343434;
+  color: $highlight-text-color;
+  background-color: $highlight-background-color;
 }
 
 .alert span {
@@ -151,10 +154,10 @@ input.form-control:focus, input.form-control:active {
 //Shared CSS
 
 .sidebar .nav-tabs .nav-item a {
-  color: #E2EDF4;
+  color: $text-color;
 }
 
 .sidebar .nav-tabs .nav-item a:hover {
-  color: #D2BCA7;
-  background-color: #343434;
+  color: $menu-hover-text-color;
+  background-color: $menu-hover-background-color;
 }
