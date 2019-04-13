@@ -1,4 +1,4 @@
-body {
+body, .page span, .header, .footer, .sidebar {
   color: $text-color;
   background-color: $background-color;
 }
@@ -8,22 +8,17 @@ body {
 }
 
 .header {
-  background-color: $background-color;
-  color: $text-color;
   border-bottom: 1px solid $border-color;
 }
 
 .footer {
-  background-color: $background-color;
-  color: $text-color;
   border-top: 1px solid $border-color;
 }
 
 .sidebar {
-  background-color: $background-color;
-  color: $text-color;
   border-right: 1px solid $border-color;
 }
+
 
 .card {
   color: $card-text-color;
@@ -38,6 +33,7 @@ body {
 .card .card-footer {
   border-top: 1px solid $card-border-color;
 }
+
 
 .btn-black {
   // TODO: Why is this using the same colors as hover?
@@ -150,8 +146,6 @@ input.form-control:focus, input.form-control:active {
 .alert span {
   color: initial;
 }
-
-//Shared CSS
 
 .sidebar .nav-tabs .nav-item a {
   color: $text-color;
