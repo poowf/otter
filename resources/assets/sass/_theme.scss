@@ -96,6 +96,10 @@ body {
   background-color: #120F12;
 }
 
+.dropdown-menu.dropdown-menu-dark-alternate.dropdown-menu-arrow:after {
+  border-bottom: 5px solid #120F12;
+}
+
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item {
   color: #E2EDF4;
 }

@@ -13,7 +13,10 @@
                                 <div class="col-md-12">
                                     <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
                                         <label class="form-label">{{ fieldKey | beautify }}</label>
-                                        <input
+                                        <textarea v-if="fieldType === 'textarea' || fieldType === 'wysiwyg'" v-bind:name="fieldKey" :class="(fieldType === 'wysiwyg' ? 'trumbowyg-textarea' : '')">
+                                            {{ (fieldType === 'wysiwyg') ? initTrumbowyg(fieldKey, resourceData[`${fieldKey}`]) : resourceData[`${fieldKey}`] }}
+                                        </textarea>
+                                        <input  v-else
                                                 :class="['form-control', (errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
                                                 v-model="resourceData[`${fieldKey}`]"
                                                 v-bind:name="fieldKey"
@@ -75,6 +78,7 @@
                 alertData: [],
                 resourceData: {},
                 relationalData: {},
+
             }
         },
         created() {
@@ -92,8 +96,33 @@
             this.fetchRelationalItems();
         },
         mounted() {
+            this.$nextTick(function () {
+                // console.log("ready");
+                // $('.trumbowyg-textarea').trumbowyg({
+                //     svgPath: '/assets/fonts/trumbowygicons.svg',
+                //     removeformatPasted: true,
+                //     resetCss: true,
+                //     autogrow: true
+                // });
+            })
+        },
+        updated() {
+            this.$nextTick(function () {
+                console.log("ready");
+
+            })
         },
         methods: {
+            initTrumbowyg(name, value) {
+                $('.trumbowyg-textarea').trumbowyg({
+                    svgPath: '/assets/fonts/trumbowygicons.svg',
+                    removeformatPasted: true,
+                    resetCss: true,
+                    autogrow: true
+                });
+                $('.trumbowyg')
+                $(`textarea[name='${name}'].trumbowyg-textarea`).trumbowyg('html', value);
+            },
             fetchResource() {
                 axios.get(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
