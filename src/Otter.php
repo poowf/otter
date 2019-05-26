@@ -94,6 +94,7 @@ class Otter
     /**
      * Retrieve them class name from a route name.
      *
+     * Example:
      * user_addresses = UserAddress
      *
      * @param $routeName
@@ -107,6 +108,7 @@ class Otter
     /**
      * Get the route name from a class name.
      *
+     * Example:
      * UserAddress = user_addresses
      *
      * @param $className
@@ -160,11 +162,19 @@ class Otter
      *
      * @param $object
      * @param $modelName
+     * @param $routeKeyName
+     *
      * @return static
      */
-    public static function getModelInstance($object, $modelName)
+    public static function getModelInstance($object, $modelName, $routeKeyName)
     {
-        return ($object instanceof $modelName) ? $object : $modelName::findOrFail($object);
+        if ($object instanceof $modelName) {
+            return $object;
+        } elseif ($routeKeyName != 'id') {
+            return $modelName::where($routeKeyName, '=', $object)->firstOrFail();
+        } else {
+            return $modelName::findOrFail($object);
+        }
     }
 
     /**
@@ -204,7 +214,7 @@ class Otter
         $relationalDataArray = [];
         $otterResourceNamespace = self::$otterResourceNamespace;
 
-        $modelInstance = ($modelObject) ? self::getModelInstance($modelObject, $otterResource::$model) : new $otterResource::$model;
+        $modelInstance = ($modelObject) ? self::getModelInstance($modelObject, $otterResource::$model, $otterResource::$routeKeyName) : new $otterResource::$model;
 
         foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
             $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
@@ -228,7 +238,7 @@ class Otter
             $relation['resourceFields'] = self::getAvailableFields($otterRelationResource);
             $relation['resourceId'] = 'null';
 
-            if ($relationshipType === 'HasOne' || $relationshipType === 'BelongsTo') {
+            if ($relationshipType === 'BelongsTo') {
                 $relationModelInstance = $modelInstance->{$relationshipName};
 
                 $relation['relationshipId'] = ($modelInstance->{$relationshipForeignKey}) ? $modelInstance->{$relationshipForeignKey} : null;
@@ -236,14 +246,46 @@ class Otter
             } elseif ($relationshipType === 'BelongsToMany') {
                 $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->allRelatedIds() : null;
                 $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
+            } elseif ($relationshipType === 'HasOne') {
+                $relationModelInstance = $modelInstance->{$relationshipName};
+
+                $relation['relationshipId'] = ($relationModelInstance) ? $relationModelInstance->id : null;
+                $relation['resourceId'] = ($relationModelInstance) ? $relationModelInstance->{$relationModelInstance->getRouteKeyName()} : null;
             } elseif ($relationshipType === 'HasMany') {
-                $relation['relationshipId'] = $otterResource->id;
+                $relation['relationshipId'] = ($modelInstance->{$relationshipName}) ? $modelInstance->{$relationshipName}()->pluck('id') : null;
+                $relation['resourceId'] = ($modelInstance) ? $modelInstance->id : null;
             }
 
             $relationalDataArray[$relationshipName] = $relation;
         }
 
         return $relationalDataArray;
+    }
+
+    /**
+     * Retrieve all the foreign keys in an OtterResource.
+     *
+     * @param  OtterResource $otterResource
+     * @return array
+     */
+    public static function getRelationalForeignKeys($otterResource)
+    {
+        $relationalForeignKeysArray = [];
+        $otterResourceNamespace = self::$otterResourceNamespace;
+
+        foreach ($otterResource::relations() as $relationshipName => $otterRelationData) {
+            $otterRelationBaseClassName = (is_array($otterRelationData)) ? $otterRelationData[0] : $otterRelationData;
+            $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
+
+            $relationshipModel = $otterRelationResource::$model;
+            $relationshipModelInstance = new $relationshipModel;
+            //Check if a foreign key is manually specified and if so, use the specified foreign key
+            $relationshipForeignKey = (is_array($otterRelationData)) ? $otterRelationData[1] : $relationshipModelInstance->getForeignKey();
+
+            array_push($relationalForeignKeysArray, $relationshipForeignKey);
+        }
+
+        return $relationalForeignKeysArray;
     }
 
     /**
@@ -262,7 +304,7 @@ class Otter
             $otterRelationResource = $otterResourceNamespace.$otterRelationBaseClassName;
 
             /* @var TYPE_NAME $model */
-            $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model)::all());
+            $relationalDataArray[$relationshipName] = $otterRelationResource::collection((new $otterRelationResource::$model())::all());
         }
 
         return $relationalDataArray;

@@ -17,8 +17,12 @@ class OtterViewController extends Controller
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace.$this->baseResourceName;
             $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
+
+            if (class_exists($this->resource)) {
+                $this->resourceRouteKeyName = $this->resource::$routeKeyName;
+            }
             /* @var TYPE_NAME $model */
-            $this->modelName = ($request->is('otter')) ? null : $this->resource::$model;
+            $this->modelName = ($request->is(config('otter.path', 'otter'))) ? null : $this->resource::$model;
         }
 
         $this->allResourceNames = Otter::getResourceNames();
@@ -94,7 +98,7 @@ class OtterViewController extends Controller
     public function show($modelInstance)
     {
         //Retrieve the model instance
-        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $prettyResourceName = $this->prettyResourceName;
@@ -114,7 +118,7 @@ class OtterViewController extends Controller
     public function edit($modelInstance)
     {
         //Retrieve the model instance
-        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName);
+        $modelInstance = Otter::getModelInstance($modelInstance, $this->modelName, $this->resourceRouteKeyName);
         //Retrieve all the otter resource names that are available
         $allResourceNames = $this->allResourceNames;
         $prettyResourceName = $this->prettyResourceName;

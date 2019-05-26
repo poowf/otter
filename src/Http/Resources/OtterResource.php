@@ -26,6 +26,11 @@ class OtterResource extends JsonResource
     }
 
     /**
+     * Resource route key name.
+     */
+    public static $routeKeyName = 'id';
+
+    /**
      * Get the fields and types used by the resource.
      *
      * @return array

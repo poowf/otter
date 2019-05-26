@@ -29678,6 +29678,20 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "./node_modules/trumbowyg/dist/plugins/colors/ui/sass/trumbowyg.colors.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/trumbowyg/dist/ui/sass/trumbowyg.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /***/ (function(module, exports) {
 
@@ -29810,14 +29824,14 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/assets/sass/app-dark.scss":
+/***/ "./resources/assets/sass/app-dark-theme.scss":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ "./resources/assets/sass/app.scss":
+/***/ "./resources/assets/sass/app-light-theme.scss":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -29828,8 +29842,10 @@ if (token) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/bootstrap.js");
-__webpack_require__("./resources/assets/sass/app.scss");
-module.exports = __webpack_require__("./resources/assets/sass/app-dark.scss");
+__webpack_require__("./resources/assets/sass/app-light-theme.scss");
+__webpack_require__("./resources/assets/sass/app-dark-theme.scss");
+__webpack_require__("./node_modules/trumbowyg/dist/ui/sass/trumbowyg.scss");
+module.exports = __webpack_require__("./node_modules/trumbowyg/dist/plugins/colors/ui/sass/trumbowyg.colors.scss");
 
 
 /***/ })

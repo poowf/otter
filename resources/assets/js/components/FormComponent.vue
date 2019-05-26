@@ -13,7 +13,10 @@
                                 <div class="col-md-12">
                                     <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
                                         <label class="form-label">{{ fieldKey | beautify }}</label>
-                                        <input
+                                        <textarea v-if="fieldType === 'textarea' || fieldType === 'wysiwyg'" v-bind:name="fieldKey" :class="(fieldType === 'wysiwyg' ? 'trumbowyg-textarea' : '')">
+                                            {{ (fieldType === 'wysiwyg') ? initTrumbowyg(fieldKey, resourceData[`${fieldKey}`]) : resourceData[`${fieldKey}`] }}
+                                        </textarea>
+                                        <input  v-else
                                                 :class="['form-control', (errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
                                                 v-model="resourceData[`${fieldKey}`]"
                                                 v-bind:name="fieldKey"
@@ -22,13 +25,14 @@
                                                 v-validate="(validationFields ? validationFields[fieldKey] : '')">
                                         <div class="invalid-feedback">{{ errors.first(fieldKey) }}</div>
                                     </div>
-                                    <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany'" class="form-group">
+                                    <div v-for="relationalMetaData, relationalKey in relationalFields" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'BelongsToMany' || relationalMetaData.relationshipType === 'HasOne' || relationalMetaData.relationshipType === 'HasMany'" class="form-group">
                                         <label class="form-label">{{ relationalKey | beautify }}</label>
-                                        <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsToMany'" v-model="relationalMetaData.relationshipId">
+                                        <select class="form-control" multiple="true" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsToMany' || relationalMetaData.relationshipType === 'HasMany'" v-model="relationalMetaData.relationshipId">
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
                                         </select>
-                                        <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo'" v-model="relationalMetaData.relationshipId">
+                                        <p v-if="relationalMetaData.relationshipType === 'HasMany'" style="color: red;">*Removing data from a HasMany relationship will delete the record</p>
+                                        <select class="form-control" v-if="relationalData && relationalMetaData.relationshipType === 'BelongsTo' || relationalMetaData.relationshipType === 'HasOne'" v-model="relationalMetaData.relationshipId">
                                             <option disabled selected value="">Select {{ relationalKey | beautify }}</option>
                                             <option v-if="relationalData" v-for="option in relationalData[`${relationalKey}`]" v-bind:value="option.id">{{ option[`${relationalMetaData.resourceTitle}`] }}</option>
                                         </select>
@@ -63,6 +67,7 @@
             'relationalFields',
             'singularResourceName',
             'action',
+            'pathPrefix'
         ],
         data() {
             return {
@@ -73,6 +78,7 @@
                 alertData: [],
                 resourceData: {},
                 relationalData: {},
+
             }
         },
         created() {
@@ -90,10 +96,35 @@
             this.fetchRelationalItems();
         },
         mounted() {
+            this.$nextTick(function () {
+                // console.log("ready");
+                // $('.trumbowyg-textarea').trumbowyg({
+                //     svgPath: '/assets/fonts/trumbowygicons.svg',
+                //     removeformatPasted: true,
+                //     resetCss: true,
+                //     autogrow: true
+                // });
+            })
+        },
+        updated() {
+            this.$nextTick(function () {
+                console.log("ready");
+
+            })
         },
         methods: {
+            initTrumbowyg(name, value) {
+                $('.trumbowyg-textarea').trumbowyg({
+                    svgPath: '/assets/fonts/trumbowygicons.svg',
+                    removeformatPasted: true,
+                    resetCss: true,
+                    autogrow: true
+                });
+                $('.trumbowyg')
+                $(`textarea[name='${name}'].trumbowyg-textarea`).trumbowyg('html', value);
+            },
             fetchResource() {
-                axios.get(`/api/otter/${this.resourceName}/${this.resourceId}`)
+                axios.get(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`)
                     .then(response=>{
                         this.resourceData = response.data.data;
                     })
@@ -104,7 +135,7 @@
                     });
             },
             fetchRelationalItems() {
-                axios.get(`/api/otter/${this.resourceName}/relational`)
+                axios.get(`/api/${this.pathPrefix}/${this.resourceName}/relational`)
                     .then(response=>{
                         this.relationalData = response.data.data;
                     }).catch(e => {
@@ -146,11 +177,11 @@
             handleStore(e) {
                 this.resourceData.relationalFields = this.relationalFields;
 
-                axios.post(`/api/otter/${this.resourceName}`, this.resourceData)
+                axios.post(`/api/${this.pathPrefix}/${this.resourceName}`, this.resourceData)
                     .then(response => {
                         console.log("success");
                         // window.location = response.data.redirect;
-                        window.location = `/otter/${this.resourceName}`;
+                        window.location = `/${this.pathPrefix}/${this.resourceName}`;
                     })
                     .catch(e => {
                         this.alertData.push({
@@ -165,7 +196,7 @@
             handleUpdate(e) {
                 this.resourceData.relationalFields = this.relationalFields;
 
-                axios.patch(`/api/otter/${this.resourceName}/${this.resourceId}`, this.resourceData)
+                axios.patch(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`, this.resourceData)
                     .then(response => {
                         this.fetchResource();
                         this.alertData.push({

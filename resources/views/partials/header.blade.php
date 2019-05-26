@@ -2,7 +2,7 @@
     <div class="header py-4">
         <div class="container">
             <div class="d-flex">
-                <a class="header-brand" href="/otter">
+                <a class="header-brand" href="/{{ config('otter.path', 'otter') }}">
                     <img src="{{ asset('vendor/otter/assets/img/logo.svg') }}" class="header-brand-img" alt="tabler logo">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
@@ -33,11 +33,12 @@
                 <div class="col-lg order-lg-first">
                     <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
                         <li class="nav-item p-0">
-                            <a href="/otter" class="nav-link pl-4"><i class="fe fe-home"></i> Home</a>
+                            <a href="/{{ config('otter.path', 'otter') }}" class="nav-link pl-4"><i class="fe fe-home"></i> Home</a>
                         </li>
                         <header-component
                                 :all-resource-names="{{ $allResourceNames }}"
                                 current-route="{{ Route::currentRouteName() }}"
+                                path-prefix="{{ config('otter.path', 'otter') }}"
                         ></header-component>
                     </ul>
                 </div>

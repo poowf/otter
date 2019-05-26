@@ -9,6 +9,8 @@ window.Vue = require('vue');
 window.VeeValidate = require('vee-validate');
 window.fz = require('fuzzaldrin-plus');
 
+require('trumbowyg');
+
 Vue.use(VeeValidate);
 
 /**

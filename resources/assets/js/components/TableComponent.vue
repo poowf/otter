@@ -10,7 +10,7 @@
                                 <input type="text" class="form-control resource-search" placeholder="Search..." v-model.lazy="query" v-debounce="300">
                                 <span class="input-icon-addon pr-3"><i class="fe fe-search"></i></span>
                             </div>
-                            <a data-toggle="tooltip" data-original-title="Create" class="icon d-inline-block" v-bind:href="`/otter/${resourceName}/create`"><i class="fe fe-plus"></i></a>
+                            <a data-toggle="tooltip" data-original-title="Create" class="icon d-inline-block" v-bind:href="`/${pathPrefix}/${resourceName}/create`"><i class="fe fe-plus"></i></a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -25,11 +25,11 @@
                                 <tr v-for="resource, index in filterResults">
                                     <td v-for="fieldType, fieldKey in resourceFields" v-html="highlight(resource[fieldKey])">{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
-                                        <a class="btn btn-secondary btn-sm btn-action" v-bind:href="`/otter/${resourceName}/${resource.route_key}/`">View</a>
+                                        <a class="btn btn-secondary btn-sm btn-action" v-bind:href="`/${pathPrefix}/${resourceName}/${resource.route_key}/`">View</a>
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-secondary btn-sm btn-dropdown-action dropdown-toggle" data-toggle="dropdown">Action</button>
                                             <div class="dropdown-menu dropdown-menu-dark">
-                                                <a class="dropdown-item" v-bind:href="`/otter/${resourceName}/${resource.route_key}/edit/`">
+                                                <a class="dropdown-item" v-bind:href="`/${pathPrefix}/${resourceName}/${resource.route_key}/edit/`">
                                                     <i class="fe fe-edit mr-3"></i>Edit
                                                 </a>
                                                 <button class="btn dropdown-item" @click.stop="handleAction('Delete', resource.route_key)">
@@ -74,7 +74,8 @@
             'relationship',
             'relation',
             'parentResourceId',
-            'parentResourceName'
+            'parentResourceName',
+            'pathPrefix'
         ],
         data() {
             return {
@@ -136,9 +137,10 @@
                 this.currentSelectedResource = resourceKey;
             },
             handleDelete() {
-                axios.delete(`/api/otter/${this.resourceName}/${this.currentSelectedResource}`)
+                axios.delete(`/api/${this.pathPrefix}/${this.resourceName}/${this.currentSelectedResource}`)
                     .then(response => {
                         console.log("success");
+                        this.modal.visible = false;
                         this.fetchResourceIndex();
                     })
                     .catch(e => {
@@ -172,11 +174,11 @@
             resourceEndpoint() {
                 if(this.relationship)
                 {
-                    return `/api/otter/${this.parentResourceName}?page=${this.currentPage}&resourceId=${this.parentResourceId}&relationshipName=${this.relation.relationshipName}&relationshipResourceName=${this.relation.resourceName}`;
+                    return `/api/${this.pathPrefix}/${this.parentResourceName}?page=${this.currentPage}&resourceId=${this.parentResourceId}&relationshipName=${this.relation.relationshipName}&relationshipResourceName=${this.relation.resourceName}`;
                 }
                 else
                 {
-                    return `/api/otter/${this.resourceName}?page=${this.currentPage}`;
+                    return `/api/${this.pathPrefix}/${this.resourceName}?page=${this.currentPage}`;
                 }
             },
             sortedResources() {

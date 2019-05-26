@@ -26,6 +26,7 @@
     "popper.js": "^1.12",
     "selectize": "^0.12.6",
     "tabler-ui": "0.0.32",
+    "trumbowyg": "^2.18.0",
     "vee-validate": "^2.1.4",
     "vue": "^2.5.2"
   }
