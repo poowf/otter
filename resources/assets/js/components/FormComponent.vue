@@ -13,7 +13,14 @@
                                 <div class="col-md-12">
                                     <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
                                         <label class="form-label">{{ fieldKey | beautify }}</label>
-                                        <textarea v-if="fieldType === 'textarea' || fieldType === 'wysiwyg'" v-bind:name="fieldKey" :class="(fieldType === 'wysiwyg' ? 'trumbowyg-textarea' : '')">
+                                        <textarea
+                                                v-if="fieldType === 'textarea' || fieldType === 'wysiwyg'"
+                                                :class="['form-control', (fieldType === 'wysiwyg' ? 'trumbowyg-textarea' : ''),(errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
+                                                v-model="resourceData[`${fieldKey}`]"
+                                                v-bind:name="fieldKey"
+                                                :data-vv-as="fieldKey | beautify"
+                                                v-validate="(validationFields ? validationFields[fieldKey] : '')"
+                                        >
                                             {{ (fieldType === 'wysiwyg') ? initTrumbowyg(fieldKey, resourceData[`${fieldKey}`]) : resourceData[`${fieldKey}`] }}
                                         </textarea>
                                         <input  v-else
@@ -78,7 +85,7 @@
                 alertData: [],
                 resourceData: {},
                 relationalData: {},
-
+                trumbowygData: {},
             }
         },
         created() {
@@ -96,21 +103,8 @@
             this.fetchRelationalItems();
         },
         mounted() {
-            this.$nextTick(function () {
-                // console.log("ready");
-                // $('.trumbowyg-textarea').trumbowyg({
-                //     svgPath: '/assets/fonts/trumbowygicons.svg',
-                //     removeformatPasted: true,
-                //     resetCss: true,
-                //     autogrow: true
-                // });
-            })
         },
         updated() {
-            this.$nextTick(function () {
-                console.log("ready");
-
-            })
         },
         methods: {
             initTrumbowyg(name, value) {
@@ -119,9 +113,23 @@
                     removeformatPasted: true,
                     resetCss: true,
                     autogrow: true
-                });
-                $('.trumbowyg')
+                })
+                    .on('tbwchange', (event) => {
+                        if(event.target.value !== this.resourceData[`${name}`])
+                        {
+                            this.setTrumbowygValue(name, event.target.value);
+                        }
+                    });
                 $(`textarea[name='${name}'].trumbowyg-textarea`).trumbowyg('html', value);
+            },
+            setTrumbowygValue(fieldKey, value) {
+                if(value !== this.trumbowygData[fieldKey])
+                {
+                    this.trumbowygData[fieldKey] = value;
+                }
+            },
+            getTrumbowygValue(fieldKey) {
+                return this.trumbowygData[fieldKey];
             },
             fetchResource() {
                 axios.get(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`)
@@ -194,6 +202,12 @@
                     });
             },
             handleUpdate(e) {
+                Object.keys(this.resourceFields).forEach(fieldKey => {
+                    if (this.resourceFields[fieldKey] === 'wysiwyg') {
+                        this.resourceData[`${fieldKey}`] = this.getTrumbowygValue(fieldKey)
+                    }
+                })
+
                 this.resourceData.relationalFields = this.relationalFields;
 
                 axios.patch(`/api/${this.pathPrefix}/${this.resourceName}/${this.resourceId}`, this.resourceData)
