@@ -22,6 +22,7 @@
                     <div class="col-12" v-for="fieldType, fieldKey in resourceFields">
                         <div class="h6">{{ fieldKey | beautify }}</div>
                         <pre v-if="fieldType=='textarea'">{{ resourceData[`${fieldKey}`] }}</pre>
+                        <pre v-else-if="fieldType=='wysiwyg'" v-html="resourceData[`${fieldKey}`]"></pre>
                         <p v-else>{{ resourceData[`${fieldKey}`] }}</p>
                     </div>
                 </div>
