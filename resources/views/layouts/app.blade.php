@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
         <link rel="stylesheet" href="{{ asset(mix('assets/css/tabler.css', 'vendor/otter')) }}">
         <link rel="stylesheet" href="{{ asset(mix((\Poowf\Otter\Otter::$useDarkTheme) ? 'assets/css/app-dark.css' : 'assets/css/app.css', 'vendor/otter')) }}">
-        <link href="{{ asset(mix('assets/css/trumbowyg.css')) }}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{ asset(mix('assets/css/trumbowyg.css', 'vendor/otter')) }}" type="text/css">
 
         <style>
         </style>
