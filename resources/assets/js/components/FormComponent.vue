@@ -13,7 +13,16 @@
                                 <div class="col-md-12">
                                     <div v-for="fieldType, fieldKey in resourceFields" class="form-group">
                                         <label class="form-label">{{ fieldKey | beautify }}</label>
+                                        <textarea v-if="fieldType=='textarea'"
+                                            rows="10"
+                                            :class="['form-control', (errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
+                                            v-model="resourceData[`${fieldKey}`]"
+                                            v-bind:name="fieldKey"
+                                            :data-vv-as="fieldKey | beautify"
+                                            v-validate="(validationFields ? validationFields[fieldKey] : '')"
+                                        ></textarea>
                                         <input
+                                                v-else
                                                 :class="['form-control', (errors.first(fieldKey) ? 'is-invalid' : ''), (fields[fieldKey] && fields[fieldKey].dirty && !errors.first(fieldKey) ? 'is-valid' : '')]"
                                                 v-model="resourceData[`${fieldKey}`]"
                                                 v-bind:name="fieldKey"
