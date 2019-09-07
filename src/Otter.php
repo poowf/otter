@@ -3,6 +3,7 @@
 namespace Poowf\Otter;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Poowf\Otter\Http\Resources\OtterResource;
 
@@ -83,7 +84,7 @@ class Otter
             $class = str_replace('.php', '', $path);
             $baseResourceName = basename($class);
 
-            $resourceName = ($pretty) ? str_plural(preg_replace('/\B([A-Z])/', ' $1', $baseResourceName)) : self::getRouteNameFromClassName($baseResourceName);
+            $resourceName = ($pretty) ? Str::plural(preg_replace('/\B([A-Z])/', ' $1', $baseResourceName)) : self::getRouteNameFromClassName($baseResourceName);
 
             $names->push($resourceName);
         }
@@ -102,7 +103,7 @@ class Otter
      */
     public static function getClassNameFromRouteName($routeName)
     {
-        return str_replace(' ', '', str_singular(ucwords(str_replace('_', ' ', $routeName))));
+        return str_replace(' ', '', Str::singular(ucwords(str_replace('_', ' ', $routeName))));
     }
 
     /**
@@ -116,7 +117,7 @@ class Otter
      */
     public static function getRouteNameFromClassName($className)
     {
-        return str_plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $className)));
+        return Str::plural(strtolower(preg_replace('/\B([A-Z])/', '_$1', $className)));
     }
 
     /**
