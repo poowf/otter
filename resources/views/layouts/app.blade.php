@@ -28,10 +28,12 @@
     <body class="">
         <div class="page container-fluid">
             <div id="app" class="page-main row h-100">
-                @include("otter::partials/sidebar")
+                <div class="col-md-2 d-none d-md-block sidebar fixed">
+                    @include("otter::partials/sidebar")
+                </div>
 
                 <!-- center content -->
-                <div class="col fluid d-flex flex-column px-0">
+                <div class="col-md-10">
                     @include("otter::partials/header")
                     <!-- main content -->
                     <div class="flex-grow">

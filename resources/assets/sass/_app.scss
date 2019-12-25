@@ -15,10 +15,6 @@
   background-color: #ffffff;
 }
 
-.sidebar.fixed {
-  display: none;
-}
-
 .sidebar .nav-tabs .nav-link {
   border-bottom: 1px solid rgba(0, 40, 100, 0.12);
 }
@@ -101,11 +97,5 @@ th.sortable.sorted-by.desc::after {
   }
   .col .fluid {
     min-height: 100vh;
-  }
-  .sidebar.fixed {
-    display: block;
-  }
-  .header .header-brand {
-    display: none;
   }
 }

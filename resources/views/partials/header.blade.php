@@ -3,7 +3,7 @@
         <div class="container">
             <div class="d-flex">
                 <a class="header-brand" href="/{{ config('otter.path', 'otter') }}">
-                    <img src="{{ asset('vendor/otter/assets/img/logo.svg') }}" class="header-brand-img" alt="tabler logo">
+                    <img src="{{ asset('vendor/otter/assets/img/logo.svg') }}" class="header-brand-img d-md-none" alt="tabler logo">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="dropdown">

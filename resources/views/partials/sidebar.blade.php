@@ -1,5 +1,4 @@
 @section("sidebar")
-    <div class="col-md-2 px-0 sidebar fixed">
         <div class="header py-4">
             <div class="container">
                 <div class="d-flex">
@@ -18,5 +17,4 @@
                     path-prefix="{{ config('otter.path', 'otter') }}"
             ></sidebar-component>
         </ul>
-    </div>
 @show
