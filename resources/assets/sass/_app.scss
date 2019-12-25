@@ -90,12 +90,6 @@ th.sortable.sorted-by.desc::after {
   flex:1;
 }
 
-@media (min-width: 992px) {
-  .fixed {
-    flex: 0 0 200px;
-    min-height: 100vh;
-  }
-  .col .fluid {
-    min-height: 100vh;
-  }
+.fixed {
+  min-height: 100vh;
 }
