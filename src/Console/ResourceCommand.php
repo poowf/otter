@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Console;
 
 use Poowf\Otter\Otter;
+use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
 
 class ResourceCommand extends GeneratorCommand
@@ -46,7 +47,7 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        $name = str_replace_first($this->rootNamespace(), '', $name);
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
         return $this->laravel->basePath().'/app'.str_replace('\\', '/', $name).'.php';
     }

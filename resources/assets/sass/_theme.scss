@@ -94,6 +94,10 @@ body, .page span, .header, .footer, .sidebar {
   background-color: $card-background-color;
 }
 
+.dropdown-menu.dropdown-menu-dark-alternate.dropdown-menu-arrow:after {
+  border-bottom: 5px solid #120F12;
+}
+
 .dropdown-menu.dropdown-menu-dark-alternate .dropdown-item {
   color: inherit;
 }
@@ -105,7 +109,15 @@ body, .page span, .header, .footer, .sidebar {
   background-color: $menu-hover-background-color;
 }
 
+// Override style from tabler.
+pre {
+  color: inherit;
+  background-color: inherit;
+  text-shadow: none;
+}
+
 input.form-control,
+textarea.form-control,
 .selectize-control.form-control .selectize-input,
 .selectize-control.form-control .selectize-dropdown,
 .selectize-control.form-control.single .selectize-input.input-active {
@@ -154,4 +166,8 @@ input.form-control:focus, input.form-control:active {
 .sidebar .nav-tabs .nav-item a:hover {
   color: $menu-hover-text-color;
   background-color: $menu-hover-background-color;
+}
+
+textarea {
+  font-family: monospace;
 }

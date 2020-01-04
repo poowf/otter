@@ -3,6 +3,7 @@
 namespace Poowf\Otter\Http\Controllers;
 
 use Poowf\Otter\Otter;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class OtterViewController extends Controller
@@ -16,7 +17,7 @@ class OtterViewController extends Controller
             $this->resourceNamespace = Otter::$otterResourceNamespace;
             $this->baseResourceName = Otter::getClassNameFromRouteName($this->resourceName);
             $this->resource = $this->resourceNamespace.$this->baseResourceName;
-            $this->prettyResourceName = str_singular(ucwords(str_replace('_', ' ', $this->resourceName)));
+            $this->prettyResourceName = Str::singular(ucwords(str_replace('_', ' ', $this->resourceName)));
 
             if (class_exists($this->resource)) {
                 $this->resourceRouteKeyName = $this->resource::$routeKeyName;

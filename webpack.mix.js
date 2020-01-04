@@ -45,15 +45,23 @@ mix
     .js('resources/assets/js/bootstrap.js', 'assets/js')
     .js('resources/assets/js/app.js', 'assets/js')
     .js('node_modules/tabler-ui/dist/assets/js/core.js', 'assets/js')
+    .js('node_modules/trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js', 'assets/js')
+    .js('node_modules/trumbowyg/dist/plugins/cleanpaste/trumbowyg.cleanpaste.min.js', 'assets/js')
+    .js('node_modules/trumbowyg/dist/plugins/fontsize/trumbowyg.fontsize.min.js', 'assets/js')
+    .js('node_modules/trumbowyg/dist/plugins/history/trumbowyg.history.min.js', 'assets/js')
 
     .sass('resources/assets/sass/app-light-theme.scss', 'public/assets/css/app.css')
     .sass('resources/assets/sass/app-dark-theme.scss', 'public/assets/css/app-dark.css')
+
+    .sass('node_modules/trumbowyg/dist/ui/sass/trumbowyg.scss', 'assets/css')
+    .sass('node_modules/trumbowyg/dist/plugins/colors/ui/sass/trumbowyg.colors.scss', 'assets/css')
 
     .copy('node_modules/tabler-ui/dist/assets/css/tabler.css', 'public/assets/css/tabler.css')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.eot', 'public/assets/fonts/feather/feather-webfont.eot')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.svg', 'public/assets/fonts/feather/feather-webfont.svg')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.ttf', 'public/assets/fonts/feather/feather-webfont.ttf')
     .copy('node_modules/tabler-ui/dist/assets/fonts/feather/feather-webfont.woff', 'public/assets/fonts/feather/feather-webfont.woff')
+    .copy('node_modules/trumbowyg/dist/ui/icons.svg', 'public/assets/fonts/trumbowygicons.svg')
 
     .extract(['jquery'])
     .version();
