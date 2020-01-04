@@ -111,7 +111,15 @@ body {
   background-color: #343434;
 }
 
+// Override style from tabler.
+pre {
+  color: inherit;
+  background-color: inherit;
+  text-shadow: none;
+}
+
 input.form-control,
+textarea.form-control,
 .selectize-control.form-control .selectize-input,
 .selectize-control.form-control .selectize-dropdown,
 .selectize-control.form-control.single .selectize-input.input-active {
@@ -119,7 +127,8 @@ input.form-control,
   background-color: #343434;
 }
 
-input.form-control:focus, input.form-control:active {
+input.form-control:focus, input.form-control:active,
+textarea.form-control:focus, textarea.form-control:active {
   color: #E2EDF4;
   background-color: #1C1C1C;
 }
@@ -161,4 +170,8 @@ input.form-control:focus, input.form-control:active {
 .sidebar .nav-tabs .nav-item a:hover {
   color: #D2BCA7;
   background-color: #343434;
+}
+
+textarea {
+  font-family: monospace;
 }
