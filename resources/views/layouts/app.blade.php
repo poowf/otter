@@ -26,28 +26,23 @@
         @yield("head")
     </head>
     <body class="">
-        <div class="page container-fluid">
-            <div id="app" class="page-main row h-100">
-                @include("otter::partials/sidebar")
-
-                <!-- center content -->
-                <div class="col fluid d-flex flex-column px-0">
-                    @include("otter::partials/header")
-                    <!-- main content -->
-                    <div class="flex-grow">
-                        @yield("content")
-                    </div>
-
-                    @include("otter::partials/footer")
-                </div>
-            </div>
-
-            <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/core.js', 'vendor/otter')) }}"></script>
-            @yield("scripts")
-        </div>
+        <header>
+            @include("otter::partials/header")
+        </header>
+        <nav>
+            @include("otter::partials/sidebar")
+        </nav>
+        <section id="app">
+            @yield("content")
+        </section>
+        <footer>
+            @include("otter::partials/footer")
+        </footer>
+        <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/core.js', 'vendor/otter')) }}"></script>
+        @yield("scripts")
     </body>
 </html>
