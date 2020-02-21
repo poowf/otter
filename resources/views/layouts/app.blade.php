@@ -30,7 +30,7 @@
             @include("otter::partials/header")
         </header>
         <nav>
-            @include("otter::partials/sidebar")
+            @include("otter::partials/nav")
         </nav>
         <section id="app">
             @yield("content")
