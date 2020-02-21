@@ -1,22 +1,16 @@
 @section("sidebar")
-    <div class="col-md-2 px-0 sidebar fixed">
-        <div class="header py-4">
-            <div class="container">
-                <div class="d-flex">
-                    <a class="header-sidebar-brand" href="/{{ config('otter.path', 'otter') }}">
-                        <img src="{{ asset('vendor/otter/assets/img/logo.svg') }}" class="header-brand-img" alt="tabler logo">
-                    </a>
-                </div>
-            </div>
-        </div>
-        <ul class="nav nav-tabs border-0 flex-md-column flex-nowrap justify-content-center">
-            <li class="nav-item">
-                <a href="/{{ config('otter.path', 'otter') }}" class="nav-link pl-4"><i class="fe fe-home"></i> Home</a>
-            </li>
-            <sidebar-component
-                    :all-resource-names="{{ $allResourceNames }}"
-                    path-prefix="{{ config('otter.path', 'otter') }}"
-            ></sidebar-component>
-        </ul>
-    </div>
+<ul class="nav nav-tabs border-0 flex-md-column flex-nowrap justify-content-center">
+    <li class="nav-item">
+        <a href="/{{ config('otter.path', 'otter') }}" class="nav-link pl-4">
+            <i class="fe fe-home"></i> Home
+        </a>
+    </li>
+    @foreach ($allResourceNames as $name)
+    <li class="nav-item">
+        <a href="/{{ config('otter.path', 'otter') }}/{{ $name }}" class="nav-link pl-4">
+            {{ $name }}
+        </a>
+    </li>
+    @endforeach
+</ul>
 @show
