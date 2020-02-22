@@ -18,9 +18,9 @@ class OtterResource extends JsonResource
         $transformed = parent::toArray($request);
         $transformed['route_key'] = $this->{parent::getRouteKeyName()};
         $transformed['relations'] = ! empty($this->getRelationships()) ? $this->getRelationships() : null;
-        $transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
-        $transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
-        $transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
+        //$transformed['created_at'] = $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
+        //$transformed['updated_at'] = $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
+        //$transformed['deleted_at'] = $this->deleted_at ? $this->deleted_at->format('Y-m-d H:i:s') : null;
 
         return $transformed;
     }
