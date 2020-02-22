@@ -18,14 +18,14 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
         <link rel="stylesheet" href="{{ asset(mix('assets/css/tabler.css', 'vendor/otter')) }}">
-        <link rel="stylesheet" href="{{ asset(mix((\Poowf\Otter\Otter::$useDarkTheme) ? 'assets/css/app-dark.css' : 'assets/css/app.css', 'vendor/otter')) }}">
+        <link rel="stylesheet" href="{{ asset(mix('assets/css/app.css', 'vendor/otter')) }}">
         <link rel="stylesheet" href="{{ asset(mix('assets/css/trumbowyg.css', 'vendor/otter')) }}" type="text/css">
 
         <style>
         </style>
         @yield("head")
     </head>
-    <body class="">
+    <body class="{{ (\Poowf\Otter\Otter::$useDarkTheme) ? 'theme-dark' : 'theme-dark-auto' }}">
         <header>
             @include("otter::partials/header")
         </header>
@@ -42,7 +42,7 @@
         <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
         <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
         <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
-        <script src="{{ asset(mix('assets/js/core.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/tabler.min.js', 'vendor/otter')) }}"></script>
         @yield("scripts")
     </body>
 </html>

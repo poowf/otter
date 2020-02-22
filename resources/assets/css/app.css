@@ -1,0 +1,87 @@
+body {
+  display: grid;
+}
+.header .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+  width: 100%;
+  display: block;
+}
+
+.nav-tabs .nav-link.active + .nav-child {
+  display: block;
+}
+
+.nav-child {
+  display: none;
+}
+
+.sidebar {
+  background-color: #ffffff;
+}
+
+.sidebar .nav-tabs .nav-link {
+  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
+.action-container {
+  position: absolute;
+  right: 20px;
+}
+
+.card-options a.dropdown-item:active {
+  color: #fff;
+}
+
+.card-options a.dropdown-item:not(.btn) {
+  margin-left: 0;
+}
+
+textarea {
+  font-family: monospace;
+}
+
+th.sortable {
+  cursor: pointer;
+}
+
+th.sortable.sorted-by.asc::after, th.sortable.sorted-by.desc::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  margin-top: 8px;
+  margin-left: 4px;
+}
+
+th.sortable.sorted-by.asc::after {
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent #6e7687 transparent;
+}
+
+th.sortable.sorted-by.desc::after {
+  border-width: 5px 5px 0 5px;
+  border-color: #6e7687 transparent transparent transparent;
+}
+
+.header-brand-img {
+  height: 3.5rem;
+  line-height: 3.5rem;
+}
+
+.flex-grow {
+  flex:1;
+}
+
+@media (min-width: 992px) {
+  .fixed {
+    flex: 0 0 200px;
+    min-height: 100vh;
+  }
+  .col .fluid {
+    min-height: 100vh;
+  }
+}

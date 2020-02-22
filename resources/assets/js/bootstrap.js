@@ -18,7 +18,7 @@ try {
 window['require'] = function(modules, callback) {
     var modulesToRequire = modules.forEach(function(module) {
         switch(module) {
-            case 'circle-progress': return require('../../../node_modules/tabler-ui/dist/assets/js/vendors/circle-progress.min.js');
+            //case 'circle-progress': return require('../../../node_modules/tabler-ui/dist/assets/js/vendors/circle-progress.min.js');
             case 'jquery': return require('jquery');
         }
     })
