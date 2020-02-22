@@ -6,8 +6,6 @@
 @stop
 
 @section("content")
-    <div class="my-3 my-md-5">
-        <div class="container">
             <div class="page-header">
                 <h1 class="page-title">
                     {{ $prettyResourceName }}
@@ -18,8 +16,6 @@
                     :resource-fields="{{ $resourceFields }}"
                     path-prefix="{{ config('otter.path', 'otter') }}"
             ></table-component>
-        </div>
-    </div>
 @stop
 
 @section("scripts")

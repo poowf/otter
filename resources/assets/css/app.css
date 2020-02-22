@@ -1,9 +1,37 @@
-body {
-  display: grid;
+.nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+  display: inline-block;
 }
-.header .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
-  width: 100%;
-  display: block;
+body > section#app {
+  padding: 1em;
+}
+@media (min-width: 992px) {
+  @supports(display: grid){
+    body {
+      display: grid;
+      grid-template-areas:
+        "header  header"
+        "nav     app"
+        "nothing app"
+        "footer  footer";
+      grid-template-columns: 25% 75%;
+    }
+    body > header {
+      grid-area: header;
+    }
+    body > nav {
+      grid-area: nav;
+    }
+    body > section#app {
+      grid-area: app;
+    }
+    body > footer {
+      grid-area: footer;
+    }
+    .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+      width: 100%;
+      display: block;
+    }
+  }
 }
 
 .nav-tabs .nav-link.active + .nav-child {
@@ -12,14 +40,6 @@ body {
 
 .nav-child {
   display: none;
-}
-
-.sidebar {
-  background-color: #ffffff;
-}
-
-.sidebar .nav-tabs .nav-link {
-  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
 }
 
 a[data-toggle="collapse"] {
@@ -74,14 +94,4 @@ th.sortable.sorted-by.desc::after {
 
 .flex-grow {
   flex:1;
-}
-
-@media (min-width: 992px) {
-  .fixed {
-    flex: 0 0 200px;
-    min-height: 100vh;
-  }
-  .col .fluid {
-    min-height: 100vh;
-  }
 }

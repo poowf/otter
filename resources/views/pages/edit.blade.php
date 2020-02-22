@@ -6,7 +6,6 @@
 @stop
 
 @section("content")
-        <div class="container">
             <div class="page-header">
                 <h1 class="page-title">
                     {{ $prettyResourceName }}
@@ -22,7 +21,6 @@
                     :validation-fields="{{ $validationFields }}"
                     path-prefix="{{ config('otter.path', 'otter') }}"
             ></form-component>
-        </div>
 @stop
 
 @section("scripts")

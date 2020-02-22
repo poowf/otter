@@ -6,7 +6,6 @@
 @stop
 
 @section("content")
-    <div class="container">
         <div class="page-header">
             <h1 class="page-title">
                 {{ $prettyResourceName }}
@@ -18,7 +17,6 @@
                 :resource-fields="{{ $resourceFields }}"
                 path-prefix="{{ config('otter.path', 'otter') }}"
         ></show-component>
-    </div>
 @stop
 
 @section("scripts")
