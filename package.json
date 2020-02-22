@@ -25,7 +25,7 @@
     "lodash": "^4.17.11",
     "popper.js": "^1.12",
     "selectize": "^0.12.6",
-    "tabler-ui": "0.0.32",
+    "tabler": "1.0.0-alpha.4",
     "trumbowyg": "^2.18.0",
     "vee-validate": "^2.1.4",
     "vue": "^2.5.2"

@@ -18,36 +18,31 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
         <link rel="stylesheet" href="{{ asset(mix('assets/css/tabler.css', 'vendor/otter')) }}">
-        <link rel="stylesheet" href="{{ asset(mix((\Poowf\Otter\Otter::$useDarkTheme) ? 'assets/css/app-dark.css' : 'assets/css/app.css', 'vendor/otter')) }}">
+        <link rel="stylesheet" href="{{ asset(mix('assets/css/app.css', 'vendor/otter')) }}">
         <link rel="stylesheet" href="{{ asset(mix('assets/css/trumbowyg.css', 'vendor/otter')) }}" type="text/css">
 
         <style>
         </style>
         @yield("head")
     </head>
-    <body class="">
-        <div class="page container-fluid">
-            <div id="app" class="page-main row h-100">
-                @include("otter::partials/sidebar")
-
-                <!-- center content -->
-                <div class="col fluid d-flex flex-column px-0">
-                    @include("otter::partials/header")
-                    <!-- main content -->
-                    <div class="flex-grow">
-                        @yield("content")
-                    </div>
-
-                    @include("otter::partials/footer")
-                </div>
-            </div>
-
-            <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
-            <script src="{{ asset(mix('assets/js/core.js', 'vendor/otter')) }}"></script>
-            @yield("scripts")
-        </div>
+    <body class="{{ (\Poowf\Otter\Otter::$useDarkTheme) ? 'theme-dark' : 'theme-dark-auto' }}">
+        <header>
+            @include("otter::partials/header")
+        </header>
+        <nav>
+            @include("otter::partials/nav")
+        </nav>
+        <section id="app">
+            @yield("content")
+        </section>
+        <footer>
+            @include("otter::partials/footer")
+        </footer>
+        <script src="{{ asset(mix('assets/js/manifest.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/vendor.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/bootstrap.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/app.js', 'vendor/otter')) }}"></script>
+        <script src="{{ asset(mix('assets/js/tabler.min.js', 'vendor/otter')) }}"></script>
+        @yield("scripts")
     </body>
 </html>

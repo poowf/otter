@@ -21,27 +21,6 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
-                    <span class="header-toggler-icon"></span>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="header collapse p-0" id="headerMenuCollapse">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg order-lg-first">
-                    <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
-                        <li class="nav-item p-0">
-                            <a href="/{{ config('otter.path', 'otter') }}" class="nav-link pl-4"><i class="fe fe-home"></i> Home</a>
-                        </li>
-                        <header-component
-                                :all-resource-names="{{ $allResourceNames }}"
-                                current-route="{{ Route::currentRouteName() }}"
-                                path-prefix="{{ config('otter.path', 'otter') }}"
-                        ></header-component>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>

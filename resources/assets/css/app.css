@@ -1,0 +1,104 @@
+/* General site layout. */
+.nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+  display: inline-block;
+}
+body > section#app {
+  padding: 1em;
+}
+@media (min-width: 992px) {
+  @supports(display: grid){
+    body {
+      display: grid;
+      grid-template-areas:
+        "header  header"
+        "nav     app"
+        "nothing app"
+        "footer  footer";
+      grid-template-columns: 25% 75%;
+    }
+    body > header {
+      grid-area: header;
+    }
+    body > nav {
+      grid-area: nav;
+    }
+    body > section#app {
+      grid-area: app;
+    }
+    body > footer {
+      grid-area: footer;
+    }
+    .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
+      width: 100%;
+      display: block;
+    }
+  }
+}
+
+/* Fix for tabler inconsistencies. */
+.dropdown-menu .dropdown-item {
+  justify-content: center;
+  font-weight: 400 !important;
+}
+
+.nav-tabs .nav-link.active + .nav-child {
+  display: block;
+}
+
+.nav-child {
+  display: none;
+}
+
+a[data-toggle="collapse"] {
+  position: relative;
+}
+
+.action-container {
+  position: absolute;
+  right: 20px;
+}
+
+.card-options a.dropdown-item:active {
+  color: #fff;
+}
+
+.card-options a.dropdown-item:not(.btn) {
+  margin-left: 0;
+}
+
+textarea {
+  font-family: monospace;
+}
+
+th.sortable {
+  cursor: pointer;
+}
+
+th.sortable.sorted-by.asc::after, th.sortable.sorted-by.desc::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  margin-top: 8px;
+  margin-left: 4px;
+}
+
+th.sortable.sorted-by.asc::after {
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent #6e7687 transparent;
+}
+
+th.sortable.sorted-by.desc::after {
+  border-width: 5px 5px 0 5px;
+  border-color: #6e7687 transparent transparent transparent;
+}
+
+.header-brand-img {
+  height: 3.5rem;
+  line-height: 3.5rem;
+}
+
+.flex-grow {
+  flex:1;
+}

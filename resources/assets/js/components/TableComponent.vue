@@ -26,16 +26,14 @@
                                     <td v-for="fieldType, fieldKey in resourceFields" v-html="highlight(resource[fieldKey])">{{ resource[`${fieldKey}`] }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-secondary btn-sm btn-action" v-bind:href="`/${pathPrefix}/${resourceName}/${resource.route_key}/`">View</a>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-secondary btn-sm btn-dropdown-action dropdown-toggle" data-toggle="dropdown">Action</button>
+                                        <button type="button" class="btn btn-secondary btn-sm btn-dropdown-action dropdown-toggle" data-toggle="dropdown">Action</button>
                                             <div class="dropdown-menu dropdown-menu-dark">
-                                                <a class="dropdown-item" v-bind:href="`/${pathPrefix}/${resourceName}/${resource.route_key}/edit/`">
-                                                    <i class="fe fe-edit mr-3"></i>Edit
-                                                </a>
-                                                <button class="btn dropdown-item" @click.stop="handleAction('Delete', resource.route_key)">
-                                                    <i class="fe fe-delete mr-3"></i>Delete
-                                                </button>
-                                            </div>
+                                            <a class="dropdown-item" v-bind:href="`/${pathPrefix}/${resourceName}/${resource.route_key}/edit/`">
+                                                <i class="fe fe-edit mr-3"></i>Edit
+                                            </a>
+                                            <button class="btn dropdown-item" @click.stop="handleAction('Delete', resource.route_key)">
+                                                <i class="fe fe-delete mr-3"></i>Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
