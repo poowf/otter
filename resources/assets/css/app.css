@@ -1,3 +1,4 @@
+/* General site layout. */
 .nav-tabs .nav-item, .sidebar .nav-tabs .nav-item {
   display: inline-block;
 }
@@ -32,6 +33,12 @@ body > section#app {
       display: block;
     }
   }
+}
+
+/* Fix for tabler inconsistencies. */
+.dropdown-menu .dropdown-item {
+  justify-content: center;
+  font-weight: 400 !important;
 }
 
 .nav-tabs .nav-link.active + .nav-child {
