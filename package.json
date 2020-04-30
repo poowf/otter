@@ -17,7 +17,7 @@
     "fuzzaldrin-plus": "^0.6.0",
     "imagemin-mozjpeg": "^7.0.0",
     "imagemin-webpack-plugin": "^2.3.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery-circle-progress": "^1.2.2",
     "laravel-mix": "^2.0",
     "less": "^3.9.0",
