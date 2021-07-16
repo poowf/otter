@@ -3,6 +3,7 @@
 namespace Poowf\Otter;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Poowf\Otter\Http\Resources\OtterResource;
@@ -45,12 +46,12 @@ class Otter
      */
     public static function check($request)
     {
-        return (static::$authUsing ?: function () {
-            return app()->environment('local');
-        })($request);
+        return app()->environment('local')
+            ?: Gate::check('viewOtter', [$request->user()]);
     }
 
     /**
+     *
      * Set the callback that should be used to authenticate Otter users.
      *
      * @param  \Closure  $callback
