@@ -27,8 +27,8 @@ class OtterApplicationServiceProvider extends ServiceProvider
         $this->gate();
 
         Otter::auth(function ($request) {
-            return app()->environment('local') ||
-                Gate::check('viewOtter', [$request->user()]);
+            return app()->environment('local')
+                ?: Gate::check('viewOtter', [$request->user()]);
         });
     }
 
