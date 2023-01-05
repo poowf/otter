@@ -19,7 +19,7 @@
     "imagemin-webpack-plugin": "^2.4.2",
     "jquery": "^3.6.0",
     "jquery-circle-progress": "^1.2.2",
-    "laravel-mix": "^2.0",
+    "laravel-mix": "^6.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.21",
